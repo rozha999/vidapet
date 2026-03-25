@@ -1,0 +1,27 @@
+<h1>Consultas</h1>
+
+<a href="/consultas/form">
+    <button>Agregar</button>
+</a>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Motivo</th>
+        <th>Diagnóstico</th>
+        <th>Acciones</th>
+    </tr>
+
+    <tr th:each="c : ${consultas}">
+        <td th:text="${c['id']}"></td>
+        <td th:text="${c['fecha']}"></td>
+        <td th:text="${c['motivo']}"></td>
+        <td th:text="${c['diagnostico']}"></td>
+
+        <td>
+            <a th:href="@{'/consultas/form/' + ${c['id']}}"><button>Editar</button></a>
+            <a th:href="@{'/consultas/delete/' + ${c['id']}}"><button>Eliminar</button></a>
+        </td>
+    </tr>
+</table>

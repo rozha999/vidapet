@@ -1,0 +1,15 @@
+<h2>Formulario Consulta</h2>
+
+<form th:action="${consulta['id']} != null ? '/consultas/update' : '/consultas/save'" method="post">
+
+  <input type="hidden" name="id" th:value="${consulta['id']}">
+
+  Fecha: <input type="datetime-local" name="fecha"><br>
+  Motivo: <input type="text" name="motivo" th:value="${consulta['motivo']}"><br>
+  Diagnóstico: <input type="text" name="diagnostico" th:value="${consulta['diagnostico']}"><br>
+  Mascota ID: <input type="number" name="mascota_id" th:value="${consulta['mascota_id']}"><br>
+
+  <button type="submit">Guardar</button>
+</form>
+
+<a href="/consultas">Volver</a>

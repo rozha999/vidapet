@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Tratamiento</title>
+</head>
+<body>
+
+<!-- ===== Título dinámico: Nuevo o Editar tratamiento ===== -->
+<h2 th:text="${tratamiento['id']} == '' ? 'Nuevo Tratamiento' : 'Editar Tratamiento'"></h2>
+
+<!-- ===== Formulario para crear un nuevo tratamiento ===== -->
+<form th:if="${tratamiento['id']} == ''"
+      th:action="@{/tratamientos/guardar}"
+      method="post">
+
+    <label>Tipo:</label>
+    <input type="text" name="tipo" th:value="${tratamiento['tipo']}" required><br>
+
+    <label>Duración:</label>
+    <input type="text" name="duracion" th:value="${tratamiento['duracion']}" required><br>
+
+    <label>Consulta ID:</label>
+    <input type="number" name="consulta_id" th:value="${tratamiento['consulta_id']}" required><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<!-- ===== Formulario para editar un tratamiento existente ===== -->
+<form th:if="${tratamiento['id']} != ''"
+      th:action="@{/tratamientos/actualizar}"
+      method="post">
+
+    <!-- Campo oculto para enviar el ID del tratamiento -->
+    <input type="hidden" name="id" th:value="${tratamiento['id']}">
+
+    <label>Tipo:</label>
+    <input type="text" name="tipo" th:value="${tratamiento['tipo']}" required><br>
+
+    <label>Duración:</label>
+    <input type="text" name="duracion" th:value="${tratamiento['duracion']}" required><br>
+
+    <label>Consulta ID:</label>
+    <input type="number" name="consulta_id" th:value="${tratamiento['consulta_id']}" required><br>
+
+    <button type="submit">Actualizar</button>
+</form>
+
+<br>
+
+<!-- ===== Enlace para volver a la lista de tratamientos ===== -->
+<a href="/tratamientos">Volver</a>
+
+</body>
+</html>

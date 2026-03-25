@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tratamientos</title>
+</head>
+<body>
+
+<!-- ===== Título de la página ===== -->
+<h1>Tratamientos</h1>
+
+<!-- ===== Botón para agregar nuevo tratamiento ===== -->
+<a href="/tratamientos/nuevo">
+    <button>Agregar</button>
+</a>
+
+<!-- ===== Tabla con todos los tratamientos ===== -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Duración</th>
+        <th>Consulta ID</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterar sobre la lista de tratamientos enviada desde el controlador -->
+    <tr th:each="t : ${tratamientos}">
+        <td th:text="${t['id']}"></td>
+        <td th:text="${t['tipo']}"></td>
+        <td th:text="${t['duracion']}"></td>
+        <td th:text="${t['consulta_id']}"></td>
+        <td>
+            <!-- Botón para editar tratamiento -->
+            <a th:href="@{'/tratamientos/editar/' + ${t['id']}}">
+                <button>Editar</button>
+            </a>
+            <!-- Botón para eliminar tratamiento con confirmación -->
+            <a th:href="@{'/tratamientos/eliminar/' + ${t['id']}}"
+               onclick="return confirm('¿Está seguro de eliminar este tratamiento?');">
+                <button>Eliminar</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+
+<!-- ===== Enlace para volver a la página principal ===== -->
+<a href="/">Volver al inicio</a>
+
+</body>
+</html>

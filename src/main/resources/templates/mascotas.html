@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mascotas</title>
+</head>
+<body>
+
+<!-- ===== Título de la página ===== -->
+<h1>Mascotas</h1>
+
+<!-- ===== Botón para agregar una nueva mascota ===== -->
+<a th:href="@{/mascotas/nuevo}">
+    <button>Agregar</button>
+</a>
+
+<!-- ===== Tabla con todas las mascotas ===== -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Especie</th>
+        <th>Raza</th>
+        <th>Edad</th>
+        <th>Propietario</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterar sobre la lista de mascotas enviada desde el controlador -->
+    <tr th:each="m : ${mascotas}">
+        <td th:text="${m['id']}"></td>
+        <td th:text="${m['nombre']}"></td>
+        <td th:text="${m['especie']}"></td>
+        <td th:text="${m['raza']}"></td>
+        <td th:text="${m['edad']}"></td>
+        <!-- Mostrar nombre completo del propietario -->
+        <td th:text="${m['propietario_nombre']} + ' ' + ${m['propietario_apellido']}"></td>
+        <td>
+            <!-- Botón para editar mascota -->
+            <a th:href="@{'/mascotas/editar/' + ${m['id']}}">
+                <button>Editar</button>
+            </a>
+            |
+            <!-- Botón para eliminar mascota con confirmación -->
+            <a th:href="@{'/mascotas/eliminar/' + ${m['id']}}"
+               onclick="return confirm('¿Está seguro de eliminar esta mascota?');">
+                <button>Eliminar</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+
+<!-- ===== Enlace para volver al inicio ===== -->
+<a href="/">Volver al inicio</a>
+
+</body>
+</html>

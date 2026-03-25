@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <!-- Título dinámico según si es nuevo o editar propietario -->
+  <title th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</title>
+</head>
+<body>
+
+<!-- ===== Título de la página ===== -->
+<h1 th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
+
+<!-- ===== Formulario para agregar un nuevo propietario ===== -->
+<form th:if="${propietario['id']} == ''"
+      th:action="@{/propietarios/guardar}"
+      method="post">
+
+  <!-- Campo oculto para el ID (vacío al crear) -->
+  <input type="hidden" name="id" th:value="${propietario['id']}"/>
+
+  <label>Nombre:</label>
+  <input type="text" name="nombre" th:value="${propietario['nombre']}" required/><br/>
+
+  <label>Apellido:</label>
+  <input type="text" name="apellido" th:value="${propietario['apellido']}" required/><br/>
+
+  <label>Teléfono:</label>
+  <input type="text" name="telefono" th:value="${propietario['telefono']}" required/><br/>
+
+  <label>Email:</label>
+  <input type="email" name="email" th:value="${propietario['email']}" required/><br/>
+
+  <button type="submit">Guardar</button>
+</form>
+
+<!-- ===== Formulario para editar un propietario existente ===== -->
+<form th:if="${propietario['id']} != ''"
+      th:action="@{/propietarios/actualizar}"
+      method="post">
+
+  <!-- Campo oculto para enviar el ID del propietario -->
+  <input type="hidden" name="id" th:value="${propietario['id']}"/>
+
+  <label>Nombre:</label>
+  <input type="text" name="nombre" th:value="${propietario['nombre']}" required/><br/>
+
+  <label>Apellido:</label>
+  <input type="text" name="apellido" th:value="${propietario['apellido']}" required/><br/>
+
+  <label>Teléfono:</label>
+  <input type="text" name="telefono" th:value="${propietario['telefono']}" required/><br/>
+
+  <label>Email:</label>
+  <input type="email" name="email" th:value="${propietario['email']}" required/><br/>
+
+  <button type="submit">Actualizar</button>
+</form>
+
+<br/>
+
+<!-- ===== Enlace para volver a la lista de propietarios ===== -->
+<a href="/propietarios">Volver a la lista</a>
+
+</body>
+</html>

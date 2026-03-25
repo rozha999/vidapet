@@ -1,11 +1,29 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidapet</title>
+    <!-- Título de la página de inicio -->
+    <title>VidaPet - Inicio</title>
 </head>
 <body>
-<h1>Hola mundooo</h1>
+
+<!-- ===== Título principal ===== -->
+<h1>Bienvenido a VidaPet</h1>
+
+<!-- ===== Menú de navegación ===== -->
+<ul>
+    <!-- Enlace a la lista de propietarios -->
+    <li><a th:href="@{/propietarios}">Propietarios</a></li>
+
+    <!-- Enlace a la lista de mascotas -->
+    <li><a th:href="@{/mascotas}">Mascotas</a></li>
+
+    <!-- Enlace a la lista de consultas -->
+    <li><a th:href="@{/consultas}">Consultas</a></li>
+
+    <!-- Enlace a la lista de tratamientos -->
+    <li><a th:href="@{/tratamientos}">Tratamientos</a></li>
+</ul>
+
 </body>
 </html>
