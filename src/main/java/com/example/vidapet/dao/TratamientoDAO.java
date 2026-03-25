@@ -16,7 +16,7 @@ public class TratamientoDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // ===== RowMapper para mapear resultados de la tabla 'tratamiento' =====
+    // ===--== RowMapper para mapear resultados de la tabla 'tratamiento' =====
     private RowMapper<Map<String,Object>> rowMapper = (rs, rowNum) -> Map.of(
             "id", rs.getLong("id"),
             "tipo", rs.getString("tipo"),
