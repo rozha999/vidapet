@@ -1,0 +1,30 @@
+<h2>Formulario Consulta</h2>
+
+<form th:action="${consulta['id']} != null ? '/consultas/actualizar' : '/consultas/guardar'" method="post">
+
+  <input type="hidden" name="id" th:value="${consulta['id']}">
+
+  <label>Fecha:</label>
+  <input type="datetime-local" name="fecha"
+         th:value="${consulta['fecha']} != null ? ${#temporals.format(consulta['fecha'], 'yyyy-MM-dd\'T\'HH:mm')} : ''" required><br>
+
+  <label>Motivo:</label>
+  <input type="text" name="motivo" th:value="${consulta['motivo']}" required><br>
+
+  <label>Diagnóstico:</label>
+  <input type="text" name="diagnostico" th:value="${consulta['diagnostico']}" required><br>
+
+  <label>Mascota:</label>
+  <select name="mascota_id" required>
+    <option value="">-- Seleccione una mascota --</option>
+    <option th:each="m : ${mascotas}"
+            th:value="${m['id']}"
+            th:text="${m['nombre']}"
+            th:selected="${consulta['mascota_id']} == ${m['id']}">
+    </option>
+  </select><br><br>
+
+  <button type="submit">Guardar</button>
+</form>
+
+<a th:href="@{/consultas}">Volver</a>

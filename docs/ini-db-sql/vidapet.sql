@@ -16,7 +16,7 @@ USE vidapet;
 -- Tabla: propietario
 -- ============================================
 CREATE TABLE propietario (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
     telefono VARCHAR(20),
@@ -27,42 +27,45 @@ CREATE TABLE propietario (
 -- Tabla: mascota
 -- ============================================
 CREATE TABLE mascota (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    especie VARCHAR(50),
-    raza VARCHAR(50),
-    edad INT,
-    propietario_id BIGINT,
-    CONSTRAINT fk_mascota_propietario FOREIGN KEY (propietario_id)
-        REFERENCES propietario(id)
-        ON DELETE SET NULL
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50) NOT NULL,
+  especie VARCHAR(50),
+  raza VARCHAR(50),
+  fecha_nacimiento DATE,
+  propietario_id INT,
+  CONSTRAINT fk_mascota_propietario FOREIGN KEY (propietario_id)
+      REFERENCES propietario(id)
+      ON DELETE SET NULL
+      ON UPDATE CASCADE
 );
 
 -- ============================================
 -- Tabla: consulta
 -- ============================================
 CREATE TABLE consulta (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    fecha DATETIME NOT NULL,
-    motivo VARCHAR(255),
-    diagnostico VARCHAR(255),
-    mascota_id BIGINT,
-    CONSTRAINT fk_consulta_mascota FOREIGN KEY (mascota_id)
-        REFERENCES mascota(id)
-        ON DELETE SET NULL
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   fecha DATETIME NOT NULL,
+   motivo VARCHAR(255),
+   diagnostico VARCHAR(255),
+   mascota_id INT,
+   CONSTRAINT fk_consulta_mascota FOREIGN KEY (mascota_id)
+       REFERENCES mascota(id)
+       ON DELETE SET NULL
+       ON UPDATE CASCADE
 );
 
 -- ============================================
 -- Tabla: tratamiento
 -- ============================================
 CREATE TABLE tratamiento (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(50) NOT NULL,
-    duracion VARCHAR(50),
-    consulta_id BIGINT,
-    CONSTRAINT fk_tratamiento_consulta FOREIGN KEY (consulta_id)
-        REFERENCES consulta(id)
-        ON DELETE CASCADE
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   tipo VARCHAR(50) NOT NULL,
+   duracion VARCHAR(50),
+   consulta_id INT,
+   CONSTRAINT fk_tratamiento_consulta FOREIGN KEY (consulta_id)
+       REFERENCES consulta(id)
+       ON DELETE CASCADE
+       ON UPDATE CASCADE
 );
 
 -- ============================================

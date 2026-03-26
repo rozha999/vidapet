@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
 
 @Component
 public class MascotaDAO {
@@ -22,7 +23,7 @@ public class MascotaDAO {
             "nombre", rs.getString("nombre"),
             "especie", rs.getString("especie"),
             "raza", rs.getString("raza"),
-            "edad", rs.getInt("edad"),
+            "fecha_nacimiento", rs.getObject("fecha_nacimiento", LocalDate.class),
             "propietario_id", rs.getLong("propietario_id")
     );
 
@@ -30,7 +31,7 @@ public class MascotaDAO {
 
     // ===== Listar todas las mascotas con información de su propietario =====
     public List<Map<String,Object>> findAll() {
-        String sql = "SELECT m.id, m.nombre, m.especie, m.raza, m.edad, " +
+        String sql = "SELECT m.id, m.nombre, m.especie, m.raza, m.fecha_nacimiento, " +
                 "m.propietario_id, p.nombre AS propietario_nombre, p.apellido AS propietario_apellido " +
                 "FROM mascota m " +
                 "JOIN propietario p ON m.propietario_id = p.id";
@@ -40,7 +41,7 @@ public class MascotaDAO {
                 "nombre", rs.getString("nombre"),
                 "especie", rs.getString("especie"),
                 "raza", rs.getString("raza"),
-                "edad", rs.getInt("edad"),
+                "fecha_nacimiento", rs.getObject("fecha_nacimiento", LocalDate.class),
                 "propietario_id", rs.getLong("propietario_id"),
                 "propietario_nombre", rs.getString("propietario_nombre"),
                 "propietario_apellido", rs.getString("propietario_apellido")
@@ -57,18 +58,18 @@ public class MascotaDAO {
     }
 
     // ===== Guardar una nueva mascota =====
-    public void save(String nombre, String especie, String raza, int edad, Long propietarioId) {
+    public void save(String nombre, String especie, String raza, LocalDate fechaNacimiento, Long propietarioId) {
         jdbcTemplate.update(
-                "INSERT INTO mascota(nombre, especie, raza, edad, propietario_id) VALUES (?, ?, ?, ?, ?)",
-                nombre, especie, raza, edad, propietarioId
+                "INSERT INTO mascota(nombre, especie, raza, fecha_nacimiento, propietario_id) VALUES (?, ?, ?, ?, ?)",
+                nombre, especie, raza, fechaNacimiento, propietarioId
         );
     }
 
     // ===== Actualizar una mascota existente =====
-    public void update(Long id, String nombre, String especie, String raza, int edad, Long propietarioId) {
+    public void update(Long id, String nombre, String especie, String raza, LocalDate fechaNacimiento, Long propietarioId) {
         jdbcTemplate.update(
-                "UPDATE mascota SET nombre=?, especie=?, raza=?, edad=?, propietario_id=? WHERE id=?",
-                nombre, especie, raza, edad, propietarioId, id
+                "UPDATE mascota SET nombre=?, especie=?, raza=?, fecha_nacimiento=?, propietario_id=? WHERE id=?",
+                nombre, especie, raza, fechaNacimiento, propietarioId, id
         );
     }
 

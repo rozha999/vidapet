@@ -2,15 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- Título dinámico según si es nueva mascota o editar existente -->
     <title th:text="${mascota['id']} == '' ? 'Nueva Mascota' : 'Editar Mascota'">Formulario Mascota</title>
 </head>
 <body>
 
-<!-- ===== Título de la página ===== -->
 <h2 th:text="${mascota['id']} == '' ? 'Nueva Mascota' : 'Editar Mascota'"></h2>
 
-<!-- ===== Formulario para agregar una nueva mascota ===== -->
+<!-- ===== Formulario para agregar nueva mascota ===== -->
 <form th:if="${mascota['id']} == ''"
       th:action="@{/mascotas/guardar}"
       method="post">
@@ -24,10 +22,9 @@
     <label>Raza:</label>
     <input type="text" name="raza" th:value="${mascota['raza']}" required><br>
 
-    <label>Edad:</label>
-    <input type="number" name="edad" th:value="${mascota['edad']}" required><br>
+    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" th:value="${mascota['fecha_nacimiento']}" required><br>
 
-    <!-- Selector de propietario -->
     <label>Propietario:</label>
     <select name="propietario_id" required>
         <option value="">-- Seleccione un propietario --</option>
@@ -40,12 +37,11 @@
     <button type="submit">Guardar</button>
 </form>
 
-<!-- ===== Formulario para editar una mascota existente ===== -->
+<!-- ===== Formulario para editar mascota existente ===== -->
 <form th:if="${mascota['id']} != ''"
       th:action="@{/mascotas/actualizar}"
       method="post">
 
-    <!-- Campo oculto para enviar el ID de la mascota -->
     <input type="hidden" name="id" th:value="${mascota['id']}">
 
     <label>Nombre:</label>
@@ -57,10 +53,10 @@
     <label>Raza:</label>
     <input type="text" name="raza" th:value="${mascota['raza']}" required><br>
 
-    <label>Edad:</label>
-    <input type="number" name="edad" th:value="${mascota['edad']}" required><br>
+    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"
+           th:value="${mascota['fecha_nacimiento']}" required><br>
 
-    <!-- Selector de propietario con valor seleccionado según la mascota -->
     <label>Propietario:</label>
     <select name="propietario_id" required>
         <option value="">-- Seleccione un propietario --</option>
@@ -75,8 +71,6 @@
 </form>
 
 <br/>
-
-<!-- ===== Enlace para volver a la lista de mascotas ===== -->
 <a href="/mascotas">Volver a la lista</a>
 
 </body>

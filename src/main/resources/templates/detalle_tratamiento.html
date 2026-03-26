@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Tratamiento</title>
+</head>
+<body>
+<h2>Lista de Detalles de Tratamiento</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Motivo Consulta</th>
+        <th>Tipo Tratamiento</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="d : ${detalles}">
+        <td th:text="${d['id']}"></td>
+        <td th:text="${d['consulta_motivo']}"></td>
+        <td th:text="${d['tratamiento_tipo']}"></td>
+        <td>
+            <a th:href="@{'/detalles/editar/' + ${d['id']}}">Editar</a>
+            <a th:href="@{'/detalles/eliminar/' + ${d['id']}}">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/detalles/nuevo">Nuevo Detalle</a>
+</body>
+</html>

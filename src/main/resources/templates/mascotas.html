@@ -22,7 +22,7 @@
         <th>Nombre</th>
         <th>Especie</th>
         <th>Raza</th>
-        <th>Edad</th>
+        <th>Fecha Nacimiento</th>
         <th>Propietario</th>
         <th>Acciones</th>
     </tr>
@@ -34,7 +34,7 @@
         <td th:text="${m['nombre']}"></td>
         <td th:text="${m['especie']}"></td>
         <td th:text="${m['raza']}"></td>
-        <td th:text="${m['edad']}"></td>
+        <td th:text="${m['fecha_nacimiento']}"></td>
         <!-- Mostrar nombre completo del propietario -->
         <td th:text="${m['propietario_nombre']} + ' ' + ${m['propietario_apellido']}"></td>
         <td>
