@@ -16,12 +16,10 @@ public class TratamientoDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // ===--== RowMapper para mapear resultados de la tabla 'tratamiento' =====
+    // === RowMapper para mapear resultados de la tabla 'tratamiento' ===
     private RowMapper<Map<String,Object>> rowMapper = (rs, rowNum) -> Map.of(
             "id", rs.getLong("id"),
-            "tipo", rs.getString("tipo"),
-            "duracion", rs.getString("duracion"),  // duración como String
-            "consulta_id", rs.getLong("consulta_id")
+            "nombre", rs.getString("nombre")
     );
 
     /*---------------------------- MÉTODOS CRUD ----------------------------*/
@@ -41,18 +39,18 @@ public class TratamientoDAO {
     }
 
     // ===== Guardar un nuevo tratamiento =====
-    public void save(String tipo, String duracion, Long consultaId) {
+    public void save(String nombre) {
         jdbcTemplate.update(
-                "INSERT INTO tratamiento(tipo, duracion, consulta_id) VALUES (?, ?, ?)",
-                tipo, duracion, consultaId
+                "INSERT INTO tratamiento(nombre) VALUES (?)",
+                nombre
         );
     }
 
     // ===== Actualizar un tratamiento existente =====
-    public void update(Long id, String tipo, String duracion, Long consultaId) {
+    public void update(Long id, String nombre) {
         jdbcTemplate.update(
-                "UPDATE tratamiento SET tipo=?, duracion=?, consulta_id=? WHERE id=?",
-                tipo, duracion, consultaId, id
+                "UPDATE tratamiento SET nombre=? WHERE id=?",
+                nombre, id
         );
     }
 

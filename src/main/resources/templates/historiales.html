@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial Médico</title>
+</head>
+<body>
+
+<h1>Historial Médico</h1>
+
+<a href="/historial/nuevo">
+    <button>Agregar Historial</button>
+</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Mascota</th>
+        <th>Fecha</th>
+        <th>Problema</th>
+        <th>Tratamiento</th>
+        <th>Nombre Tratamiento</th>
+        <th>Notas</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="h : ${historiales}">
+        <td th:text="${h['id']}"></td>
+        <td th:text="${h['mascota_id']}"></td> <!-- Opcional: puedes mapear al nombre de la mascota si quieres -->
+        <td th:text="${h['fecha']}"></td>
+        <td th:text="${h['problema']}"></td>
+        <td th:text="${h['tratamiento_id']}"></td>
+        <td th:text="${h['nombre_tratamiento']}"></td>
+        <td th:text="${h['notas']}"></td>
+        <td>
+            <a th:href="@{'/historial/editar/' + ${h['id']}}"><button>Editar</button></a>
+            <a th:href="@{'/historial/eliminar/' + ${h['id']}}"
+               onclick="return confirm('¿Está seguro de eliminar este historial?');">
+                <button>Eliminar</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/">Volver al inicio</a>
+
+</body>
+</html>

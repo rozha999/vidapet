@@ -1,92 +1,105 @@
--- ============================================
--- Script de inicialización de la base de datos
--- Nombre de la base de datos: vidapet
--- ============================================
-
--- 1. Eliminar la base de datos si existía
-DROP DATABASE IF EXISTS vidapet;
-
--- 2. Crear la base de datos
-CREATE DATABASE vidapet;
-
--- 3. Usar la base de datos
+-- Crear la base de datos
+CREATE DATABASE IF NOT EXISTS vidapet;
 USE vidapet;
 
--- ============================================
--- Tabla: propietario
--- ============================================
+-- =======================
+-- Tabla Propietario
+-- =======================
 CREATE TABLE propietario (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    apellido VARCHAR(50) NOT NULL,
-    telefono VARCHAR(20),
-    email VARCHAR(100)
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ nombre VARCHAR(100) NOT NULL,
+ apellido VARCHAR(100) NOT NULL,
+ telefono VARCHAR(20),
+ email VARCHAR(100)
 );
 
--- ============================================
--- Tabla: mascota
--- ============================================
+-- =======================
+-- Tabla Mascota
+-- =======================
 CREATE TABLE mascota (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(50) NOT NULL,
+  nombre VARCHAR(100) NOT NULL,
   especie VARCHAR(50),
   raza VARCHAR(50),
   fecha_nacimiento DATE,
-  propietario_id INT,
-  CONSTRAINT fk_mascota_propietario FOREIGN KEY (propietario_id)
-      REFERENCES propietario(id)
-      ON DELETE SET NULL
-      ON UPDATE CASCADE
+  propietario_id INT NOT NULL,
+  FOREIGN KEY (propietario_id) REFERENCES propietario(id) ON DELETE CASCADE
 );
 
--- ============================================
--- Tabla: consulta
--- ============================================
-CREATE TABLE consulta (
-   id INT AUTO_INCREMENT PRIMARY KEY,
-   fecha DATETIME NOT NULL,
-   motivo VARCHAR(255),
-   diagnostico VARCHAR(255),
-   mascota_id INT,
-   CONSTRAINT fk_consulta_mascota FOREIGN KEY (mascota_id)
-       REFERENCES mascota(id)
-       ON DELETE SET NULL
-       ON UPDATE CASCADE
-);
-
--- ============================================
--- Tabla: tratamiento
--- ============================================
+-- =======================
+-- Tabla Tratamiento
+-- =======================
 CREATE TABLE tratamiento (
    id INT AUTO_INCREMENT PRIMARY KEY,
-   tipo VARCHAR(50) NOT NULL,
-   duracion VARCHAR(50),
-   consulta_id INT,
-   CONSTRAINT fk_tratamiento_consulta FOREIGN KEY (consulta_id)
-       REFERENCES consulta(id)
-       ON DELETE CASCADE
-       ON UPDATE CASCADE
+   nombre VARCHAR(100) NOT NULL
 );
 
--- ============================================
--- Datos de ejemplo (opcional)
--- ============================================
-INSERT INTO propietario(nombre, apellido, telefono, email)
-VALUES 
-('Juan', 'Pérez', '555-1234', 'juan@example.com'),
-('María', 'García', '555-5678', 'maria@example.com');
+-- =======================
+-- Tabla HistorialMedico
+-- =======================
+CREATE TABLE HistorialMedico (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  mascota_id INT NOT NULL,
+  fecha DATE NOT NULL,
+  problema VARCHAR(255),
+  tratamiento_id INT,
+  nombre_tratamiento VARCHAR(100),
+  notas TEXT,
+  FOREIGN KEY (mascota_id) REFERENCES mascota(id) ON DELETE CASCADE,
+  FOREIGN KEY (tratamiento_id) REFERENCES tratamiento(id) ON DELETE SET NULL
+);
 
-INSERT INTO mascota(nombre, especie, raza, edad, propietario_id)
-VALUES
-('Firulais', 'Perro', 'Labrador', 3, 1),
-('Michi', 'Gato', 'Siamés', 2, 2);
+-- =======================
+-- Tabla Cita
+-- =======================
+CREATE TABLE cita (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  mascota_id INT NOT NULL,
+  fecha DATE NOT NULL,
+  hora TIME NOT NULL,
+  estado VARCHAR(50),
+  notas TEXT,
+  FOREIGN KEY (mascota_id) REFERENCES mascota(id) ON DELETE CASCADE
+);
 
-INSERT INTO consulta(fecha, motivo, diagnostico, mascota_id)
-VALUES
-(NOW(), 'Chequeo general', 'Saludable', 1),
-(NOW(), 'Vacuna', 'Vacunado', 2);
+USE vidapet;
 
-INSERT INTO tratamiento(tipo, duracion, consulta_id)
-VALUES
-('Vacuna antirrábica', '1 día', 2),
-('Desparasitación', '2 días', 1);
+-- =======================
+-- Datos de prueba para Propietario
+-- =======================
+INSERT INTO propietario (nombre, apellido, telefono, email) VALUES
+  ('Juan', 'Perez', '555-1234', 'juan.perez@email.com'),
+  ('Maria', 'Lopez', '555-5678', 'maria.lopez@email.com'),
+  ('Carlos', 'Gomez', NULL, 'carlos.gomez@email.com');
+
+-- =======================
+-- Datos de prueba para Mascota
+-- =======================
+INSERT INTO mascota (nombre, especie, raza, fecha_nacimiento, propietario_id) VALUES
+   ('Firulais', 'Perro', 'Labrador', '2018-05-12', 1),
+   ('Michi', 'Gato', 'Siames', '2020-03-22', 2),
+   ('Rex', 'Perro', 'Pastor Alemán', '2019-11-10', 3);
+
+-- =======================
+-- Datos de prueba para Tratamiento
+-- =======================
+INSERT INTO tratamiento (nombre) VALUES
+    ('Vacuna Antirrábica'),
+    ('Desparasitación'),
+    ('Chequeo General');
+
+-- =======================
+-- Datos de prueba para HistorialMedico
+-- =======================
+INSERT INTO HistorialMedico (mascota_id, fecha, problema, tratamiento_id, nombre_tratamiento, notas) VALUES
+   (1, '2023-01-15', 'Fiebre', 3, 'Chequeo General', 'Recuperación completa'),
+   (2, '2023-02-20', 'Pulgas', 2, 'Desparasitación', 'Aplicar champú antipulgas'),
+   (3, '2023-03-05', 'Vacuna anual', 1, 'Vacuna Antirrábica', 'Siguiente vacuna en 1 año');
+
+-- =======================
+-- Datos de prueba para Cita
+-- =======================
+INSERT INTO cita (mascota_id, fecha, hora, estado, notas) VALUES
+    (1, '2023-04-10', '10:00:00', 'Pendiente', 'Primera consulta'),
+    (2, '2023-04-11', '14:30:00', 'Confirmada', 'Revisión general'),
+    (3, '2023-04-12', '09:00:00', 'Cancelada', 'Cita reprogramada');

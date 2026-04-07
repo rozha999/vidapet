@@ -3,6 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>VidaPet - Panel de Administración</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #2c3e50; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 10px 0; }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.button:hover { background-color: #2980b9; }
+    </style>
 </head>
 <body>
 
@@ -12,9 +27,9 @@
 <ul>
     <li><a class="button" th:href="@{/propietarios}">Propietarios</a></li>
     <li><a class="button" th:href="@{/mascotas}">Mascotas</a></li>
-    <li><a class="button" th:href="@{/consultas}">Consultas</a></li>
+    <li><a class="button" th:href="@{/citas}">Citas</a></li> <!-- ← اینجا calendar نمایش داده می‌شود -->
     <li><a class="button" th:href="@{/tratamientos}">Tratamientos</a></li>
-    <li><a class="button" th:href="@{/detalles}">Detalles de Tratamiento</a></li>
+    <li><a class="button" th:href="@{/historial}">Historial Médico</a></li>
 </ul>
 
 </body>

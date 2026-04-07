@@ -1,15 +1,14 @@
 package com.example.vidapet.service;
 
-import com.example.vidapet.dao.PropietarioDAO;
-import com.example.vidapet.dao.DetalleTratamientoDAO;
-import com.example.vidapet.dao.MascotaDAO;
-import com.example.vidapet.dao.TratamientoDAO;
-import com.example.vidapet.dao.ConsultaDAO;
+import com.example.vidapet.dao.*;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Map;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Service
 public class VidapetService {
@@ -17,22 +16,75 @@ public class VidapetService {
     private final PropietarioDAO propietarioDAO;
     private final MascotaDAO mascotaDAO;
     private final TratamientoDAO tratamientoDAO;
-    private final ConsultaDAO consultaDAO;
-    private final DetalleTratamientoDAO detalleTratamientoDAO;
+    private final HistorialMedicoDAO historialMedicoDAO;
+    private final citaDAO citaDAO;
 
+    // Constructor con todos los DAO
     public VidapetService(PropietarioDAO propietarioDAO,
                           MascotaDAO mascotaDAO,
                           TratamientoDAO tratamientoDAO,
-                          ConsultaDAO consultaDAO,
-                          DetalleTratamientoDAO detalleTratamientoDAO) {
-
+                          HistorialMedicoDAO historialMedicoDAO,
+                          citaDAO citaDAO) {  // اضافه شد
         this.propietarioDAO = propietarioDAO;
         this.mascotaDAO = mascotaDAO;
         this.tratamientoDAO = tratamientoDAO;
-        this.consultaDAO = consultaDAO;
-        this.detalleTratamientoDAO = detalleTratamientoDAO;
+        this.historialMedicoDAO = historialMedicoDAO;
+        this.citaDAO = citaDAO;  // اضافه شد
     }
 
+    /*================= CITAS =================*/
+    /*================= CITAS =================*/
+    public List<Map<String,Object>> listarCitas() {
+        return citaDAO.findAll();
+    }
+
+    public Map<String,Object> obtenerCitaPorId(Long id) {
+        return citaDAO.findById(id);
+    }
+
+    public void guardarCita(Long mascotaId, String fechaStr, String horaStr, String notas) {
+        LocalDate fecha = LocalDate.parse(fechaStr);
+        LocalTime hora = LocalTime.parse(horaStr);
+        citaDAO.save(mascotaId, fecha, hora, notas);
+    }
+
+    public void actualizarCita(Long id, Long mascotaId, String fechaStr, String horaStr, String notas) {
+        LocalDate fecha = LocalDate.parse(fechaStr);
+        LocalTime hora = LocalTime.parse(horaStr);
+        citaDAO.update(id, mascotaId, fecha, hora, notas);
+    }
+
+    public void eliminarCita(Long id) {
+        citaDAO.delete(id);
+    }
+
+    /*================= FULLCALENDAR =================*/
+    public List<Map<String,Object>> listarCitasParaCalendar() {
+        List<Map<String,Object>> citas = citaDAO.findAll();
+        // برای هر نوبت، می‌توانیم یک عنوان مناسب بسازیم
+        for (Map<String,Object> c : citas) {
+            String titulo = c.get("mascota_nombre") + " (" + c.get("mascota_propietario") + ")";
+            c.put("title", titulo);
+            c.put("start", c.get("fecha") + "T" + c.get("hora"));
+        }
+        return citas;
+    }
+
+    /*================= HORAS LIBRES =================*/
+    public List<String> obtenerHorasLibres(String fechaStr) {
+        LocalDate fecha = LocalDate.parse(fechaStr);
+        List<String> horasOcupadas = citaDAO.findHorasByFecha(fecha);
+        // فرض کنیم ساعات کاری کلینیک 09:00 تا 17:00 هر نیم ساعت یک نوبت
+        List<String> todasHoras = List.of(
+                "09:00","09:30","10:00","10:30","11:00","11:30",
+                "12:00","12:30","13:00","13:30","14:00","14:30",
+                "15:00","15:30","16:00","16:30"
+        );
+        // حذف ساعت‌های پر شده
+        return todasHoras.stream()
+                .filter(h -> !horasOcupadas.contains(h))
+                .toList();
+    }
     /*---------------------------- PROPIETARIOS ----------------------------*/
 
     public List<Map<String, Object>> listarPropietarios() {
@@ -78,69 +130,65 @@ public class VidapetService {
         mascotaDAO.delete(id);
     }
 
+
     /*---------------------------- TRATAMIENTOS ----------------------------*/
 
+    // Listar todos los tratamientos
     public List<Map<String, Object>> listarTratamientos() {
         return tratamientoDAO.findAll();
     }
 
-    public void guardarTratamiento(String tipo, String duracion, Long consultaId) {
-        tratamientoDAO.save(tipo, duracion, consultaId);
+    // Guardar un nuevo tratamiento
+    public void guardarTratamiento(String nombre) {
+        tratamientoDAO.save(nombre);
     }
 
+    // Obtener un tratamiento por ID
     public Map<String, Object> obtenerTratamientoPorId(Long id) {
         return tratamientoDAO.findById(id);
     }
 
-    public void actualizarTratamiento(Long id, String tipo, String duracion, Long consultaId) {
-        tratamientoDAO.update(id, tipo, duracion, consultaId);
+    // Actualizar un tratamiento existente
+    public void actualizarTratamiento(Long id, String nombre) {
+        tratamientoDAO.update(id, nombre);
     }
 
+    // Eliminar un tratamiento por ID
     public void eliminarTratamiento(Long id) {
         tratamientoDAO.delete(id);
     }
 
-    /*---------------------------- CONSULTAS ----------------------------*/
 
-    public List<Map<String, Object>> listarConsultas() {
-        return consultaDAO.findAll();
+
+    /*---------------------------- HISTORIAL MÉDICO ----------------------------*/
+
+    // Listar todos los historiales
+    public List<Map<String, Object>> listarHistoriales() {
+        return historialMedicoDAO.findAll();
     }
 
-    public void guardarConsulta(LocalDateTime fecha, String motivo, String diagnostico, Long mascotaId) {
-        consultaDAO.save(fecha, motivo, diagnostico, mascotaId);
+    // Listar historial por mascota
+    public List<Map<String, Object>> listarHistorialPorMascota(int mascotaId) {
+        return historialMedicoDAO.findByMascotaId(mascotaId);
     }
 
-    public Map<String, Object> obtenerConsultaPorId(Long id) {
-        return consultaDAO.findById(id);
+    // Obtener historial por ID
+    public Map<String, Object> obtenerHistorialPorId(int id) {
+        return historialMedicoDAO.findById(id);
     }
 
-    public void actualizarConsulta(Long id, LocalDateTime fecha, String motivo, String diagnostico, Long mascotaId) {
-        consultaDAO.update(id, fecha, motivo, diagnostico, mascotaId);
+    // Guardar nuevo historial
+    public void guardarHistorial(int mascotaId, String fecha, String problema, Integer tratamientoId, String nombreTratamiento, String notas) {
+        historialMedicoDAO.save(mascotaId, fecha, problema, tratamientoId, nombreTratamiento, notas);
     }
 
-    public void eliminarConsulta(Long id) {
-        consultaDAO.delete(id);
+    // Actualizar historial existente
+    public void actualizarHistorial(int id, int mascotaId, String fecha, String problema, Integer tratamientoId, String nombreTratamiento, String notas) {
+        historialMedicoDAO.update(id, mascotaId, fecha, problema, tratamientoId, nombreTratamiento, notas);
     }
 
-    /*---------------------------- DETALLE_TRATAMIENTO ----------------------------*/
-
-    public List<Map<String, Object>> listarDetalles() {
-        return detalleTratamientoDAO.findAll();
-    }
-
-    public void guardarDetalle(Long consultaId, Long tratamientoId) {
-        detalleTratamientoDAO.save(consultaId, tratamientoId);
-    }
-
-    public Map<String, Object> obtenerDetallePorId(Long id) {
-        return detalleTratamientoDAO.findById(id);
-    }
-
-    public void actualizarDetalle(Long id, Long consultaId, Long tratamientoId) {
-        detalleTratamientoDAO.update(id, consultaId, tratamientoId);
-    }
-
-    public void eliminarDetalle(Long id) {
-        detalleTratamientoDAO.delete(id);
+    // Eliminar historial
+    public void eliminarHistorial(int id) {
+        historialMedicoDAO.delete(id);
     }
 }

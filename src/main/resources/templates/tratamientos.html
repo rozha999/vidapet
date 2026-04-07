@@ -19,9 +19,7 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Tipo</th>
-        <th>Duración</th>
-        <th>Consulta ID</th>
+        <th>Nombre</th>
         <th>Acciones</th>
     </tr>
     </thead>
@@ -29,9 +27,7 @@
     <!-- Iterar sobre la lista de tratamientos enviada desde el controlador -->
     <tr th:each="t : ${tratamientos}">
         <td th:text="${t['id']}"></td>
-        <td th:text="${t['tipo']}"></td>
-        <td th:text="${t['duracion']}"></td>
-        <td th:text="${t['consulta_id']}"></td>
+        <td th:text="${t['nombre']}"></td>
         <td>
             <!-- Botón para editar tratamiento -->
             <a th:href="@{'/tratamientos/editar/' + ${t['id']}}">
