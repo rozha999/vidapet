@@ -2,23 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Propietarios</title>
+    <link rel="stylesheet" href="css/propietario.css">
+    <title>Lista de Propietarios</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
 </head>
 <body>
 
-<!-- ===== Título de la página ===== -->
 <h1>Lista de Propietarios</h1>
 
 <!-- ===== Botón para agregar un nuevo propietario ===== -->
-<a href="/propietarios/nuevo">
-    <button>Agregar Nuevo Propietario</button>
+<a th:href="@{/propietarios/nuevo}" class="btn">
+    <i class="fas fa-plus"></i> Agregar
 </a>
 
-<!-- ===== Tabla con todos los propietarios ===== -->
 <table border="1">
     <thead>
     <tr>
-        <th>ID</th>
         <th>Nombre</th>
         <th>Apellido</th>
         <th>Teléfono</th>
@@ -27,23 +28,19 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Iterar sobre la lista de propietarios enviada desde el controlador -->
     <tr th:each="propietario : ${propietarios}">
-        <td th:text="${propietario['id']}"></td>
         <td th:text="${propietario['nombre']}"></td>
         <td th:text="${propietario['apellido']}"></td>
         <td th:text="${propietario['telefono']}"></td>
         <td th:text="${propietario['email']}"></td>
         <td>
-            <!-- Botón para editar propietario -->
-            <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}">
-                <button>Editar</button>
+            <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}" class="btn" title="Editar">
+                <i class="fas fa-edit"></i> Editar
             </a>
-            |
-            <!-- Botón para eliminar propietario con confirmación -->
             <a th:href="@{'/propietarios/eliminar/' + ${propietario['id']}}"
-               onclick="return confirm('¿Está seguro de eliminar este propietario?');">
-                <button>Eliminar</button>
+               onclick="return confirm('¿Está seguro de eliminar este propietario?');"
+               class="btn" title="Eliminar">
+                <i class="fas fa-trash-alt"></i> Eliminar
             </a>
         </td>
     </tr>
@@ -53,8 +50,8 @@
 <br>
 
 <!-- ===== Enlace para volver a la página principal ===== -->
-<a href="/">
-    <button>Volver al inicio</button>
+<a th:href="@{/}" class="btn">
+    <i class="fas fa-arrow-left"></i> Volver
 </a>
 
 </body>

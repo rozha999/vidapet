@@ -1,0 +1,141 @@
+/* ==========================
+   Reset & Base Styles
+========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #e6f0ff; /* Soft pastel blue background */
+    color: #1a1a1a;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* ==========================
+   Headings
+========================== */
+h1, h2, h3 {
+    color: #336699; /* Medium blue */
+    margin-bottom: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+}
+
+/* ==========================
+   Buttons & Links
+========================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #99ccff; /* Pastel blue */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.95em;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #6699cc; /* Darker pastel blue on hover */
+    transform: translateY(-2px);
+}
+
+/* ==========================
+   Forms
+========================== */
+form {
+    background-color: #ffffff; /* White form background */
+    padding: 30px;
+    margin: 20px auto;
+    border-radius: 16px;
+    max-width: 550px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #336699;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus {
+    border-color: #6699cc;
+    outline: none;
+}
+
+/* ==========================
+   Tables
+========================== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 14px 20px;
+    text-align: center;
+}
+
+th {
+    background-color: #6699cc; /* Pastel darker blue header */
+    color: #ffffff;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #e6f2ff; /* Light pastel blue for stripes */
+}
+
+tr:hover {
+    background-color: #cce0ff; /* Hover effect pastel */
+    transform: scale(1.01);
+    transition: 0.2s ease;
+}
+
+/* ==========================
+   Responsive
+========================== */
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    tr {
+        margin-bottom: 15px;
+    }
+}

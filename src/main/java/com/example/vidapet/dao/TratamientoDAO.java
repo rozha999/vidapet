@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -16,46 +17,42 @@ public class TratamientoDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // === RowMapper para mapear resultados de la tabla 'tratamiento' ===
-    private RowMapper<Map<String,Object>> rowMapper = (rs, rowNum) -> Map.of(
-            "id", rs.getLong("id"),
-            "nombre", rs.getString("nombre")
+    private RowMapper<Map<String, Object>> rowMapper = (rs, rowNum) -> Map.of(
+            "id", rs.getInt("id"),
+            "consulta_id", rs.getInt("consulta_id"),
+            "tratamiento", rs.getString("tratamiento"),
+            "fecha_inicio", rs.getObject("fecha_inicio", LocalDate.class),
+            "fecha_fin", rs.getObject("fecha_fin", LocalDate.class),
+            "observaciones", rs.getString("observaciones")
     );
 
-    /*---------------------------- MÉTODOS CRUD ----------------------------*/
-
-    // ===== Listar todos los tratamientos =====
-    public List<Map<String,Object>> findAll() {
-        return jdbcTemplate.query("SELECT * FROM tratamiento", rowMapper);
+    public List<Map<String, Object>> findAll() {
+        String sql = "SELECT * FROM tratamiento";
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
-    // ===== Obtener un tratamiento por ID =====
-    public Map<String,Object> findById(Long id) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM tratamiento WHERE id=?",
-                new Object[]{id},
-                rowMapper
-        );
+    public Map<String, Object> findById(int id) {
+        String sql = "SELECT * FROM tratamiento WHERE id=?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, rowMapper);
     }
 
-    // ===== Guardar un nuevo tratamiento =====
-    public void save(String nombre) {
-        jdbcTemplate.update(
-                "INSERT INTO tratamiento(nombre) VALUES (?)",
-                nombre
-        );
+    public List<Map<String, Object>> findByConsultaId(int consultaId) {
+        String sql = "SELECT * FROM tratamiento WHERE consulta_id=?";
+        return jdbcTemplate.query(sql, new Object[]{consultaId}, rowMapper);
     }
 
-    // ===== Actualizar un tratamiento existente =====
-    public void update(Long id, String nombre) {
-        jdbcTemplate.update(
-                "UPDATE tratamiento SET nombre=? WHERE id=?",
-                nombre, id
-        );
+    public void save(int consultaId, String tratamiento, LocalDate fechaInicio, LocalDate fechaFin, String observaciones) {
+        String sql = "INSERT INTO tratamiento(consulta_id, tratamiento, fecha_inicio, fecha_fin, observaciones) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, consultaId, tratamiento, fechaInicio, fechaFin, observaciones);
     }
 
-    // ===== Eliminar un tratamiento por ID =====
-    public void delete(Long id) {
-        jdbcTemplate.update("DELETE FROM tratamiento WHERE id=?", id);
+    public void update(int id, int consultaId, String tratamiento, LocalDate fechaInicio, LocalDate fechaFin, String observaciones) {
+        String sql = "UPDATE tratamiento SET consulta_id=?, tratamiento=?, fecha_inicio=?, fecha_fin=?, observaciones=? WHERE id=?";
+        jdbcTemplate.update(sql, consultaId, tratamiento, fechaInicio, fechaFin, observaciones, id);
+    }
+
+    public void delete(int id) {
+        String sql = "DELETE FROM tratamiento WHERE id=?";
+        jdbcTemplate.update(sql, id);
     }
 }

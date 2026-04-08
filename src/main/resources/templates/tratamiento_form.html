@@ -6,38 +6,54 @@
 </head>
 <body>
 
-<!-- ===== Título dinámico: Nuevo o Editar tratamiento ===== -->
 <h2 th:text="${tratamiento['id']} == '' ? 'Nuevo Tratamiento' : 'Editar Tratamiento'"></h2>
 
-<!-- ===== Formulario para crear un nuevo tratamiento ===== -->
-<form th:if="${tratamiento['id']} == ''"
-      th:action="@{/tratamientos/guardar}"
-      method="post">
+<form th:action="${tratamiento['id']} == '' ? @{/tratamientos/guardar} : @{/tratamientos/actualizar}" method="post">
+    <!-- Campo oculto para enviar ID si es edición -->
+    <input type="hidden" th:if="${tratamiento['id']} != ''" name="id" th:value="${tratamiento['id']}">
 
-    <label>Nombre:</label>
-    <input type="text" name="nombre" th:value="${tratamiento['nombre']}" required><br>
+    <!-- Selección de Consulta -->
+    <div>
+        <label>Consulta:</label>
+        <select name="consulta_id" required>
+            <option value="">Seleccione una consulta</option>
+            <option th:each="c : ${consultas}"
+                    th:value="${c.id}"
+                    th:text="${'Consulta #' + c.id + ' - Mascota: ' + c.mascota_nombre}"
+                    th:selected="${tratamiento['consulta_id']} == ${c.id}">
+            </option>
+        </select>
+    </div>
 
-    <button type="submit">Guardar</button>
-</form>
+    <!-- Tratamiento -->
+    <div>
+        <label>Tratamiento:</label>
+        <input type="text" name="tratamiento" th:value="${tratamiento['tratamiento']}" required>
+    </div>
 
-<!-- ===== Formulario para editar un tratamiento existente ===== -->
-<form th:if="${tratamiento['id']} != ''"
-      th:action="@{/tratamientos/actualizar}"
-      method="post">
+    <!-- Fecha Inicio -->
+    <div>
+        <label>Fecha Inicio:</label>
+        <input type="date" name="fecha_inicio" th:value="${tratamiento['fecha_inicio']}">
+    </div>
 
-    <!-- Campo oculto para enviar el ID del tratamiento -->
-    <input type="hidden" name="id" th:value="${tratamiento['id']}">
+    <!-- Fecha Fin -->
+    <div>
+        <label>Fecha Fin:</label>
+        <input type="date" name="fecha_fin" th:value="${tratamiento['fecha_fin']}">
+    </div>
 
-    <label>Nombre:</label>
-    <input type="text" name="nombre" th:value="${tratamiento['nombre']}" required><br>
+    <!-- Observaciones -->
+    <div>
+        <label>Observaciones:</label>
+        <textarea name="observaciones" th:text="${tratamiento['observaciones']}"></textarea>
+    </div>
 
-    <button type="submit">Actualizar</button>
+    <button type="submit" th:text="${tratamiento['id']} == '' ? 'Guardar' : 'Actualizar'"></button>
 </form>
 
 <br>
-
-<!-- ===== Enlace para volver a la lista de tratamientos ===== -->
-<a href="/tratamientos">Volver</a>
+<a href="/tratamientos">Volver a la lista de tratamientos</a>
 
 </body>
 </html>

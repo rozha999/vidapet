@@ -1,0 +1,88 @@
+/* پس زمینه کل صفحه */
+body {
+    font-family: 'Verdana', Geneva, sans-serif;
+    background-color: #FFF0F5; /* صورتی خیلی ملایم */
+    color: #2E2E2E;
+    margin: 20px;
+}
+
+h1 {
+    background-color: #90CAF9; /* آبی پاستلی ملایم */
+    color: #0D47A1;
+    padding: 20px;
+    text-align: center;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    font-size: 2em;
+}
+
+/* دکمه‌ها به شکل کارت با سایه */
+a button {
+    background-color: #F48FB1; /* صورتی ملایم */
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #4E342E;
+    font-weight: bold;
+    font-size: 1em;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+a button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    background-color: #F06292;
+    color: #fff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    background-color: #E3F2FD; /* آبی خیلی روشن */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+th {
+    background-color: #90CAF9; /* آبی ملایم */
+    color: #0D47A1;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+tr:hover {
+    background-color: #BBDEFB; /* آبی روشن برای hover */
+}
+
+a {
+    text-decoration: none;
+}
+
+/* لینک بازگشت */
+a[href="/"] {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #F48FB1; /* صورتی ملایم */
+    color: #880E4F;
+    padding: 12px 25px;
+    border-radius: 15px;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+a[href="/"]:hover {
+    background-color: #F06292;
+    color: #fff;
+    transform: scale(1.05);
+}

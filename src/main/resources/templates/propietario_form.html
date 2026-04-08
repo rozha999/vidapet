@@ -2,64 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <!-- Título dinámico según si es nuevo o editar propietario -->
+  <link rel="stylesheet" href="css/fpropietario.css">
   <title th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</title>
 </head>
 <body>
 
-<!-- ===== Título de la página ===== -->
-<h1 th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
+<!-- ===== کارت فرم ===== -->
+<div class="card-form">
 
-<!-- ===== Formulario para agregar un nuevo propietario ===== -->
-<form th:if="${propietario['id']} == ''"
-      th:action="@{/propietarios/guardar}"
-      method="post">
+  <!-- عنوان فرم -->
+  <h1 th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
 
-  <!-- Campo oculto para el ID (vacío al crear) -->
-  <input type="hidden" name="id" th:value="${propietario['id']}"/>
+  <!-- فرم برای ایجاد مالک جدید -->
+  <form th:if="${propietario['id']} == ''"
+        th:action="@{/propietarios/guardar}"
+        method="post">
 
-  <label>Nombre:</label>
-  <input type="text" name="nombre" th:value="${propietario['nombre']}" required/><br/>
+    <input type="hidden" name="id" th:value="${propietario['id']}" />
 
-  <label>Apellido:</label>
-  <input type="text" name="apellido" th:value="${propietario['apellido']}" required/><br/>
+    <label>Nombre:</label>
+    <input type="text" name="nombre" th:value="${propietario['nombre']}" required/>
 
-  <label>Teléfono:</label>
-  <input type="text" name="telefono" th:value="${propietario['telefono']}" required/><br/>
+    <label>Apellido:</label>
+    <input type="text" name="apellido" th:value="${propietario['apellido']}" required/>
 
-  <label>Email:</label>
-  <input type="email" name="email" th:value="${propietario['email']}" required/><br/>
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" th:value="${propietario['telefono']}" required/>
 
-  <button type="submit">Guardar</button>
-</form>
+    <label>Email:</label>
+    <input type="email" name="email" th:value="${propietario['email']}" required/>
 
-<!-- ===== Formulario para editar un propietario existente ===== -->
-<form th:if="${propietario['id']} != ''"
-      th:action="@{/propietarios/actualizar}"
-      method="post">
+    <button type="submit">Guardar</button>
+  </form>
 
-  <!-- Campo oculto para enviar el ID del propietario -->
-  <input type="hidden" name="id" th:value="${propietario['id']}"/>
+  <!-- فرم برای ویرایش مالک موجود -->
+  <form th:if="${propietario['id']} != ''"
+        th:action="@{/propietarios/actualizar}"
+        method="post">
 
-  <label>Nombre:</label>
-  <input type="text" name="nombre" th:value="${propietario['nombre']}" required/><br/>
+    <input type="hidden" name="id" th:value="${propietario['id']}"/>
 
-  <label>Apellido:</label>
-  <input type="text" name="apellido" th:value="${propietario['apellido']}" required/><br/>
+    <label>Nombre:</label>
+    <input type="text" name="nombre" th:value="${propietario['nombre']}" required/>
 
-  <label>Teléfono:</label>
-  <input type="text" name="telefono" th:value="${propietario['telefono']}" required/><br/>
+    <label>Apellido:</label>
+    <input type="text" name="apellido" th:value="${propietario['apellido']}" required/>
 
-  <label>Email:</label>
-  <input type="email" name="email" th:value="${propietario['email']}" required/><br/>
+    <label>Teléfono:</label>
+    <input type="text" name="telefono" th:value="${propietario['telefono']}" required/>
 
-  <button type="submit">Actualizar</button>
-</form>
+    <label>Email:</label>
+    <input type="email" name="email" th:value="${propietario['email']}" required/>
 
-<br/>
+    <button type="submit">Actualizar</button>
+  </form>
 
-<!-- ===== Enlace para volver a la lista de propietarios ===== -->
-<a href="/propietarios">Volver a la lista</a>
+  <!-- لینک بازگشت به لیست -->
+  <a href="/propietarios">Volver a la lista</a>
+</div>
 
 </body>
 </html>

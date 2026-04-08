@@ -1,0 +1,82 @@
+/* فونت و پس‌زمینه */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(120deg, #e0f0ff, #ffffff);
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 2px solid #3498db;
+    padding: 0.8rem 2rem;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+.navbar-brand span {
+    color: #3498db;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    font-size: 1.3rem;
+}
+.navbar-brand svg {
+    transition: transform 0.3s, stroke 0.3s;
+    stroke: #3498db;
+}
+.navbar-brand:hover svg {
+    transform: scale(1.2);
+    stroke: #e91e63;
+}
+
+/* کارت‌های داشبورد */
+.dashboard-card {
+    border-radius: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: #ffffff;
+    border-left: 6px solid #3498db;
+    padding: 1rem;
+}
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+/* رنگ‌های کارت‌ها (پاستلی) */
+.bg-pastel1 { border-left-color: #3498db; } /* آبی */
+.bg-pastel2 { border-left-color: #e91e63; } /* صورتی */
+.bg-pastel3 { border-left-color: #a0d8f1; } /* آبی پاستلی */
+.bg-pastel4 { border-left-color: #ffb6c1; } /* صورتی پاستلی */
+.bg-pastel5 { border-left-color: #6ec1e4; } /* آبی روشن */
+
+/* متن و آیکون کارت‌ها */
+.dashboard-card h5 {
+    font-weight: 700;
+    color: #3498db;
+}
+.dashboard-card p {
+    font-size: 0.9rem;
+    color: #555;
+}
+.dashboard-card i {
+    font-size: 3rem;
+    color: #e91e63;
+    margin-bottom: 0.5rem;
+}
+
+/* تیتر اصلی */
+.container h1 {
+    font-weight: 700;
+    color: #3498db;
+}
+.container p {
+    color: #555;
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+    .dashboard-card { margin: 0 auto; }
+}
+

@@ -31,24 +31,23 @@ CREATE TABLE mascota (
 -- =======================
 CREATE TABLE tratamiento (
    id INT AUTO_INCREMENT PRIMARY KEY,
-   nombre VARCHAR(100) NOT NULL
+   consulta_id INT NOT NULL,
+   tratamiento VARCHAR(255) NOT NULL,
+   fecha_inicio DATE,
+   fecha_fin DATE,
+   observaciones VARCHAR(255),
+   FOREIGN KEY (consulta_id) REFERENCES consulta(id) ON DELETE CASCADE
 );
 
 -- =======================
 -- Tabla HistorialMedico
 -- =======================
-CREATE TABLE HistorialMedico (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  mascota_id INT NOT NULL,
-  fecha DATE NOT NULL,
-  problema VARCHAR(255),
-  tratamiento_id INT,
-  nombre_tratamiento VARCHAR(100),
-  notas TEXT,
-  FOREIGN KEY (mascota_id) REFERENCES mascota(id) ON DELETE CASCADE,
-  FOREIGN KEY (tratamiento_id) REFERENCES tratamiento(id) ON DELETE SET NULL
+CREATE TABLE consulta (
+id INT AUTO_INCREMENT PRIMARY KEY,
+mascota_id INT NOT NULL,
+diagnostico VARCHAR(255),
+FOREIGN KEY (mascota_id) REFERENCES mascota(id) ON DELETE CASCADE
 );
-
 -- =======================
 -- Tabla Cita
 -- =======================

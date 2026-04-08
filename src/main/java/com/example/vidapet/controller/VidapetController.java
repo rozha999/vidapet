@@ -15,6 +15,7 @@ import java.util.*;
 import java.util.Map;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/")
@@ -148,218 +149,188 @@ public class VidapetController {
 
     /*---------------------------- TRATAMIENTOS ----------------------------*/
 
-    // Listar todos los tratamientos
     @GetMapping("/tratamientos")
     public String listarTratamientos(Model model) {
         model.addAttribute("tratamientos", vidapetService.listarTratamientos());
         return "tratamientos";
     }
 
-    // Formulario para crear un nuevo tratamiento
     @GetMapping("/tratamientos/nuevo")
     public String nuevoTratamiento(Model model) {
         Map<String, Object> tratamiento = new HashMap<>();
         tratamiento.put("id", "");
-        tratamiento.put("nombre", "");
+        tratamiento.put("consulta_id", "");
+        tratamiento.put("tratamiento", "");
+        tratamiento.put("fecha_inicio", "");
+        tratamiento.put("fecha_fin", "");
+        tratamiento.put("observaciones", "");
+
         model.addAttribute("tratamiento", tratamiento);
+        model.addAttribute("consultas", vidapetService.listarConsultas());
         return "tratamiento_form";
     }
 
-    // Guardar un nuevo tratamiento
     @PostMapping("/tratamientos/guardar")
-    public String guardarTratamiento(@RequestParam String nombre) {
-        vidapetService.guardarTratamiento(nombre);
+    public String guardarTratamiento(@RequestParam int consulta_id,
+                                     @RequestParam String tratamiento,
+                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_inicio,
+                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_fin,
+                                     @RequestParam(required = false) String observaciones) {
+        vidapetService.guardarTratamiento(consulta_id, tratamiento, fecha_inicio, fecha_fin, observaciones);
         return "redirect:/tratamientos";
     }
 
-    // Formulario para editar tratamiento existente
     @GetMapping("/tratamientos/editar/{id}")
-    public String editarTratamiento(@PathVariable Long id, Model model) {
+    public String editarTratamiento(@PathVariable int id, Model model) {
         Map<String, Object> tratamiento = vidapetService.obtenerTratamientoPorId(id);
         model.addAttribute("tratamiento", tratamiento);
+        model.addAttribute("consultas", vidapetService.listarConsultas());
         return "tratamiento_form";
     }
 
-    // Actualizar tratamiento
     @PostMapping("/tratamientos/actualizar")
-    public String actualizarTratamiento(@RequestParam Long id,
-                                        @RequestParam String nombre) {
-        vidapetService.actualizarTratamiento(id, nombre);
+    public String actualizarTratamiento(@RequestParam int id,
+                                        @RequestParam int consulta_id,
+                                        @RequestParam String tratamiento,
+                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_inicio,
+                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_fin,
+                                        @RequestParam(required = false) String observaciones) {
+        vidapetService.actualizarTratamiento(id, consulta_id, tratamiento, fecha_inicio, fecha_fin, observaciones);
         return "redirect:/tratamientos";
     }
 
-    // Eliminar tratamiento
     @GetMapping("/tratamientos/eliminar/{id}")
-    public String eliminarTratamiento(@PathVariable Long id) {
+    public String eliminarTratamiento(@PathVariable int id) {
         vidapetService.eliminarTratamiento(id);
         return "redirect:/tratamientos";
     }
 
-    /*---------------------------- HISTORIAL MÉDICO ----------------------------*/
+    /*==================== CONSULTAS ====================*/
 
-    // Listar todos los historiales
-    @GetMapping("/historial")
-    public String listarHistoriales(Model model) {
-        model.addAttribute("historiales", vidapetService.listarHistoriales());
-        return "historiales";
+    @GetMapping("/consulta")
+    public String listarConsultas(Model model) {
+        List<Map<String, Object>> consultas = vidapetService.listarConsultasConTratamientos();
+        model.addAttribute("consultas", consultas);
+        return "consultas";
     }
 
-    // Formulario para crear nuevo historial
-    @GetMapping("/historial/nuevo")
-    public String nuevoHistorial(Model model) {
-        Map<String, Object> historial = new HashMap<>();
-        historial.put("id", "");
-        historial.put("mascota_id", "");
-        historial.put("fecha", "");
-        historial.put("problema", "");
-        historial.put("tratamiento_id", "");
-        historial.put("nombre_tratamiento", "");
-        historial.put("notas", "");
+    @GetMapping("/consulta/nueva")
+    public String nuevaConsulta(Model model) {
+        Map<String, Object> consulta = new HashMap<>();
+        consulta.put("id", null);
+        consulta.put("mascota_id", null);
+        consulta.put("diagnostico", "");
 
-        model.addAttribute("historial", historial);
+        model.addAttribute("consulta", consulta);
+        model.addAttribute("tratamientos", List.of()); // لیست خالی برای فرم جدید
+        model.addAttribute("mascotas", vidapetService.listarMascotas()); // اگر متد listarMascotas داری
+        return "consulta_form";
+    }
+
+    @PostMapping("/consulta/guardar")
+    public String guardarConsulta(@RequestParam int mascota_id,
+                                  @RequestParam String diagnostico,
+                                  @RequestParam(required = false) List<String> tratamientos,
+                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_inicio,
+                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_fin,
+                                  @RequestParam(required = false) List<String> observaciones) {
+
+        vidapetService.guardarConsulta(mascota_id, diagnostico);
+
+        // گرفتن آخرین id ذخیره شده (فرض کنید JdbcTemplate auto-increment درست کار می‌کند)
+        Map<String, Object> ultimaConsulta = vidapetService.listarConsultas().get(vidapetService.listarConsultas().size() - 1);
+        int consultaId = (Integer) ultimaConsulta.get("id");
+
+        if (tratamientos != null) {
+            for (int i = 0; i < tratamientos.size(); i++) {
+                vidapetService.guardarTratamiento(
+                        consultaId,
+                        tratamientos.get(i),
+                        fecha_inicio != null ? fecha_inicio.get(i) : null,
+                        fecha_fin != null ? fecha_fin.get(i) : null,
+                        observaciones != null ? observaciones.get(i) : null
+                );
+            }
+        }
+
+        return "redirect:/consulta";
+    }
+
+    @GetMapping("/consulta/editar/{id}")
+    public String editarConsulta(@PathVariable int id, Model model) {
+        Map<String, Object> consulta = vidapetService.obtenerConsultaPorId(id);
+        model.addAttribute("consulta", consulta);
+
+        List<Map<String, Object>> tratamientos = (List<Map<String, Object>>) consulta.get("tratamientos");
+        model.addAttribute("tratamientos", tratamientos);
+
         model.addAttribute("mascotas", vidapetService.listarMascotas());
-        model.addAttribute("tratamientos", vidapetService.listarTratamientos());
-        return "historial_form";
+        return "consulta_form";
     }
 
-    // Guardar historial
-    @PostMapping("/historial/guardar")
-    public String guardarHistorial(@RequestParam int mascota_id,
-                                   @RequestParam String fecha,
-                                   @RequestParam String problema,
-                                   @RequestParam(required = false) Integer tratamiento_id,
-                                   @RequestParam String nombre_tratamiento,
-                                   @RequestParam String notas) {
+    @PostMapping("/consulta/actualizar")
+    public String actualizarConsulta(@RequestParam int id,
+                                     @RequestParam int mascota_id,
+                                     @RequestParam String diagnostico,
+                                     @RequestParam(required = false) List<Integer> tratamientoId,
+                                     @RequestParam(required = false) List<String> tratamientos,
+                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_inicio,
+                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_fin,
+                                     @RequestParam(required = false) List<String> observaciones) {
 
-        vidapetService.guardarHistorial(mascota_id, fecha, problema, tratamiento_id, nombre_tratamiento, notas);
-        return "redirect:/historial";
+        vidapetService.actualizarConsulta(id, mascota_id, diagnostico);
+
+        if (tratamientos != null) {
+            for (int i = 0; i < tratamientos.size(); i++) {
+                if (tratamientoId != null && i < tratamientoId.size() && tratamientoId.get(i) != null) {
+                    vidapetService.actualizarTratamiento(
+                            tratamientoId.get(i),
+                            id,
+                            tratamientos.get(i),
+                            fecha_inicio != null ? fecha_inicio.get(i) : null,
+                            fecha_fin != null ? fecha_fin.get(i) : null,
+                            observaciones != null ? observaciones.get(i) : null
+                    );
+                } else {
+                    vidapetService.guardarTratamiento(
+                            id,
+                            tratamientos.get(i),
+                            fecha_inicio != null ? fecha_inicio.get(i) : null,
+                            fecha_fin != null ? fecha_fin.get(i) : null,
+                            observaciones != null ? observaciones.get(i) : null
+                    );
+                }
+            }
+        }
+
+        return "redirect:/consulta";
     }
 
-    // Formulario para editar historial
-    @GetMapping("/historial/editar/{id}")
-    public String editarHistorial(@PathVariable int id, Model model) {
-        Map<String, Object> historial = vidapetService.obtenerHistorialPorId(id);
-        model.addAttribute("historial", historial);
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
-        model.addAttribute("tratamientos", vidapetService.listarTratamientos());
-        return "historial_form";
+    @GetMapping("/consulta/eliminar/{id}")
+    public String eliminarConsulta(@PathVariable int id) {
+        vidapetService.eliminarConsulta(id);
+        return "redirect:/consulta";
     }
 
-    // Actualizar historial
-    @PostMapping("/historial/actualizar")
-    public String actualizarHistorial(@RequestParam int id,
-                                      @RequestParam int mascota_id,
-                                      @RequestParam String fecha,
-                                      @RequestParam String problema,
-                                      @RequestParam(required = false) Integer tratamiento_id,
-                                      @RequestParam String nombre_tratamiento,
-                                      @RequestParam String notas) {
+    /*-------------------- MASTER-DETAIL DASHBOARD --------------------*/
 
-        vidapetService.actualizarHistorial(id, mascota_id, fecha, problema, tratamiento_id, nombre_tratamiento, notas);
-        return "redirect:/historial";
+    @GetMapping("/consultas/dashboard")
+    public String dashboardConsultas(Model model) {
+        model.addAttribute("consultas", vidapetService.listarConsultasConTratamientos());
+        return "consultas";
     }
 
-    // Eliminar historial
-    @GetMapping("/historial/eliminar/{id}")
-    public String eliminarHistorial(@PathVariable int id) {
-        vidapetService.eliminarHistorial(id);
-        return "redirect:/historial";
+    @PostMapping("/consultas/{id}/tratamiento")
+    public String agregarTratamientoDashboard(@PathVariable int id,
+                                              @RequestParam String tratamiento,
+                                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_inicio,
+                                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha_fin,
+                                              @RequestParam(required = false) String observaciones) {
+        vidapetService.guardarTratamiento(id, tratamiento, fecha_inicio, fecha_fin, observaciones);
+        return "redirect:/consultas";
     }
 
     /*================= CITAS =================*/
-    /*================= CITAS =================*/
 
-    @GetMapping("/citas")
-    public String listarCitas(Model model) {
-        model.addAttribute("citas", vidapetService.listarCitas());
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
-        return "citas"; // نمایش لیست نوبت‌ها
-    }
 
-    @GetMapping("/citas/nuevo")
-    public String nuevoCita(Model model) {
-        Map<String,Object> cita = new HashMap<>();
-        cita.put("id", "");
-        cita.put("mascota_id", "");
-        cita.put("fecha", "");
-        cita.put("hora", "");
-        cita.put("notas", "");
-
-        model.addAttribute("cita", cita);
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
-        return "cita_form"; // فرم رزرو نوبت
-    }
-
-    @PostMapping("/citas/guardar")
-    public String guardarCita(@RequestParam Long mascota_id,
-                              @RequestParam String fecha,
-                              @RequestParam String hora,
-                              @RequestParam String notas) {
-        vidapetService.guardarCita(mascota_id, fecha, hora, notas);
-        return "redirect:/citas";
-    }
-
-    @GetMapping("/citas/editar/{id}")
-    public String editarCita(@PathVariable Long id, Model model) {
-        Map<String,Object> cita = vidapetService.obtenerCitaPorId(id);
-        model.addAttribute("cita", cita);
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
-        return "cita_form";
-    }
-
-    @PostMapping("/citas/actualizar")
-    public String actualizarCita(@RequestParam Long id,
-                                 @RequestParam Long mascota_id,
-                                 @RequestParam String fecha,
-                                 @RequestParam String hora,
-                                 @RequestParam String notas) {
-        vidapetService.actualizarCita(id, mascota_id, fecha, hora, notas);
-        return "redirect:/citas";
-    }
-
-    @GetMapping("/citas/eliminar/{id}")
-    public String eliminarCita(@PathVariable Long id) {
-        vidapetService.eliminarCita(id);
-        return "redirect:/citas";
-    }
-
-    /*================= CALENDARIO =================*/
-    @GetMapping("/citas/calendar")
-    public String verCalendario(Model model) {
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
-        return "citas_calendar";
-    }
-
-    /*================= DATOS JSON PARA FULLCALENDAR =================*/
-    @GetMapping("/citas/calendar-data")
-    @ResponseBody
-    public List<Map<String,Object>> getCitasJson() {
-        return vidapetService.listarCitasParaCalendar();
-    }
-
-    /*================= RESERVAR CITA AJAX =================*/
-    @PostMapping("/citas/reserve")
-    @ResponseBody
-    public String reservarCita(@RequestParam Long mascota_id,
-                               @RequestParam String fecha,
-                               @RequestParam String hora,
-                               @RequestParam(required = false) String notas) {
-        vidapetService.guardarCita(mascota_id, fecha, hora, notas);
-        return "OK";
-    }
-
-    /*================= OBTENER HORAS LIBRES =================*/
-    @GetMapping("/citas/horas-libres")
-    @ResponseBody
-    public List<String> horasLibres(@RequestParam String fecha) {
-        return vidapetService.obtenerHorasLibres(fecha);
-    }
-
-    /*================= ELIMINAR CITA AJAX =================*/
-    @PostMapping("/citas/delete")
-    @ResponseBody
-    public String eliminarCitaAjax(@RequestParam Long citaId) {
-        vidapetService.eliminarCita(citaId);
-        return "OK";
-    }
 }
