@@ -10,49 +10,83 @@
 </head>
 <body>
 
-<h1>Lista de Propietarios</h1>
+<div class="layout">
 
-<!-- ===== Botón para agregar un nuevo propietario ===== -->
-<a th:href="@{/propietarios/nuevo}" class="btn">
-    <i class="fas fa-plus"></i> Agregar
-</a>
+    <!-- ===== Sidebar ===== -->
+    <div class="sidebar">
+        <h2>🐾 VidaPet</h2>
+        <a href="/">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="/propietarios">
+            <i class="fas fa-user"></i> Propietarios
+        </a>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Teléfono</th>
-        <th>Email</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="propietario : ${propietarios}">
-        <td th:text="${propietario['nombre']}"></td>
-        <td th:text="${propietario['apellido']}"></td>
-        <td th:text="${propietario['telefono']}"></td>
-        <td th:text="${propietario['email']}"></td>
-        <td>
-            <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}" class="btn" title="Editar">
-                <i class="fas fa-edit"></i> Editar
-            </a>
-            <a th:href="@{'/propietarios/eliminar/' + ${propietario['id']}}"
-               onclick="return confirm('¿Está seguro de eliminar este propietario?');"
-               class="btn" title="Eliminar">
-                <i class="fas fa-trash-alt"></i> Eliminar
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        <a href="/mascotas">
+            <i class="fas fa-dog"></i> Mascotas
+        </a>
 
-<br>
+        <a href="/citas">
+            <i class="fas fa-calendar"></i> Citas
+        </a>
 
-<!-- ===== Enlace para volver a la página principal ===== -->
-<a th:href="@{/}" class="btn">
-    <i class="fas fa-arrow-left"></i> Volver
-</a>
+        <a href="/consultas">
+            <i class="fas fa-stethoscope"></i> Consultas
+        </a>
+    </div>
+
+    <!-- ===== Main Content ===== -->
+    <div class="main">
+
+        <h1>Lista de Propietarios</h1>
+
+        <a th:href="@{/propietarios/nuevo}" class="btn">
+            <i class="fas fa-plus"></i> Agregar
+        </a>
+
+        <div class="search-container">
+            <form method="get" action="/propietarios">
+                <input type="text" name="search" placeholder="Buscar por nombre o apellido..." />
+                <button type="submit">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </form>
+        </div>
+
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="propietario : ${propietarios}">
+                <td th:text="${propietario['nombre']}"></td>
+                <td th:text="${propietario['apellido']}"></td>
+                <td th:text="${propietario['telefono']}"></td>
+                <td th:text="${propietario['email']}"></td>
+                <td>
+                    <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}" class="btn">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+
+                    <a th:href="@{'/propietarios/eliminar/' + ${propietario['id']}}"
+                       onclick="return confirm('¿Está seguro?');"
+                       class="btn">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
 
 </body>
 </html>

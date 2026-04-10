@@ -3,6 +3,7 @@ package com.example.vidapet.service;
 import com.example.vidapet.dao.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -31,14 +32,48 @@ public class VidapetService {
     }
 
     /*================= CITAS =================*/
+    // CITAS
 
+    public List<Map<String, Object>> listarCitas(
+            String mascota,
+            String propietario,
+            LocalDate fecha,
+            String orden
+    ) {
+        return citaDAO.findFiltered(mascota, propietario, fecha, orden);
+    }
 
+    public void guardarCita(int mascotaId,
+                            int propietarioId,
+                            LocalDateTime fecha,
+                            String nota) {
+        citaDAO.save(mascotaId, propietarioId, fecha, nota);
+    }
 
+    public Map<String, Object> obtenerCita(int id) {
+        return citaDAO.findById(id);
+    }
 
+    public void eliminarCita(int id) {
+        citaDAO.delete(id);
+    }
+
+    public void cambiarEstadoCita(int id, String estado) {
+        citaDAO.updateEstado(id, estado);
+    }
+    public int guardarConsultaDesdeCita(int citaId, int mascotaId, String diagnostico) {
+        return consultaDAO.saveConCita(citaId, mascotaId, diagnostico);
+    }
+    public Map<String, Object> obtenerConsultaCompleta(int id) {
+        return consultaDAO.findConsultaFull(id);
+    }
     /*---------------------------- PROPIETARIOS ----------------------------*/
 
-    public List<Map<String, Object>> listarPropietarios() {
-        return propietarioDAO.findAll();
+    public List<Map<String,Object>> listarPropietarios(String search) {
+        if (search == null || search.isBlank()) {
+            return propietarioDAO.findAll();
+        }
+        return propietarioDAO.search(search);
     }
 
     public void guardarPropietario(String nombre, String apellido, String telefono, String email) {
@@ -91,8 +126,8 @@ public class VidapetService {
         return consultaDAO.findConsultaWithTratamientos(id);
     }
 
-    public void guardarConsulta(int mascotaId, String diagnostico) {
-        consultaDAO.save(mascotaId, diagnostico);
+    public int guardarConsulta(int mascotaId, String diagnostico) {
+        return consultaDAO.save(mascotaId, diagnostico);
     }
 
     public void actualizarConsulta(int id, int mascotaId, String diagnostico) {

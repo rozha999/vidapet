@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="css/fpropietario.css">
+  <link rel="stylesheet" th:href="@{/css/fpropietario.css}">
   <title th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</title>
 </head>
 <body>

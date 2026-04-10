@@ -23,31 +23,36 @@ public class ConsultaDAO {
         map.put("id", rs.getInt("id"));
         map.put("mascota_id", rs.getInt("mascota_id"));
         map.put("diagnostico", rs.getString("diagnostico"));
+        map.put("mascota_nombre", rs.getString("mascota_nombre")); // ✅ مهم
         return map;
     };
-
     /*---------------------------- CRUD ----------------------------*/
 
     public List<Map<String, Object>> findAll() {
-        String sql = "SELECT * FROM consulta";
+        String sql = "SELECT c.id, c.mascota_id, c.diagnostico, m.nombre AS mascota_nombre " +
+                "FROM consulta c " +
+                "JOIN mascota m ON c.mascota_id = m.id";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     public Map<String, Object> findById(int id) {
-        String sql = "SELECT * FROM consulta WHERE id=?";
+        String sql = "SELECT c.id, c.mascota_id, c.diagnostico, m.nombre AS mascota_nombre " +
+                "FROM consulta c " +
+                "JOIN mascota m ON c.mascota_id = m.id " +
+                "WHERE c.id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, rowMapper);
     }
-
     public List<Map<String, Object>> findByMascotaId(int mascotaId) {
         String sql = "SELECT * FROM consulta WHERE mascota_id=?";
         return jdbcTemplate.query(sql, new Object[]{mascotaId}, rowMapper);
     }
 
-    public void save(int mascotaId, String diagnostico) {
+    public int save(int mascotaId, String diagnostico) {
         String sql = "INSERT INTO consulta(mascota_id, diagnostico) VALUES (?, ?)";
         jdbcTemplate.update(sql, mascotaId, diagnostico);
-    }
 
+        return jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+    }
     public void update(int id, int mascotaId, String diagnostico) {
         String sql = "UPDATE consulta SET mascota_id=?, diagnostico=? WHERE id=?";
         jdbcTemplate.update(sql, mascotaId, diagnostico, id);
@@ -105,5 +110,58 @@ public class ConsultaDAO {
             c.putAll(consultaMutable); // ← جایگزینی Map اصلی با نسخه قابل تغییر
         }
         return consultas;
+    }
+    public int saveConCita(int citaId, int mascotaId, String diagnostico) {
+
+        jdbcTemplate.update("""
+        INSERT INTO consulta (cita_id, mascota_id, diagnostico)
+        VALUES (?, ?, ?)
+    """, citaId, mascotaId, diagnostico);
+
+        return jdbcTemplate.queryForObject(
+                "SELECT LAST_INSERT_ID()",
+                Integer.class
+        );
+    }
+    public Map<String, Object> findConsultaFull(int id) {
+
+        String sql = """
+        SELECT 
+            co.id AS consulta_id,
+            co.diagnostico,
+
+            m.id AS mascota_id,
+            m.nombre AS mascota_nombre,
+            m.especie,
+            m.raza,
+
+            p.id AS propietario_id,
+            p.nombre AS propietario_nombre,
+            p.apellido AS propietario_apellido,
+            p.telefono,
+            p.email
+
+        FROM consulta co
+        JOIN mascota m ON co.mascota_id = m.id
+        JOIN propietario p ON m.propietario_id = p.id
+        WHERE co.id = ?
+    """;
+
+        Map<String, Object> data = jdbcTemplate.queryForMap(sql, id);
+
+        List<Map<String, Object>> tratamientos = jdbcTemplate.query("""
+        SELECT * FROM tratamiento WHERE consulta_id=?
+    """, (rs, rowNum) -> {
+            Map<String, Object> t = new HashMap<>();
+            t.put("tratamiento", rs.getString("tratamiento"));
+            t.put("fecha_inicio", rs.getObject("fecha_inicio"));
+            t.put("fecha_fin", rs.getObject("fecha_fin"));
+            t.put("observaciones", rs.getString("observaciones"));
+            return t;
+        }, id);
+
+        data.put("tratamientos", tratamientos);
+
+        return data;
     }
 }

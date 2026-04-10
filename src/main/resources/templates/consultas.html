@@ -3,39 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <title>Consultas - VidaPet</title>
+
+    <link rel="stylesheet" th:href="@{/css/consulta.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body class="p-4">
 
-<h1 class="mb-4">Lista de Consultas</h1>
+<div class="container">
 
-<a th:href="@{/consulta/nueva}" class="btn btn-primary mb-3">Agregar Consulta</a>
+    <h1 class="mb-4">Lista de Consultas</h1>
 
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Mascota</th>
-        <th>Diagnóstico</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="c : ${consultas}">
-        <td th:text="${c['id']}"></td>
-        <td th:text="${c['mascota_id']}"></td>
-        <td th:text="${c['diagnostico']}"></td>
-        <td>
-            <a th:href="@{'/consulta/editar/' + ${c['id']}}" class="btn btn-warning btn-sm">Editar</a>
-            <a th:href="@{'/consulta/eliminar/' + ${c['id']}}" class="btn btn-danger btn-sm"
-               onclick="return confirm('¿Está seguro de eliminar esta consulta?');">Eliminar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <!-- NUEVA CONSULTA -->
+    <a th:href="@{/consulta/nueva}" class="btn btn-primary mb-3">
+        Agregar Consulta
+    </a>
 
-<a href="/" class="btn btn-secondary mt-3">Volver al inicio</a>
+    <!-- TABLE -->
+    <table class="table table-bordered table-striped">
+
+        <thead class="table-dark">
+        <tr>
+            <th>Mascota</th>
+            <th>Diagnóstico</th>
+            <th>Tratamientos</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="c : ${consultas}">
+
+            <!-- Mascota -->
+            <td th:text="${c['mascota_nombre']}"></td>
+
+            <!-- Diagnóstico -->
+            <td th:text="${c['diagnostico']}"></td>
+
+            <!-- Tratamientos -->
+            <td>
+                <ul class="mb-0">
+                    <li th:each="t : ${c['tratamientos']}"
+                        th:text="${t['tratamiento']}">
+                    </li>
+                </ul>
+            </td>
+
+            <!-- Acciones -->
+            <td>
+
+                <a th:href="@{'/consulta/editar/' + ${c['id']}}"
+                   class="btn btn-warning btn-sm me-1">
+                    Editar
+                </a>
+
+                <a th:href="@{'/consulta/eliminar/' + ${c['id']}}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Está seguro de eliminar esta consulta?');">
+                    Eliminar
+                </a>
+
+                <!-- VER DETALLE -->
+                <a th:href="@{'/consultas/' + ${c['id']}}"
+                   class="btn btn-info btn-sm mt-1">
+                    Ver
+                </a>
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <a href="/" class="btn btn-secondary mt-3">Volver al inicio</a>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

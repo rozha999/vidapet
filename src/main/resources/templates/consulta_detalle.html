@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Consulta Detalle</title>
+    <link rel="stylesheet" th:href="@{/css/cita.css}">
+</head>
+<body>
+
+<div class="content">
+
+    <h1>📋 Consulta Médica</h1>
+
+    <!-- 🟢 MASCOTA + PROPIETARIO -->
+    <div class="card">
+
+        <h2>🐶 Mascota</h2>
+        <p><b>Nombre:</b> <span th:text="${data.mascota_nombre}"></span></p>
+        <p><b>Especie:</b> <span th:text="${data.especie}"></span></p>
+        <p><b>Raza:</b> <span th:text="${data.raza}"></span></p>
+
+        <hr/>
+
+        <h2>👤 Propietario</h2>
+        <p><b>Nombre:</b> <span th:text="${data.propietario_nombre + ' ' + data.propietario_apellido}"></span></p>
+        <p><b>Tel:</b> <span th:text="${data.telefono}"></span></p>
+        <p><b>Email:</b> <span th:text="${data.email}"></span></p>
+
+    </div>
+
+    <!-- 🟡 DIAGNÓSTICO -->
+    <div class="card">
+        <h2>🩺 Diagnóstico</h2>
+        <p th:text="${data.diagnostico}"></p>
+    </div>
+
+    <!-- 🟢 TRATAMIENTOS -->
+    <div class="card">
+        <h2>💊 Tratamientos</h2>
+
+        <table>
+            <tr>
+                <th>Tratamiento</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Observaciones</th>
+            </tr>
+
+            <tr th:each="t : ${data.tratamientos}">
+                <td th:text="${t.tratamiento}"></td>
+                <td th:text="${t.fecha_inicio}"></td>
+                <td th:text="${t.fecha_fin}"></td>
+                <td th:text="${t.observaciones}"></td>
+            </tr>
+
+        </table>
+    </div>
+
+    <br/>
+    <a href="/citas">⬅ Volver</a>
+
+</div>
+
+</body>
+</html>

@@ -1,88 +1,115 @@
-/* پس زمینه کل صفحه */
+/* ===== Reset ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* ===== Background ===== */
 body {
-    font-family: 'Verdana', Geneva, sans-serif;
-    background-color: #FFF0F5; /* صورتی خیلی ملایم */
-    color: #2E2E2E;
-    margin: 20px;
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+}
+
+/* ===== Sidebar (آبی ملایم) ===== */
+.sidebar {
+    width: 220px;
+    background: #3b82f6; /* آبی پاستلی */
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #fbcfe8; /* صورتی پاستلی */
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.sidebar a i {
+    margin-right: 8px;
+    color: #fbcfe8;
+}
+
+.sidebar a:hover {
+    background-color: #60a5fa;
+}
+
+/* ===== Main ===== */
+.main {
+    margin-left: 240px;
+    padding: 25px;
+    width: 100%;
 }
 
 h1 {
-    background-color: #90CAF9; /* آبی پاستلی ملایم */
-    color: #0D47A1;
-    padding: 20px;
-    text-align: center;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    font-size: 2em;
+    margin-bottom: 20px;
+    color: #3b82f6;
 }
 
-/* دکمه‌ها به شکل کارت با سایه */
-a button {
-    background-color: #F48FB1; /* صورتی ملایم */
+/* ===== Button (صورتی پاستلی) ===== */
+button {
+    background-color: #f9a8d4; /* صورتی پاستلی */
+    color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: 9px 14px;
+    border-radius: 10px;
     cursor: pointer;
-    color: #4E342E;
     font-weight: bold;
-    font-size: 1em;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: 0.3s;
 }
 
-a button:hover {
+button:hover {
+    background-color: #f472b6;
     transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
-    background-color: #F06292;
-    color: #fff;
 }
 
+/* ===== Table ===== */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 25px;
-    background-color: #E3F2FD; /* آبی خیلی روشن */
+    background: white;
+    margin-top: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 th {
-    background-color: #90CAF9; /* آبی ملایم */
-    color: #0D47A1;
+    background-color: #3b82f6;
+    color: #fbcfe8;
     padding: 12px;
-    text-align: left;
 }
 
 td {
     padding: 12px;
-    border-bottom: 1px solid #E0E0E0;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 tr:hover {
-    background-color: #BBDEFB; /* آبی روشن برای hover */
+    background-color: #fce7f3; /* صورتی خیلی ملایم */
 }
 
-a {
-    text-decoration: none;
-}
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 180px;
+    }
 
-/* لینک بازگشت */
-a[href="/"] {
-    display: inline-block;
-    margin-top: 20px;
-    background-color: #F48FB1; /* صورتی ملایم */
-    color: #880E4F;
-    padding: 12px 25px;
-    border-radius: 15px;
-    font-weight: bold;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-a[href="/"]:hover {
-    background-color: #F06292;
-    color: #fff;
-    transform: scale(1.05);
+    .main {
+        margin-left: 200px;
+    }
 }

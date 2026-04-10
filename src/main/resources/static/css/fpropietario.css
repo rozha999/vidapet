@@ -1,0 +1,113 @@
+/* ===== بک‌گراند کلی ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f4f8ff, #e6f0ff);
+    margin: 0;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #2c3e50;
+}
+
+/* ===== کارت فرم ===== */
+.card-form {
+    background: white;
+    padding: 30px 35px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* انیمیشن ورود */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== عنوان ===== */
+.card-form h1 {
+    text-align: center;
+    color: #2f80ed;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* ===== لیبل‌ها ===== */
+label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+/* ===== input ها ===== */
+input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dce6f5;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #f9fbff;
+}
+
+input:focus {
+    border-color: #2f80ed;
+    box-shadow: 0 0 8px rgba(47, 128, 237, 0.25);
+    background: white;
+}
+
+/* ===== دکمه‌ها ===== */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg, #2f80ed, #56ccf2);
+    box-shadow: 0 8px 20px rgba(47, 128, 237, 0.25);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(47, 128, 237, 0.35);
+}
+
+/* ===== لینک برگشت ===== */
+.card-form a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #2f80ed;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.card-form a:hover {
+    color: #1c5fd4;
+    text-decoration: underline;
+}
+
+/* ===== ریسپانسیو ===== */
+@media (max-width: 500px) {
+    .card-form {
+        padding: 20px;
+    }
+}

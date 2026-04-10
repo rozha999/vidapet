@@ -1,141 +1,119 @@
-/* ==========================
-   Reset & Base Styles
-========================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ===== Layout ===== */
+.layout {
+    display: flex;
+    min-height: 100vh;
 }
 
-body {
-    background-color: #e6f0ff; /* Soft pastel blue background */
-    color: #1a1a1a;
-    line-height: 1.6;
+/* ===== Sidebar ===== */
+.sidebar {
+    width: 220px;
+    background: linear-gradient(180deg, #eaf4fb, #f3eefc);
     padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
 }
 
-/* ==========================
-   Headings
-========================== */
-h1, h2, h3 {
-    color: #336699; /* Medium blue */
+.sidebar h2 {
+    text-align: center;
+    color: #5a6f8a;
     margin-bottom: 20px;
 }
 
-h1 {
-    text-align: center;
-    font-size: 2.5em;
+.sidebar a {
+    display: block;
+    padding: 10px;
+    margin: 6px 0;
+    text-decoration: none;
+    color: #3a3f46;
+    border-radius: 10px;
+    transition: 0.25s;
 }
 
-/* ==========================
-   Buttons & Links
-========================== */
+.sidebar a:hover {
+    background: #d9ecf6;
+    color: #2c5870;
+}
+
+/* ===== Main Content ===== */
+.main {
+    flex: 1;
+    padding: 20px;
+    background: linear-gradient(180deg, #f7fafc, #fdf7ff);
+}
+
+/* ===== Buttons ===== */
 .btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background-color: #99ccff; /* Pastel blue */
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 0.95em;
+    padding: 8px 12px;
+    margin: 4px;
+    background: linear-gradient(135deg, #7fb3c8, #a8d5ba);
+    color: #fff;
     text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: 0.2s;
 }
 
 .btn:hover {
-    background-color: #6699cc; /* Darker pastel blue on hover */
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, #6aa3bb, #94c9ab);
 }
 
-/* ==========================
-   Forms
-========================== */
-form {
-    background-color: #ffffff; /* White form background */
-    padding: 30px;
-    margin: 20px auto;
-    border-radius: 16px;
-    max-width: 550px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+/* ===== Search ===== */
+.search-container {
+    text-align: center;
+    margin: 15px 0 25px;
 }
 
-label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #336699;
+.search-container input {
+    padding: 8px 10px;
+    width: 220px;
+    border: 1px solid #d7e3ea;
+    border-radius: 10px;
+    background: #fff;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="number"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    transition: border-color 0.3s ease;
+.search-container button {
+    padding: 8px 12px;
+    border: none;
+    background: linear-gradient(135deg, #a7c7dc, #d7bde2);
+    color: white;
+    border-radius: 10px;
+    transition: 0.2s;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus {
-    border-color: #6699cc;
-    outline: none;
+.search-container button:hover {
+    opacity: 0.9;
 }
 
-/* ==========================
-   Tables
-========================== */
+/* ===== Table ===== */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 25px 0;
-    background-color: #ffffff;
+    background: #fff;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+thead {
+    background: linear-gradient(135deg, #eaf4fb, #f3eefc);
+    color: #3f6f8f;
 }
 
 th, td {
-    padding: 14px 20px;
+    padding: 10px;
     text-align: center;
+    border-bottom: 1px solid #eef3f7;
 }
 
-th {
-    background-color: #6699cc; /* Pastel darker blue header */
-    color: #ffffff;
-    font-weight: 600;
+tbody tr:hover {
+    background: #f1f7fb;
 }
 
-tr:nth-child(even) {
-    background-color: #e6f2ff; /* Light pastel blue for stripes */
-}
-
-tr:hover {
-    background-color: #cce0ff; /* Hover effect pastel */
-    transform: scale(1.01);
-    transition: 0.2s ease;
-}
-
-/* ==========================
-   Responsive
-========================== */
-@media (max-width: 600px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: left;
-    }
-
-    tr {
-        margin-bottom: 15px;
-    }
+/* Icons */
+i {
+    margin-right: 5px;
 }

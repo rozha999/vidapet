@@ -18,7 +18,7 @@ public class PropietarioDAO {
     }
 
     // ===== RowMapper para mapear resultados de la tabla 'propietario' =====
-    private RowMapper<Map<String,Object>> rowMapper = (rs, rowNum) -> {
+    private RowMapper<Map<String, Object>> rowMapper = (rs, rowNum) -> {
         Map<String, Object> map = new HashMap<>();
         map.put("id", rs.getLong("id"));
         map.put("nombre", rs.getString("nombre"));
@@ -31,12 +31,12 @@ public class PropietarioDAO {
     /*---------------------------- MÉTODOS CRUD ----------------------------*/
 
     // ===== Listar todos los propietarios =====
-    public List<Map<String,Object>> findAll() {
+    public List<Map<String, Object>> findAll() {
         return jdbcTemplate.query("SELECT * FROM propietario", rowMapper);
     }
 
     // ===== Obtener un propietario por ID =====
-    public Map<String,Object> findById(Long id) {
+    public Map<String, Object> findById(Long id) {
         return jdbcTemplate.queryForObject(
                 "SELECT * FROM propietario WHERE id=?",
                 new Object[]{id},
@@ -63,5 +63,18 @@ public class PropietarioDAO {
     // ===== Eliminar un propietario por ID =====
     public void delete(Long id) {
         jdbcTemplate.update("DELETE FROM propietario WHERE id=?", id);
+    }
+
+    public List<Map<String,Object>> search(String search) {
+
+        String sql = """
+        SELECT * FROM propietario
+        WHERE LOWER(nombre) LIKE LOWER(?)
+           OR LOWER(apellido) LIKE LOWER(?)
+    """;
+
+        String keyword = "%" + search + "%";
+
+        return jdbcTemplate.query(sql, rowMapper, keyword, keyword);
     }
 }

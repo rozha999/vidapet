@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Citas</title>
+
+    <link rel="stylesheet" th:href="@{/css/cita.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+    <h2>🐾 VidaPet</h2>
+
+    <a href="/"><i class="fas fa-home"></i> Home</a>
+    <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
+    <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
+    <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
+    <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="content">
+
+    <h1>📅 Citas</h1>
+
+    <!-- ===== TOOLBAR ===== -->
+    <div class="toolbar">
+
+        <a class="btn" href="/citas/nueva">➕ Nueva Cita</a>
+
+        <form class="filter-bar" method="get" action="/citas">
+            <input type="text" name="mascota" placeholder="🐶 Mascota..." />
+            <input type="text" name="propietario" placeholder="👤 Propietario..." />
+            <input type="date" name="fecha" />
+            <button type="submit">Buscar</button>
+        </form>
+
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <table>
+
+        <tr>
+            <th>Mascota</th>
+            <th>Propietario</th>
+
+            <th>
+                Fecha
+                <a th:href="@{/citas(orden='asc')}"><i class="fas fa-arrow-up"></i></a>
+                <a th:href="@{/citas(orden='desc')}"><i class="fas fa-arrow-down"></i></a>
+            </th>
+
+            <th>Nota</th>
+            <th>Estado</th>
+            <th>Consulta</th>
+            <th>Acciones</th>
+        </tr>
+
+        <!-- ===== ROW ===== -->
+        <tr th:each="c : ${citas}">
+
+            <td th:text="${c.mascota_nombre}"></td>
+
+            <td th:text="${c.propietario_nombre + ' ' + c.propietario_apellido}"></td>
+
+            <td th:text="${c.fecha}"></td>
+
+            <td th:text="${c.nota}"></td>
+
+            <!-- ===== ESTADO ===== -->
+            <td>
+                <span th:switch="${c.estado}">
+                    <span th:case="'ESPERANDO'">🟡 Esperando</span>
+                    <span th:case="'ATENDIENDO'">🔵 Atendiendo</span>
+                    <span th:case="'ATENDIDO'">🟢 Atendido</span>
+                    <span th:case="*">⚪ Sin estado</span>
+                </span>
+            </td>
+
+            <!-- ===== CONSULTA ===== -->
+            <td>
+
+                <a th:if="${c.consulta_id != null}"
+                   th:href="@{'/consultas/' + ${c.consulta_id}}">
+                    👁 Ver
+                </a>
+
+                <span th:if="${c.consulta_id == null}">-</span>
+
+            </td>
+
+            <!-- ===== ACCIONES ===== -->
+            <td>
+
+                <a th:href="@{'/citas/editar/' + ${c.id}}">Editar</a>
+                <a th:href="@{'/citas/eliminar/' + ${c.id}}">Eliminar</a>
+
+                <br/>
+
+                <a th:href="@{'/citas/estado/' + ${c.id} + '/ATENDIENDO'}">
+                    ▶ Iniciar
+                </a>
+
+                <a th:href="@{'/citas/estado/' + ${c.id} + '/ATENDIDO'}">
+                    ✔ Finalizar
+                </a>
+
+                <br/>
+
+                <!-- Crear consulta SOLO si no existe -->
+                <a th:if="${c.estado == 'ATENDIENDO' and c.consulta_id == null}"
+                   th:href="@{'/consultas/nueva-desde-cita/' + ${c.id}}">
+                    ➕ Consulta
+                </a>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>

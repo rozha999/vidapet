@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cita Form</title>
+</head>
+<body>
+
+<h1>📌 Formulario Cita</h1>
+
+<form th:action="@{/citas/guardar}" method="post">
+
+    <!-- Mascota -->
+    <label>Mascota:</label>
+    <select name="mascota_id" required>
+        <option value="">-- Seleccionar --</option>
+        <option th:each="m : ${mascotas}"
+                th:value="${m.id}"
+                th:text="${m.nombre}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <!-- Propietario -->
+    <label>Propietario:</label>
+    <select name="propietario_id" required>
+        <option value="">-- Seleccionar --</option>
+        <option th:each="p : ${propietarios}"
+                th:value="${p.id}"
+                th:text="${p.nombre + ' ' + p.apellido}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <!-- Fecha -->
+    <label>Fecha:</label>
+    <input type="datetime-local" name="fecha" required>
+
+    <br><br>
+
+    <!-- Nota -->
+    <label>Nota:</label>
+    <textarea name="nota"></textarea>
+
+    <br><br>
+
+    <button type="submit">💾 Guardar</button>
+
+</form>
+
+<br>
+<a href="/citas">⬅ Volver</a>
+
+</body>
+</html>
