@@ -5,85 +5,90 @@
     <link rel="stylesheet" href="/css/mascota.css">
     <title>Mascotas</title>
 
-    <!-- Font Awesome (para los íconos) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-<!-- ===== Sidebar ===== -->
-<div class="sidebar">
-    <h2>🐾 VidaPet</h2>
+<div class="layout">
 
-    <a href="/">
-        <i class="fas fa-home"></i> Home
-    </a>
+    <!-- ===== Sidebar ===== -->
+    <div class="sidebar">
+        <h2>🐾 VidaPet</h2>
 
-    <a href="/propietarios">
-        <i class="fas fa-user"></i> Propietarios
-    </a>
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
+        <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
+        <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
+        <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
 
-    <a href="/mascotas">
-        <i class="fas fa-dog"></i> Mascotas
-    </a>
+    </div>
+    <!-- ===== Main ===== -->
+    <div class="main">
 
-    <a href="/citas">
-        <i class="fas fa-calendar"></i> Citas
-    </a>
+        <h1>Mascotas</h1>
 
-    <a href="/consultas">
-        <i class="fas fa-stethoscope"></i> Consultas
-    </a>
-</div>
+        <a th:href="@{/mascotas/nuevo}">
+            <button>+Agregar</button>
+        </a>
 
-<!-- ===== Main Content ===== -->
-<div class="main">
+        <table>
+            <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th>Fecha Nacimiento</th>
+                <th>Propietario</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
 
-    <h1>Mascotas</h1>
+            <tbody>
+            <tr th:each="m : ${mascotas}">
 
-    <!-- Botón para agregar nueva mascota -->
-    <a th:href="@{/mascotas/nuevo}">
-        <button>Agregar</button>
-    </a>
+                <!-- FOTO -->
+                <td>
+                    <img th:if="${m['foto'] != null and m['foto'] != ''}"
+                         th:src="@{'/' + ${m['foto']}}"
+                         width="80"
+                         height="80">
 
-    <!-- Tabla de mascotas -->
-    <table border="1">
-        <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Especie</th>
-            <th>Raza</th>
-            <th>Fecha Nacimiento</th>
-            <th>Propietario</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
+                    <span th:if="${m['foto'] == null or m['foto'] == ''}">
+                        Sin foto
+                    </span>
+                </td>
 
-        <tbody>
-        <tr th:each="m : ${mascotas}">
-            <td th:text="${m['nombre']}"></td>
-            <td th:text="${m['especie']}"></td>
-            <td th:text="${m['raza']}"></td>
-            <td th:text="${m['fecha_nacimiento']}"></td>
-            <td th:text="${m['propietario_nombre']} + ' ' + ${m['propietario_apellido']}"></td>
+                <td th:text="${m['nombre']}"></td>
+                <td th:text="${m['especie']}"></td>
+                <td th:text="${m['raza']}"></td>
+                <td th:text="${m['fecha_nacimiento']}"></td>
 
-            <td>
-                <a th:href="@{'/mascotas/editar/' + ${m['id']}}">
-                    <button>Editar</button>
-                </a>
-                |
-                <a th:href="@{'/mascotas/eliminar/' + ${m['id']}}"
-                   onclick="return confirm('¿Está seguro de eliminar esta mascota?');">
-                    <button>Eliminar</button>
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                <td th:text="${m['propietario_nombre']} + ' ' + ${m['propietario_apellido']}"></td>
+                <td class="actions">
 
-    <br/>
-    <a href="/">Volver al inicio</a>
+                    <a th:href="@{'/mascotas/editar/' + ${m['id']}}" class="icon-btn edit">
+                        <i class="fas fa-pen"></i>
+                    </a>
+
+                    <a th:href="@{'/mascotas/eliminar/' + ${m['id']}}"
+                       class="icon-btn delete"
+                       onclick="return confirm('¿Está seguro de eliminar esta mascota?');">
+                        <i class="fas fa-trash"></i>
+                    </a>
+
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+
+        <br/>
+
+
+    </div>
 
 </div>
 

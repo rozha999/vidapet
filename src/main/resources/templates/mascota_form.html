@@ -3,45 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/fmascota.css}">
-    <title th:text="${mascota['id']} == '' ? 'Nueva Mascota' : 'Editar Mascota'">Formulario Mascota</title>
+    <title th:text="${mascota['id']} == '' ? 'Nueva Mascota' : 'Editar Mascota'">
+        Formulario Mascota
+    </title>
 </head>
 <body>
 
 <h2 th:text="${mascota['id']} == '' ? 'Nueva Mascota' : 'Editar Mascota'"></h2>
 
-<!-- ===== Formulario para agregar nueva mascota ===== -->
+<!-- ================= NUEVA ================= -->
 <form th:if="${mascota['id']} == ''"
       th:action="@{/mascotas/guardar}"
-      method="post">
+      method="post"
+      enctype="multipart/form-data">
 
     <label>Nombre:</label>
-    <input type="text" name="nombre" th:value="${mascota['nombre']}" required><br>
+    <input type="text" name="nombre" required><br>
 
     <label>Especie:</label>
-    <input type="text" name="especie" th:value="${mascota['especie']}" required><br>
+    <input type="text" name="especie" required><br>
 
     <label>Raza:</label>
-    <input type="text" name="raza" th:value="${mascota['raza']}" required><br>
+    <input type="text" name="raza" required><br>
 
-    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" th:value="${mascota['fecha_nacimiento']}" required><br>
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" name="fecha_nacimiento" required><br>
 
+    <!-- ================= PROPIETARIO SEARCH ================= -->
     <label>Propietario:</label>
-    <select name="propietario_id" required>
-        <option value="">-- Seleccione un propietario --</option>
+
+    <input type="text"
+           id="propietarioInput"
+           list="propietariosList"
+           placeholder="Buscar propietario..."
+           required>
+
+    <datalist id="propietariosList">
         <option th:each="p : ${propietarios}"
-                th:value="${p['id']}"
-                th:text="${p['nombre']} + ' ' + ${p['apellido']}">
+                th:value="${p['nombre']} + ' ' + ${p['apellido']}"
+                th:data-id="${p['id']}">
         </option>
-    </select><br><br>
+    </datalist>
+
+    <input type="hidden" name="propietario_id" id="propietario_id">
+
+    <br>
+
+    <!-- FOTO -->
+    <label>Foto:</label>
+    <input type="file" name="foto" accept="image/*"><br><br>
 
     <button type="submit">Guardar</button>
 </form>
 
-<!-- ===== Formulario para editar mascota existente ===== -->
+<!-- ================= EDITAR ================= -->
 <form th:if="${mascota['id']} != ''"
       th:action="@{/mascotas/actualizar}"
-      method="post">
+      method="post"
+      enctype="multipart/form-data">
 
     <input type="hidden" name="id" th:value="${mascota['id']}">
 
@@ -54,25 +73,75 @@
     <label>Raza:</label>
     <input type="text" name="raza" th:value="${mascota['raza']}" required><br>
 
-    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" name="fecha_nacimiento"
            th:value="${mascota['fecha_nacimiento']}" required><br>
 
+    <!-- ================= PROPIETARIO SEARCH (EDIT) ================= -->
     <label>Propietario:</label>
-    <select name="propietario_id" required>
-        <option value="">-- Seleccione un propietario --</option>
+
+    <input type="text"
+           id="propietarioInput"
+           list="propietariosList"
+           th:value="${mascota['propietario_nombre']} + ' ' + ${mascota['propietario_apellido']}"
+           placeholder="Buscar propietario..."
+           required>
+
+    <datalist id="propietariosList">
         <option th:each="p : ${propietarios}"
-                th:value="${p['id']}"
-                th:text="${p['nombre']} + ' ' + ${p['apellido']}"
-                th:selected="${mascota['propietario_id']} == ${p['id']}">
+                th:value="${p['nombre']} + ' ' + ${p['apellido']}"
+                th:data-id="${p['id']}">
         </option>
-    </select><br><br>
+    </datalist>
+
+    <input type="hidden" name="propietario_id"
+           th:value="${mascota['propietario_id']}"
+           id="propietario_id">
+
+    <br>
+
+    <!-- FOTO ACTUAL -->
+    <div th:if="${mascota['foto'] != null and mascota['foto'] != ''}">
+        <p>Foto actual:</p>
+        <img th:src="@{'/' + ${mascota['foto']}}"
+             width="120"
+             style="border-radius:8px;">
+    </div>
+
+    <br>
+
+    <!-- CAMBIAR FOTO -->
+    <label>Cambiar foto:</label>
+    <input type="file" name="foto" accept="image/*"><br><br>
 
     <button type="submit">Actualizar</button>
 </form>
 
 <br/>
 <a href="/mascotas">Volver a la lista</a>
+
+<!-- ================= JS (OBLIGATORIO para ID) ================= -->
+<script>
+    function bindPropietarioSearch() {
+        const input = document.querySelector('input[list="propietariosList"]');
+        const hidden = document.getElementById("propietario_id");
+        const options = document.querySelectorAll("#propietariosList option");
+
+        if (!input || !hidden) return;
+
+        input.addEventListener("input", function () {
+            hidden.value = "";
+
+            options.forEach(opt => {
+                if (opt.value === input.value) {
+                    hidden.value = opt.getAttribute("data-id");
+                }
+            });
+        });
+    }
+
+    bindPropietarioSearch();
+</script>
 
 </body>
 </html>

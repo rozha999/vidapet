@@ -98,18 +98,19 @@ public class VidapetService {
         return mascotaDAO.findAll();
     }
 
-    // ==== اصلاح شده: از int edad به LocalDate fechaNacimiento تغییر کرد ====
-    public void guardarMascota(String nombre, String especie, String raza, LocalDate fechaNacimiento, Long propietarioId) {
-        mascotaDAO.save(nombre, especie, raza, fechaNacimiento, propietarioId);
+    public void guardarMascota(String nombre, String especie, String raza,
+                               LocalDate fechaNacimiento, Long propietarioId, String foto) {
+        mascotaDAO.save(nombre, especie, raza, fechaNacimiento, propietarioId, foto);
     }
 
+    public void actualizarMascota(Long id, String nombre, String especie, String raza,
+                                  LocalDate fechaNacimiento, Long propietarioId, String foto) {
+        mascotaDAO.update(id, nombre, especie, raza, fechaNacimiento, propietarioId, foto);
+    }
     public Map<String, Object> obtenerMascotaPorId(Long id) {
         return mascotaDAO.findById(id);
     }
 
-    public void actualizarMascota(Long id, String nombre, String especie, String raza, LocalDate fechaNacimiento, Long propietarioId) {
-        mascotaDAO.update(id, nombre, especie, raza, fechaNacimiento, propietarioId);
-    }
 
     public void eliminarMascota(Long id) {
         mascotaDAO.delete(id);

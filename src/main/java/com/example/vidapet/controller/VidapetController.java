@@ -5,10 +5,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
@@ -90,6 +94,7 @@ public class VidapetController {
 
     /*------------------------------- MASCOTAS ----------------------------------*/
 
+
     @GetMapping("/mascotas")
     public String listarMascotas(Model model) {
         model.addAttribute("mascotas", vidapetService.listarMascotas());
@@ -98,55 +103,143 @@ public class VidapetController {
 
     @GetMapping("/mascotas/nuevo")
     public String nuevaMascota(Model model) {
+
         Map<String, Object> mascota = new HashMap<>();
         mascota.put("id", "");
         mascota.put("nombre", "");
         mascota.put("especie", "");
         mascota.put("raza", "");
-        mascota.put("fecha_nacimiento", ""); // ← اصلاح شد
+        mascota.put("fecha_nacimiento", "");
         mascota.put("propietario_id", "");
+        mascota.put("foto", "");
 
         model.addAttribute("mascota", mascota);
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+
         return "mascota_form";
     }
 
+    /*====================== GUARDAR ======================*/
     @PostMapping("/mascotas/guardar")
-    public String guardarMascota(@RequestParam String nombre,
-                                 @RequestParam String especie,
-                                 @RequestParam String raza,
-                                 @RequestParam("fecha_nacimiento") String fechaNacimientoStr,
-                                 @RequestParam Long propietario_id) {
+    public String guardarMascota(
+            @RequestParam String nombre,
+            @RequestParam String especie,
+            @RequestParam String raza,
+            @RequestParam("fecha_nacimiento") String fechaNacimientoStr,
+            @RequestParam Long propietario_id,
+            @RequestParam(required = false) MultipartFile foto
+    ) throws Exception {
+
+        String filePath = "";
+
+        if (foto != null && !foto.isEmpty()) {
+
+            String fileName = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
+
+            Path uploadDir = Paths.get("uploads");
+
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+
+            Path filePathDisk = uploadDir.resolve(fileName);
+            Files.write(filePathDisk, foto.getBytes());
+
+            filePath = "uploads/" + fileName;
+        }
 
         LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
-        vidapetService.guardarMascota(nombre, especie, raza, fechaNacimiento, propietario_id);
+
+        vidapetService.guardarMascota(
+                nombre,
+                especie,
+                raza,
+                fechaNacimiento,
+                propietario_id,
+                filePath
+        );
+
         return "redirect:/mascotas";
     }
 
     @GetMapping("/mascotas/editar/{id}")
     public String editarMascota(@PathVariable Long id, Model model) {
+
         Map<String, Object> mascota = vidapetService.obtenerMascotaPorId(id);
+
+        if (mascota == null) {
+            return "redirect:/mascotas";
+        }
+
         model.addAttribute("mascota", mascota);
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+
         return "mascota_form";
     }
 
+    /*====================== ACTUALIZAR ======================*/
     @PostMapping("/mascotas/actualizar")
-    public String actualizarMascota(@RequestParam Long id,
-                                    @RequestParam String nombre,
-                                    @RequestParam String especie,
-                                    @RequestParam String raza,
-                                    @RequestParam("fecha_nacimiento") String fechaNacimientoStr,
-                                    @RequestParam Long propietario_id) {
+    public String actualizarMascota(
+            @RequestParam Long id,
+            @RequestParam String nombre,
+            @RequestParam String especie,
+            @RequestParam String raza,
+            @RequestParam("fecha_nacimiento") String fechaNacimientoStr,
+            @RequestParam Long propietario_id,
+            @RequestParam(required = false) MultipartFile foto
+    ) throws Exception {
+
+        Map<String, Object> mascotaExistente =
+                vidapetService.obtenerMascotaPorId(id);
+
+        if (mascotaExistente == null) {
+            return "redirect:/mascotas";
+        }
+
+        String filePath = "";
+
+        Object fotoDB = mascotaExistente.get("foto");
+        if (fotoDB != null) {
+            filePath = fotoDB.toString();
+        }
+
+        if (foto != null && !foto.isEmpty()) {
+
+            String fileName = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
+
+            Path uploadDir = Paths.get("uploads");
+
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+
+            Path filePathDisk = uploadDir.resolve(fileName);
+            Files.write(filePathDisk, foto.getBytes());
+
+            filePath = "uploads/" + fileName;
+        }
 
         LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
-        vidapetService.actualizarMascota(id, nombre, especie, raza, fechaNacimiento, propietario_id);
+
+        vidapetService.actualizarMascota(
+                id,
+                nombre,
+                especie,
+                raza,
+                fechaNacimiento,
+                propietario_id,
+                filePath
+        );
+
         return "redirect:/mascotas";
     }
 
+    /*====================== DELETE ======================*/
     @GetMapping("/mascotas/eliminar/{id}")
     public String eliminarMascota(@PathVariable Long id) {
+
         vidapetService.eliminarMascota(id);
+
         return "redirect:/mascotas";
     }
 

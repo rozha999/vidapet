@@ -2,18 +2,46 @@
 body {
     background: linear-gradient(135deg, #f4f7fb, #e6f0ff);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
-/* ناوبار */
 .navbar {
-    border-radius: 0 0 15px 15px;
+
+
+    height: 120px;
+    width: 100%;
+}
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(255,255,255,0.55); /* روشن کننده */
+}
+/* لوگو */
+.navbar-brand img {
+    width: 124px;        /* 👈 بزرگ‌تر شد */
+    height: 124px;
+    object-fit: cover;
+    border-radius: 12px; /* گوشه‌های نرم */
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    transition: 0.3s ease;
 }
 
-.navbar-brand span {
-    color: #6b5b95;
-    font-size: 1.3rem;
+/* hover روی لوگو */
+.navbar-brand img:hover {
+    transform: scale(1.1);
 }
 
+/* اگر خواستی متن کنار لوگو */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 /* عنوان صفحه */
 h1 {
     font-weight: 700;

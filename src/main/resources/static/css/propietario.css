@@ -1,3 +1,11 @@
+/* ===== Base ===== */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: #f6f7ff;
+    color: #374151;
+}
+
 /* ===== Layout ===== */
 .layout {
     display: flex;
@@ -6,81 +14,101 @@
 
 /* ===== Sidebar ===== */
 .sidebar {
-    width: 220px;
-    background: linear-gradient(180deg, #eaf4fb, #f3eefc);
-    padding: 20px;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    width: 240px;
+    background: linear-gradient(160deg, #c7d2fe, #e9d5ff);
+    padding: 24px;
+    box-shadow: 6px 0 20px rgba(0,0,0,0.06);
 }
 
 .sidebar h2 {
     text-align: center;
-    color: #5a6f8a;
-    margin-bottom: 20px;
+    font-size: 20px;
+    color: #4338ca;
+    margin-bottom: 30px;
 }
 
 .sidebar a {
-    display: block;
-    padding: 10px;
-    margin: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    margin: 8px 0;
     text-decoration: none;
-    color: #3a3f46;
-    border-radius: 10px;
-    transition: 0.25s;
+    color: #374151;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.4);
+    transition: 0.25s ease;
 }
 
 .sidebar a:hover {
-    background: #d9ecf6;
-    color: #2c5870;
+    background: rgba(99,102,241,0.2);
+    transform: translateX(5px);
+    color: #1f2937;
 }
 
-/* ===== Main Content ===== */
+/* ===== Main ===== */
 .main {
     flex: 1;
-    padding: 20px;
-    background: linear-gradient(180deg, #f7fafc, #fdf7ff);
+    padding: 28px;
+    background: #f8fafc;
 }
 
 /* ===== Buttons ===== */
+/* ===== Buttons (Pastel Blue Theme) ===== */
 .btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 12px;
-    margin: 4px;
-    background: linear-gradient(135deg, #7fb3c8, #a8d5ba);
-    color: #fff;
+    padding: 10px 16px;
+    margin: 5px;
+    background: linear-gradient(135deg, #d8d2d9, #bfdbfe);
+    color: #000513;
+    border-radius: 14px;
     text-decoration: none;
-    border-radius: 10px;
     font-size: 14px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    transition: 0.2s;
+    font-weight: 500;
+    box-shadow: 0 6px 14px rgba(147,197,253,0.35);
+    transition: 0.25s ease;
+    border: 1px solid rgba(147,197,253,0.4);
 }
 
 .btn:hover {
-    transform: translateY(-1px);
-    background: linear-gradient(135deg, #6aa3bb, #94c9ab);
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    box-shadow: 0 10px 18px rgba(96,165,250,0.4);
+    color: #0f172a;
 }
 
+.btn:active {
+    transform: scale(0.97);
+}
 /* ===== Search ===== */
 .search-container {
     text-align: center;
-    margin: 15px 0 25px;
+    margin: 20px 0 30px;
 }
 
 .search-container input {
-    padding: 8px 10px;
-    width: 220px;
-    border: 1px solid #d7e3ea;
-    border-radius: 10px;
-    background: #fff;
+    padding: 10px 14px;
+    width: 250px;
+    border: none;
+    border-radius: 14px;
+    background: #eef2ff;
+    outline: none;
+    transition: 0.2s;
+}
+
+.search-container input:focus {
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
 }
 
 .search-container button {
-    padding: 8px 12px;
+    padding: 10px 14px;
     border: none;
-    background: linear-gradient(135deg, #a7c7dc, #d7bde2);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #818cf8, #c084fc);
     color: white;
-    border-radius: 10px;
+    cursor: pointer;
     transition: 0.2s;
 }
 
@@ -92,28 +120,30 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    background: #fff;
-    border-radius: 12px;
+    background: white;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 thead {
-    background: linear-gradient(135deg, #eaf4fb, #f3eefc);
-    color: #3f6f8f;
+    background: linear-gradient(135deg, #e0e7ff, #ede9fe);
+    color: #4338ca;
 }
 
 th, td {
-    padding: 10px;
+    padding: 12px;
     text-align: center;
-    border-bottom: 1px solid #eef3f7;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 tbody tr:hover {
-    background: #f1f7fb;
+    background: #f5f7ff;
+    transition: 0.2s;
 }
 
-/* Icons */
+/* ===== Icons ===== */
 i {
+    color: #6366f1;
     margin-right: 5px;
 }
