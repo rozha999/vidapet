@@ -1,6 +1,7 @@
 package com.example.vidapet.service;
 
 import com.example.vidapet.dao.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Service
 public class VidapetService {
 
+    private final JdbcTemplate jdbcTemplate;
     private final PropietarioDAO propietarioDAO;
     private final MascotaDAO mascotaDAO;
     private final TratamientoDAO tratamientoDAO;
@@ -19,11 +21,12 @@ public class VidapetService {
     private final citaDAO citaDAO;
 
     // Constructor con todos los DAO
-    public VidapetService(PropietarioDAO propietarioDAO,
+    public VidapetService(JdbcTemplate jdbcTemplate, PropietarioDAO propietarioDAO,
                           MascotaDAO mascotaDAO,
                           TratamientoDAO tratamientoDAO,
                           ConsultaDAO consultaDAO,
-                          citaDAO citaDAO) {  // اضافه شد
+                          citaDAO citaDAO) {
+        this.jdbcTemplate = jdbcTemplate;  // اضافه شد
         this.propietarioDAO = propietarioDAO;
         this.mascotaDAO = mascotaDAO;
         this.tratamientoDAO = tratamientoDAO;
@@ -62,10 +65,30 @@ public class VidapetService {
         citaDAO.updateEstado(id, estado);
     }
     public int guardarConsultaDesdeCita(int citaId, int mascotaId, String diagnostico) {
-        return consultaDAO.saveConCita(citaId, mascotaId, diagnostico);
+
+        int consultaId = consultaDAO.saveConCita(citaId, mascotaId, diagnostico);
+
+        jdbcTemplate.update(
+                "UPDATE cita SET consulta_id = ?, estado = 'ATENDIDO' WHERE id = ?",
+                consultaId, citaId
+        );
+
+        return consultaId;
     }
     public Map<String, Object> obtenerConsultaCompleta(int id) {
         return consultaDAO.findConsultaFull(id);
+    }
+    public void actualizarCita(int id, int mascotaId, int propietarioId, LocalDateTime fecha, String nota) {
+        citaDAO.update(id, mascotaId, propietarioId, fecha, nota);
+    }
+    public void marcarCitaConConsulta(int citaId, int consultaId) {
+        jdbcTemplate.update(
+                "UPDATE cita SET consulta_id = ?, estado = 'ATENDIDO' WHERE id = ?",
+                consultaId, citaId
+        );
+    }
+    public Map<String, Object> obtenerConsultaVistaCompleta(int consultaId) {
+        return consultaDAO.findConsultaFull(consultaId);
     }
     /*---------------------------- PROPIETARIOS ----------------------------*/
 
@@ -128,9 +151,8 @@ public class VidapetService {
     }
 
     public int guardarConsulta(int mascotaId, String diagnostico) {
-        return consultaDAO.save(mascotaId, diagnostico);
+        return consultaDAO.saveConCita(0, mascotaId, diagnostico);
     }
-
     public void actualizarConsulta(int id, int mascotaId, String diagnostico) {
         consultaDAO.update(id, mascotaId, diagnostico);
     }

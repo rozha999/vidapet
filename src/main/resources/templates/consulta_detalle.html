@@ -18,12 +18,13 @@
         <p><b>Especie:</b> <span th:text="${data.especie}"></span></p>
         <p><b>Raza:</b> <span th:text="${data.raza}"></span></p>
 
+
         <hr/>
 
         <h2>👤 Propietario</h2>
         <p><b>Nombre:</b> <span th:text="${data.propietario_nombre + ' ' + data.propietario_apellido}"></span></p>
-        <p><b>Tel:</b> <span th:text="${data.telefono}"></span></p>
-        <p><b>Email:</b> <span th:text="${data.email}"></span></p>
+        <p><b>Tel:</b> <span th:text="${data['propietario_telefono']}"></span></p>
+        <p><b>Email:</b> <span th:text="${data['propietario_email']}"></span></p>
 
     </div>
 

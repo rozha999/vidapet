@@ -2,8 +2,12 @@ package com.example.vidapet.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -113,38 +117,43 @@ public class ConsultaDAO {
     }
     public int saveConCita(int citaId, int mascotaId, String diagnostico) {
 
-        jdbcTemplate.update("""
-        INSERT INTO consulta (cita_id, mascota_id, diagnostico)
-        VALUES (?, ?, ?)
-    """, citaId, mascotaId, diagnostico);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        return jdbcTemplate.queryForObject(
-                "SELECT LAST_INSERT_ID()",
-                Integer.class
-        );
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    "INSERT INTO consulta (cita_id, mascota_id, diagnostico) VALUES (?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS
+            );
+            ps.setInt(1, citaId);
+            ps.setInt(2, mascotaId);
+            ps.setString(3, diagnostico);
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
     }
     public Map<String, Object> findConsultaFull(int id) {
 
         String sql = """
         SELECT 
-            co.id AS consulta_id,
-            co.diagnostico,
+            c.id,
+            c.diagnostico,
 
-            m.id AS mascota_id,
             m.nombre AS mascota_nombre,
             m.especie,
             m.raza,
+            m.fecha_nacimiento,
+            m.foto,
 
-            p.id AS propietario_id,
             p.nombre AS propietario_nombre,
             p.apellido AS propietario_apellido,
-            p.telefono,
-            p.email
+            p.telefono AS propietario_telefono,
+            p.email AS propietario_email
 
-        FROM consulta co
-        JOIN mascota m ON co.mascota_id = m.id
+        FROM consulta c
+        JOIN mascota m ON c.mascota_id = m.id
         JOIN propietario p ON m.propietario_id = p.id
-        WHERE co.id = ?
+        WHERE c.id = ?
     """;
 
         Map<String, Object> data = jdbcTemplate.queryForMap(sql, id);

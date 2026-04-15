@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -5,9 +6,12 @@
 </head>
 <body>
 
-<h1>📌 Formulario Cita</h1>
+<h1 th:text="${cita != null} ? '✏️ Editar Cita' : '➕ Nueva Cita'"></h1>
 
-<form th:action="@{/citas/guardar}" method="post">
+<form th:action="@{${cita != null} ? '/citas/actualizar' : '/citas/guardar'}" method="post">
+
+    <!-- ID (solo para editar) -->
+    <input type="hidden" name="id" th:value="${cita?.id}">
 
     <!-- Mascota -->
     <label>Mascota:</label>
@@ -15,7 +19,8 @@
         <option value="">-- Seleccionar --</option>
         <option th:each="m : ${mascotas}"
                 th:value="${m.id}"
-                th:text="${m.nombre}">
+                th:text="${m.nombre}"
+                th:selected="${cita != null and m.id == cita.mascota_id}">
         </option>
     </select>
 
@@ -27,7 +32,8 @@
         <option value="">-- Seleccionar --</option>
         <option th:each="p : ${propietarios}"
                 th:value="${p.id}"
-                th:text="${p.nombre + ' ' + p.apellido}">
+                th:text="${p.nombre + ' ' + p.apellido}"
+                th:selected="${cita != null and p.id == cita.propietario_id}">
         </option>
     </select>
 
@@ -35,13 +41,15 @@
 
     <!-- Fecha -->
     <label>Fecha:</label>
-    <input type="datetime-local" name="fecha" required>
+    <input type="datetime-local" name="fecha"
+           th:value="${cita != null} ? ${#temporals.format(cita.fecha, 'yyyy-MM-dd''T''HH:mm')} : ''"
+           required>
 
     <br><br>
 
     <!-- Nota -->
     <label>Nota:</label>
-    <textarea name="nota"></textarea>
+    <textarea name="nota" th:text="${cita?.nota}"></textarea>
 
     <br><br>
 
@@ -54,3 +62,4 @@
 
 </body>
 </html>
+```

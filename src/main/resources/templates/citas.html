@@ -81,16 +81,11 @@
 
             <!-- ===== CONSULTA ===== -->
             <td>
-
                 <a th:if="${c.consulta_id != null}"
                    th:href="@{'/consultas/' + ${c.consulta_id}}">
-                    👁 Ver
+                    👁 Ver consulta
                 </a>
-
-                <span th:if="${c.consulta_id == null}">-</span>
-
             </td>
-
             <!-- ===== ACCIONES ===== -->
             <td>
 

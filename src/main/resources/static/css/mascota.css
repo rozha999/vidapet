@@ -2,23 +2,32 @@
 body {
     margin: 0;
     font-family: "Segoe UI", Tahoma, sans-serif;
-    background: #faf7ff;
+    background: linear-gradient(180deg, #f6d9d4, #defae3);
     color: #2f2f3a;
+}
+
+/* ===== Layout ===== */
+.layout {
+    display: flex;
+    min-height: 100vh;
 }
 
 /* ===== Sidebar ===== */
 .sidebar {
     width: 240px;
-    min-height: 100vh;
-    background: linear-gradient(180deg, #ede9fe, #fce7f3);
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
     padding: 24px;
     box-shadow: 5px 0 20px rgba(0,0,0,0.05);
+    border-right: 1px solid rgba(255,255,255,0.4);
 }
 
 .sidebar h2 {
     text-align: center;
-    color: #3a5eed;
+    color: #b76e79; /* صورتی تیره ملایم */
     margin-bottom: 25px;
+    font-weight: 700;
 }
 
 .sidebar a {
@@ -29,51 +38,81 @@ body {
     margin: 8px 0;
     border-radius: 12px;
     text-decoration: none;
-    color: #4b5563;
+    color: #374151;
     background: rgba(255,255,255,0.4);
-    transition: 0.2s ease;
+    transition: all 0.25s ease;
 }
 
 .sidebar a:hover {
-    background: rgba(167, 139, 250, 0.25);
-    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.7);
+    transform: translateX(6px);
     color: #111827;
+}
+
+/* ===== Sidebar Contact ===== */
+.sidebar-contact {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.5);
+    font-size: 12px;
+    color: #374151;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-contact p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    background: rgba(255,255,255,0.45);
+    padding: 8px 10px;
+    border-radius: 10px;
+}
+
+.sidebar-contact i {
+    color: #b76e79;
 }
 
 /* ===== Main ===== */
 .main {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
     padding: 30px;
-    background: #faf7ff;
+    background: transparent;
 }
 
 .main h1 {
-    color: #284bd9;
+    color: #6b7280;
     margin-bottom: 15px;
 }
 
 /* ===== Button ===== */
 button {
-    padding: 9px 14px;
+    padding: 10px 16px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    background: linear-gradient(135deg, #a5b0ef, #a8f9f0);
+    background: linear-gradient(135deg, #f6a5a0, #9ae6b4);
     color: #1f2937;
-    font-weight: 500;
-    transition: 0.2s ease;
-    box-shadow: 0 6px 12px rgba(167,139,250,0.2);
+    font-weight: 600;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
 }
 
 button:hover {
     transform: translateY(-2px);
-    background: linear-gradient(135deg, #dcdbd0, #f472b6);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
 }
 
 /* ===== Table ===== */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
     border-radius: 14px;
     overflow: hidden;
     margin-top: 20px;
@@ -81,18 +120,18 @@ table {
 }
 
 thead {
-    background: #f3e8ff;
-    color: #285ad9;
+    background: rgba(246, 217, 212, 0.7);
+    color: #6b4f4f;
 }
 
 th, td {
     padding: 12px;
     text-align: center;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 tbody tr:hover {
-    background: #faf5ff;
+    background: rgba(222, 250, 227, 0.5);
 }
 
 /* ===== Image ===== */
@@ -106,45 +145,4 @@ img {
 span {
     color: #9ca3af;
     font-size: 13px;
-}
-.layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* مهم‌ترین خط */
-.sidebar {
-    width: 240px;
-    flex-shrink: 0;
-}
-
-/* مهم‌ترین خط دوم */
-.main {
-    flex: 1;
-    min-width: 0;
-    overflow-x: auto;
-}
-.sidebar-contact {
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255,255,255,0.4);
-    font-size: 12px;
-    color: #374151;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.sidebar-contact p {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    background: rgba(255,255,255,0.35);
-    padding: 8px 10px;
-    border-radius: 10px;
-}
-
-.sidebar-contact i {
-    color: #7c3aed;
 }

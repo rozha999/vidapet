@@ -303,89 +303,85 @@ public class VidapetController {
 
     /*==================== CONSULTAS ====================*/
 
-    @GetMapping("/consulta")
+    @GetMapping("/consultas")
     public String listarConsultas(Model model) {
-        List<Map<String, Object>> consultas = vidapetService.listarConsultasConTratamientos();
-        model.addAttribute("consultas", consultas);
+        model.addAttribute("consultas",
+                vidapetService.listarConsultasConTratamientos());
         return "consultas";
     }
 
-    @GetMapping("/consulta/nueva")
+    @GetMapping("/consultas/nueva")
     public String nuevaConsulta(Model model) {
+
         Map<String, Object> consulta = new HashMap<>();
         consulta.put("id", null);
         consulta.put("mascota_id", null);
+        consulta.put("cita_id", null);
         consulta.put("diagnostico", "");
 
         model.addAttribute("consulta", consulta);
-        model.addAttribute("tratamientos", List.of()); // لیست خالی برای فرم جدید
-        model.addAttribute("mascotas", vidapetService.listarMascotas()); // اگر متد listarMascotas داری
+        model.addAttribute("tratamientos", List.of());
+        model.addAttribute("mascotas", vidapetService.listarMascotas());
+
         return "consulta_form";
-    }
-
-    @PostMapping("/consulta/guardar")
-    public String guardarConsulta(@RequestParam int mascota_id,
-                                  @RequestParam String diagnostico,
-                                  @RequestParam(required = false) List<String> tratamientos,
-                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_inicio,
-                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_fin,
-                                  @RequestParam(required = false) List<String> observaciones) {
-
-        // ✅ فقط یک بار ذخیره و گرفتن ID
-        int consultaId = vidapetService.guardarConsulta(mascota_id, diagnostico);
-
-        // ✅ ذخیره tratamientos
-        if (tratamientos != null) {
-            for (int i = 0; i < tratamientos.size(); i++) {
-                vidapetService.guardarTratamiento(
-                        consultaId,
-                        tratamientos.get(i),
-                        fecha_inicio != null ? fecha_inicio.get(i) : null,
-                        fecha_fin != null ? fecha_fin.get(i) : null,
-                        observaciones != null ? observaciones.get(i) : null
-                );
-            }
-        }
-
-        return "redirect:/consulta";
     }
 
     @GetMapping("/consulta/editar/{id}")
     public String editarConsulta(@PathVariable int id, Model model) {
+
         Map<String, Object> consulta = vidapetService.obtenerConsultaPorId(id);
+
         model.addAttribute("consulta", consulta);
 
-        List<Map<String, Object>> tratamientos = (List<Map<String, Object>>) consulta.get("tratamientos");
-        model.addAttribute("tratamientos", tratamientos);
+        model.addAttribute("tratamientos",
+                consulta.get("tratamientos") != null
+                        ? consulta.get("tratamientos")
+                        : List.of());
 
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
         return "consulta_form";
     }
 
-    @PostMapping("/consulta/actualizar")
-    public String actualizarConsulta(@RequestParam int id,
-                                     @RequestParam int mascota_id,
-                                     @RequestParam String diagnostico,
-                                     @RequestParam(required = false) List<Integer> tratamientoId,
-                                     @RequestParam(required = false) List<String> tratamientos,
-                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_inicio,
-                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) List<LocalDate> fecha_fin,
-                                     @RequestParam(required = false) List<String> observaciones) {
+    @PostMapping("/consultas/actualizar")
+    public String actualizarConsulta(
+            @RequestParam int id,
+            @RequestParam int mascota_id,
+            @RequestParam int cita_id,
+            @RequestParam String diagnostico,
+            @RequestParam(required = false) List<Integer> tratamientoId,
+            @RequestParam(required = false) List<String> tratamientos,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            List<LocalDate> fecha_inicio,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            List<LocalDate> fecha_fin,
+            @RequestParam(required = false) List<String> observaciones
+    ) {
 
+        // update consulta
         vidapetService.actualizarConsulta(id, mascota_id, diagnostico);
 
+        // update/insert tratamientos
         if (tratamientos != null) {
             for (int i = 0; i < tratamientos.size(); i++) {
-                if (tratamientoId != null && i < tratamientoId.size() && tratamientoId.get(i) != null) {
+
+                Integer tid = (tratamientoId != null && i < tratamientoId.size())
+                        ? tratamientoId.get(i)
+                        : null;
+
+                if (tid != null) {
+
                     vidapetService.actualizarTratamiento(
-                            tratamientoId.get(i),
+                            tid,
                             id,
                             tratamientos.get(i),
                             fecha_inicio != null ? fecha_inicio.get(i) : null,
                             fecha_fin != null ? fecha_fin.get(i) : null,
                             observaciones != null ? observaciones.get(i) : null
                     );
+
                 } else {
+
                     vidapetService.guardarTratamiento(
                             id,
                             tratamientos.get(i),
@@ -397,8 +393,9 @@ public class VidapetController {
             }
         }
 
-        return "redirect:/consulta";
+        return "redirect:/citas";
     }
+
 
     @GetMapping("/consulta/eliminar/{id}")
     public String eliminarConsulta(@PathVariable int id) {
@@ -483,17 +480,40 @@ public class VidapetController {
         vidapetService.cambiarEstadoCita(id, estado);
         return "redirect:/citas";
     }
+
     @GetMapping("/consultas/nueva-desde-cita/{citaId}")
     public String nuevaDesdeCita(@PathVariable int citaId, Model model) {
 
         Map<String, Object> cita = vidapetService.obtenerCita(citaId);
 
-        Map<String, Object> consulta = new HashMap<>();
-        consulta.put("cita_id", citaId);
-        consulta.put("mascota_id", cita.get("mascota_id"));
+        Map<String, Object> mascota = vidapetService.obtenerMascotaPorId(
+                Long.valueOf(cita.get("mascota_id").toString())
+        );
 
-        model.addAttribute("consulta", consulta);
-        model.addAttribute("modo", "desde_cita"); // ⭐ مهم
+        Map<String, Object> propietario = vidapetService.obtenerPropietarioPorId(
+                Long.valueOf(cita.get("propietario_id").toString())
+        );
+
+        Map<String, Object> data = new HashMap<>();
+
+        // 🐶 mascota
+        data.put("mascota_nombre", mascota.get("nombre"));
+        data.put("especie", mascota.get("especie"));
+        data.put("raza", mascota.get("raza"));
+        data.put("fecha_nacimiento", mascota.get("fecha_nacimiento"));
+        data.put("foto", mascota.get("foto"));
+
+        // 👤 propietario
+        data.put("propietario_nombre", propietario.get("nombre"));
+        data.put("propietario_apellido", propietario.get("apellido"));
+        data.put("propietario_telefono", propietario.get("telefono"));
+        data.put("propietario_email", propietario.get("email"));
+
+        // cita
+        data.put("cita_id", citaId);
+
+        model.addAttribute("data", data);
+        model.addAttribute("tratamientos", List.of());
 
         return "consulta_form";
     }
@@ -518,6 +538,17 @@ public class VidapetController {
                 diagnostico
         );
 
+        return "redirect:/citas";
+    }
+    @PostMapping("/citas/actualizar")
+    public String actualizarCita(
+            @RequestParam int id,
+            @RequestParam int mascota_id,
+            @RequestParam int propietario_id,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fecha,
+            @RequestParam String nota
+    ) {
+        vidapetService.actualizarCita(id, mascota_id, propietario_id, fecha, nota);
         return "redirect:/citas";
     }
 }

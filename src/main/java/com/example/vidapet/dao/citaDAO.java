@@ -105,4 +105,11 @@ public class citaDAO {
     public void updateEstado(int id, String estado) {
         jdbcTemplate.update("UPDATE cita SET estado=? WHERE id=?", estado, id);
     }
+    public void update(int id, int mascotaId, int propietarioId, LocalDateTime fecha, String nota) {
+        jdbcTemplate.update("""
+        UPDATE cita
+        SET mascota_id=?, propietario_id=?, fecha=?, nota=?
+        WHERE id=?
+    """, mascotaId, propietarioId, fecha, nota, id);
+    }
 }
