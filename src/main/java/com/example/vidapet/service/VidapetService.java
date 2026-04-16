@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 import java.time.LocalDate;
@@ -14,24 +13,29 @@ import java.time.LocalDate;
 public class VidapetService {
 
     private final JdbcTemplate jdbcTemplate;
+
     private final PropietarioDAO propietarioDAO;
     private final MascotaDAO mascotaDAO;
     private final TratamientoDAO tratamientoDAO;
     private final ConsultaDAO consultaDAO;
     private final citaDAO citaDAO;
+    private final VeterinarioDAO veterinarioDAO;
 
-    // Constructor con todos los DAO
-    public VidapetService(JdbcTemplate jdbcTemplate, PropietarioDAO propietarioDAO,
+    public VidapetService(JdbcTemplate jdbcTemplate,
+                          PropietarioDAO propietarioDAO,
                           MascotaDAO mascotaDAO,
                           TratamientoDAO tratamientoDAO,
                           ConsultaDAO consultaDAO,
-                          citaDAO citaDAO) {
-        this.jdbcTemplate = jdbcTemplate;  // اضافه شد
+                          citaDAO citaDAO,
+                          VeterinarioDAO veterinarioDAO) {
+
+        this.jdbcTemplate = jdbcTemplate;
         this.propietarioDAO = propietarioDAO;
         this.mascotaDAO = mascotaDAO;
         this.tratamientoDAO = tratamientoDAO;
         this.consultaDAO = consultaDAO;
-        this.citaDAO = citaDAO;  // اضافه شد
+        this.citaDAO = citaDAO;
+        this.veterinarioDAO = veterinarioDAO;
     }
 
     /*================= CITAS =================*/
@@ -87,9 +91,7 @@ public class VidapetService {
                 consultaId, citaId
         );
     }
-    public Map<String, Object> obtenerConsultaVistaCompleta(int consultaId) {
-        return consultaDAO.findConsultaFull(consultaId);
-    }
+
     /*---------------------------- PROPIETARIOS ----------------------------*/
 
     public List<Map<String,Object>> listarPropietarios(String search) {
@@ -150,9 +152,6 @@ public class VidapetService {
         return consultaDAO.findConsultaWithTratamientos(id);
     }
 
-    public int guardarConsulta(int mascotaId, String diagnostico) {
-        return consultaDAO.saveConCita(0, mascotaId, diagnostico);
-    }
     public void actualizarConsulta(int id, int mascotaId, String diagnostico) {
         consultaDAO.update(id, mascotaId, diagnostico);
     }
@@ -188,4 +187,40 @@ public class VidapetService {
     public void eliminarTratamiento(int id) {
         tratamientoDAO.delete(id);
     }
+
+    public List<Map<String, Object>> buscarConsultas(String nombreMascota) {
+        return consultaDAO.searchByMascota(nombreMascota);
+    }
+
+    /* ================= VETERINARIOS ================= */
+
+    public List<Map<String, Object>> listarVeterinarios(String search) {
+        if (search == null || search.isBlank()) {
+            return veterinarioDAO.findAll();
+        }
+        return veterinarioDAO.search(search);
+    }
+
+    public List<Map<String, Object>> buscarVeterinarios(String search) {
+        return veterinarioDAO.search(search);
+    }
+
+    public void guardarVeterinario(String n, String a, String t,
+                                   String e, String esp, String cod) {
+        veterinarioDAO.save(n, a, t, e, esp, cod);
+    }
+
+    public void actualizarVeterinario(Long id, String n, String a,
+                                      String t, String e, String esp, String cod) {
+        veterinarioDAO.update(id, n, a, t, e, esp, cod);
+    }
+
+    public void eliminarVeterinario(Long id) {
+        veterinarioDAO.delete(id);
+    }
+
+    public Map<String, Object> obtenerVeterinario(Long id) {
+        return veterinarioDAO.findById(id);
+    }
 }
+

@@ -304,12 +304,21 @@ public class VidapetController {
     /*==================== CONSULTAS ====================*/
 
     @GetMapping("/consultas")
-    public String listarConsultas(Model model) {
-        model.addAttribute("consultas",
-                vidapetService.listarConsultasConTratamientos());
+    public String listarConsultas(@RequestParam(required = false) String search,
+                                  Model model) {
+
+        if (search != null && !search.isBlank()) {
+            model.addAttribute("consultas",
+                    vidapetService.buscarConsultas(search));
+        } else {
+            model.addAttribute("consultas",
+                    vidapetService.listarConsultasConTratamientos());
+        }
+
+        model.addAttribute("search", search);
+
         return "consultas";
     }
-
     @GetMapping("/consultas/nueva")
     public String nuevaConsulta(Model model) {
 
@@ -326,7 +335,7 @@ public class VidapetController {
         return "consulta_form";
     }
 
-    @GetMapping("/consulta/editar/{id}")
+    @GetMapping("/consultas/editar/{id}")
     public String editarConsulta(@PathVariable int id, Model model) {
 
         Map<String, Object> consulta = vidapetService.obtenerConsultaPorId(id);
@@ -334,9 +343,7 @@ public class VidapetController {
         model.addAttribute("consulta", consulta);
 
         model.addAttribute("tratamientos",
-                consulta.get("tratamientos") != null
-                        ? consulta.get("tratamientos")
-                        : List.of());
+                consulta.getOrDefault("tratamientos", new ArrayList<>()));
 
         return "consulta_form";
     }
@@ -397,12 +404,11 @@ public class VidapetController {
     }
 
 
-    @GetMapping("/consulta/eliminar/{id}")
+    @GetMapping("/consultas/eliminar/{id}")
     public String eliminarConsulta(@PathVariable int id) {
         vidapetService.eliminarConsulta(id);
-        return "redirect:/consulta";
+        return "redirect:/consultas";
     }
-
     /*-------------------- MASTER-DETAIL DASHBOARD --------------------*/
 
     @GetMapping("/consultas/dashboard")
@@ -486,34 +492,18 @@ public class VidapetController {
 
         Map<String, Object> cita = vidapetService.obtenerCita(citaId);
 
-        Map<String, Object> mascota = vidapetService.obtenerMascotaPorId(
-                Long.valueOf(cita.get("mascota_id").toString())
-        );
+        Map<String, Object> consulta = new HashMap<>();
+        consulta.put("id", null);
+        consulta.put("mascota_id", cita.get("mascota_id"));
+        consulta.put("cita_id", citaId);
+        consulta.put("diagnostico", "");
 
-        Map<String, Object> propietario = vidapetService.obtenerPropietarioPorId(
-                Long.valueOf(cita.get("propietario_id").toString())
-        );
+        model.addAttribute("consulta", consulta);
 
-        Map<String, Object> data = new HashMap<>();
+        // 🔥 IMPORTANT: add data (fix error)
+        model.addAttribute("data", cita);
 
-        // 🐶 mascota
-        data.put("mascota_nombre", mascota.get("nombre"));
-        data.put("especie", mascota.get("especie"));
-        data.put("raza", mascota.get("raza"));
-        data.put("fecha_nacimiento", mascota.get("fecha_nacimiento"));
-        data.put("foto", mascota.get("foto"));
-
-        // 👤 propietario
-        data.put("propietario_nombre", propietario.get("nombre"));
-        data.put("propietario_apellido", propietario.get("apellido"));
-        data.put("propietario_telefono", propietario.get("telefono"));
-        data.put("propietario_email", propietario.get("email"));
-
-        // cita
-        data.put("cita_id", citaId);
-
-        model.addAttribute("data", data);
-        model.addAttribute("tratamientos", List.of());
+        model.addAttribute("tratamientos", new ArrayList<>());
 
         return "consulta_form";
     }
@@ -529,16 +519,31 @@ public class VidapetController {
     public String guardarConsultaDesdeCita(
             @RequestParam int cita_id,
             @RequestParam int mascota_id,
-            @RequestParam String diagnostico
+            @RequestParam String diagnostico,
+            @RequestParam(required = false) List<String> tratamientos,
+            @RequestParam(required = false) List<LocalDate> fecha_inicio,
+            @RequestParam(required = false) List<LocalDate> fecha_fin,
+            @RequestParam(required = false) List<String> observaciones
     ) {
 
-        vidapetService.guardarConsultaDesdeCita(
-                cita_id,
-                mascota_id,
-                diagnostico
+        int consultaId = vidapetService.guardarConsultaDesdeCita(
+                cita_id, mascota_id, diagnostico
         );
 
-        return "redirect:/citas";
+        if (tratamientos != null) {
+            for (int i = 0; i < tratamientos.size(); i++) {
+
+                vidapetService.guardarTratamiento(
+                        consultaId,
+                        tratamientos.get(i),
+                        fecha_inicio != null ? fecha_inicio.get(i) : null,
+                        fecha_fin != null ? fecha_fin.get(i) : null,
+                        observaciones != null ? observaciones.get(i) : null
+                );
+            }
+        }
+
+        return "redirect:/consultas";
     }
     @PostMapping("/citas/actualizar")
     public String actualizarCita(
@@ -550,5 +555,67 @@ public class VidapetController {
     ) {
         vidapetService.actualizarCita(id, mascota_id, propietario_id, fecha, nota);
         return "redirect:/citas";
+    }
+
+
+    // ================= VETERINARIOS (FIXED) =================
+    @GetMapping("/veterinarios")
+    public String listarVeterinarios(@RequestParam(required = false) String search, Model model) {
+        model.addAttribute("veterinarios", vidapetService.listarVeterinarios(search));
+        return "veterinarios";
+    }
+
+    @GetMapping("/veterinarios/nuevo")
+    public String nuevoVeterinario(Model model) {
+        Map<String, Object> v = new HashMap<>();
+        v.put("id", null);
+        v.put("nombre", "");
+        v.put("apellido", "");
+        v.put("telefono", "");
+        v.put("email", "");
+        v.put("especialidad", "");
+        v.put("codigo_colegiado", "");
+
+        model.addAttribute("veterinario", v);
+        return "veterinario_form";
+    }
+
+    @PostMapping("/veterinarios/guardar")
+    public String guardarVeterinario(@RequestParam String nombre,
+                                     @RequestParam String apellido,
+                                     @RequestParam String telefono,
+                                     @RequestParam String email,
+                                     @RequestParam String especialidad,
+                                     @RequestParam String codigo_colegiado) {
+
+        vidapetService.guardarVeterinario(nombre, apellido, telefono, email, especialidad, codigo_colegiado);
+        return "redirect:/veterinarios";
+    }
+
+    @GetMapping("/veterinarios/editar/{id}")
+    public String editarVeterinario(@PathVariable Long id, Model model) {
+        Map<String, Object> v = vidapetService.obtenerVeterinario(id);
+        if (v == null) return "redirect:/veterinarios";
+        model.addAttribute("veterinario", v);
+        return "veterinario_form";
+    }
+
+    @PostMapping("/veterinarios/actualizar")
+    public String actualizarVeterinario(@RequestParam Long id,
+                                        @RequestParam String nombre,
+                                        @RequestParam String apellido,
+                                        @RequestParam String telefono,
+                                        @RequestParam String email,
+                                        @RequestParam String especialidad,
+                                        @RequestParam String codigo_colegiado) {
+
+        vidapetService.actualizarVeterinario(id, nombre, apellido, telefono, email, especialidad, codigo_colegiado);
+        return "redirect:/veterinarios";
+    }
+
+    @GetMapping("/veterinarios/eliminar/{id}")
+    public String eliminarVeterinario(@PathVariable Long id) {
+        vidapetService.eliminarVeterinario(id);
+        return "redirect:/veterinarios";
     }
 }

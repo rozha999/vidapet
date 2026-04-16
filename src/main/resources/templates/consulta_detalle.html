@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Consulta Detalle</title>
-    <link rel="stylesheet" th:href="@{/css/cita.css}">
+    <link rel="stylesheet" th:href="@{/css/detalle.css}">
 </head>
 <body>
 
@@ -12,6 +12,13 @@
 
     <!-- 🟢 MASCOTA + PROPIETARIO -->
     <div class="card">
+        <img th:if="${data.foto != null and data.foto != ''}"
+             th:src="@{'/' + ${data.foto}}"
+             style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+
+        <img th:if="${data.foto == null or data.foto == ''}"
+             src="https://via.placeholder.com/150"
+             style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
 
         <h2>🐶 Mascota</h2>
         <p><b>Nombre:</b> <span th:text="${data.mascota_nombre}"></span></p>

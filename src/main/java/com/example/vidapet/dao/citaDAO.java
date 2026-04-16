@@ -25,50 +25,51 @@ public class citaDAO {
         map.put("propietario_id", rs.getInt("propietario_id"));
         map.put("fecha", rs.getObject("fecha", LocalDateTime.class));
         map.put("nota", rs.getString("nota"));
-
         map.put("estado", rs.getString("estado"));
-        map.put("consulta_id", rs.getObject("consulta_id")); // ⭐ NEW
+        map.put("consulta_id", rs.getObject("consulta_id"));
+        map.put("veterinario_id", rs.getObject("veterinario_id"));
 
         map.put("mascota_nombre", rs.getString("mascota_nombre"));
         map.put("propietario_nombre", rs.getString("propietario_nombre"));
         map.put("propietario_apellido", rs.getString("propietario_apellido"));
+        map.put("veterinario_nombre", rs.getString("veterinario_nombre"));
 
         return map;
     };
 
-    public List<Map<String, Object>> findFiltered(
-            String mascota,
-            String propietario,
-            LocalDate fecha,
-            String orden
-    ) {
+    public List<Map<String, Object>> findFiltered(String mascota,
+                                                  String propietario,
+                                                  LocalDate fecha,
+                                                  String orden) {
 
         String sql = """
-        SELECT c.id,
-               c.mascota_id,
-               c.propietario_id,
-               c.fecha,
-               c.nota,
-               c.estado,
-               co.id AS consulta_id,
-               m.nombre AS mascota_nombre,
-               p.nombre AS propietario_nombre,
-               p.apellido AS propietario_apellido
-        FROM cita c
-        LEFT JOIN consulta co ON co.cita_id = c.id
-        JOIN mascota m ON c.mascota_id = m.id
-        JOIN propietario p ON c.propietario_id = p.id
-        WHERE 1=1
+            SELECT c.id,
+                   c.mascota_id,
+                   c.propietario_id,
+                   c.veterinario_id,
+                   c.fecha,
+                   c.nota,
+                   c.estado,
+                   c.consulta_id,
+                   m.nombre AS mascota_nombre,
+                   p.nombre AS propietario_nombre,
+                   p.apellido AS propietario_apellido,
+                   v.nombre AS veterinario_nombre
+            FROM cita c
+            JOIN mascota m ON c.mascota_id = m.id
+            JOIN propietario p ON c.propietario_id = p.id
+            LEFT JOIN veterinario v ON c.veterinario_id = v.id
+            WHERE 1=1
         """;
 
         List<Object> params = new ArrayList<>();
 
-        if (mascota != null && !mascota.isEmpty()) {
+        if (mascota != null && !mascota.isBlank()) {
             sql += " AND LOWER(m.nombre) LIKE ?";
             params.add("%" + mascota.toLowerCase() + "%");
         }
 
-        if (propietario != null && !propietario.isEmpty()) {
+        if (propietario != null && !propietario.isBlank()) {
             sql += " AND LOWER(p.nombre) LIKE ?";
             params.add("%" + propietario.toLowerCase() + "%");
         }
@@ -83,19 +84,27 @@ public class citaDAO {
         return jdbcTemplate.query(sql, rowMapper, params.toArray());
     }
 
-    public void save(int mascotaId,
-                     int propietarioId,
-                     LocalDateTime fecha,
-                     String nota) {
+    public void save(int mascotaId, int propietarioId,
+                     LocalDateTime fecha, String nota) {
 
         jdbcTemplate.update("""
             INSERT INTO cita (mascota_id, propietario_id, fecha, nota, estado)
-            VALUES (?, ?, ?, ?, ?)
-        """, mascotaId, propietarioId, fecha, nota, "ESPERANDO");
+            VALUES (?, ?, ?, ?, 'ESPERANDO')
+        """, mascotaId, propietarioId, fecha, nota);
     }
 
     public Map<String, Object> findById(int id) {
         return jdbcTemplate.queryForMap("SELECT * FROM cita WHERE id=?", id);
+    }
+
+    public void update(int id, int mascotaId, int propietarioId,
+                       LocalDateTime fecha, String nota) {
+
+        jdbcTemplate.update("""
+            UPDATE cita
+            SET mascota_id=?, propietario_id=?, fecha=?, nota=?
+            WHERE id=?
+        """, mascotaId, propietarioId, fecha, nota, id);
     }
 
     public void delete(int id) {
@@ -105,11 +114,11 @@ public class citaDAO {
     public void updateEstado(int id, String estado) {
         jdbcTemplate.update("UPDATE cita SET estado=? WHERE id=?", estado, id);
     }
-    public void update(int id, int mascotaId, int propietarioId, LocalDateTime fecha, String nota) {
-        jdbcTemplate.update("""
-        UPDATE cita
-        SET mascota_id=?, propietario_id=?, fecha=?, nota=?
-        WHERE id=?
-    """, mascotaId, propietarioId, fecha, nota, id);
+
+    public void asignarVeterinario(int citaId, int veterinarioId) {
+        jdbcTemplate.update(
+                "UPDATE cita SET veterinario_id=? WHERE id=?",
+                veterinarioId, citaId
+        );
     }
 }

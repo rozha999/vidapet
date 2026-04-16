@@ -1,0 +1,90 @@
+/* ===== BACKGROUND ===== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #9484f1, #72bed5);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== CARD ===== */
+form {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    width: 400px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* ===== TITLE ===== */
+h1 {
+    position: absolute;
+    top: 40px;
+    color: white;
+    font-size: 28px;
+}
+
+/* ===== LABELS ===== */
+label {
+    font-weight: 600;
+    color: #333;
+}
+
+/* ===== INPUTS ===== */
+select,
+input[type="datetime-local"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+/* ===== FOCUS EFFECT ===== */
+select:focus,
+input:focus,
+textarea:focus {
+    border-color: #6a5cff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(106,92,255,0.5);
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #43415a, #051e2c);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* ===== BUTTON HOVER ===== */
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* ===== LINK ===== */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
