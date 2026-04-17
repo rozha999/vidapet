@@ -13,13 +13,12 @@ import java.time.YearMonth;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.*;
 import java.util.Map;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/")
@@ -176,7 +175,12 @@ public class VidapetController {
 
         return "mascota_form";
     }
-
+    // ===== NEW API: obtener propietario por mascota =====
+    @GetMapping("/mascotas/{id}/propietario")
+    @ResponseBody
+    public Map<String, Object> getPropietarioByMascota(@PathVariable Long id) {
+        return vidapetService.obtenerPropietarioPorMascota(id);
+    }
     /*====================== ACTUALIZAR ======================*/
     @PostMapping("/mascotas/actualizar")
     public String actualizarMascota(
@@ -450,8 +454,11 @@ public class VidapetController {
     }
     @GetMapping("/citas/nueva")
     public String nuevaCita(Model model) {
+
         model.addAttribute("mascotas", vidapetService.listarMascotas());
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+        model.addAttribute("veterinarios", vidapetService.listarVeterinarios(null));
+
         return "cita_form";
     }
 
@@ -459,18 +466,30 @@ public class VidapetController {
     public String guardarCita(
             @RequestParam int mascota_id,
             @RequestParam int propietario_id,
+            @RequestParam(required = false) Integer veterinario_id,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fecha,
             @RequestParam String nota
     ) {
-        vidapetService.guardarCita(mascota_id, propietario_id, fecha, nota);
+
+        vidapetService.guardarCita(
+                mascota_id,
+                propietario_id,
+                veterinario_id,
+                fecha,
+                nota
+        );
+
         return "redirect:/citas";
     }
 
     @GetMapping("/citas/editar/{id}")
     public String editarCita(@PathVariable int id, Model model) {
+
         model.addAttribute("cita", vidapetService.obtenerCita(id));
         model.addAttribute("mascotas", vidapetService.listarMascotas());
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+        model.addAttribute("veterinarios", vidapetService.listarVeterinarios(null));
+
         return "cita_form";
     }
 
@@ -492,28 +511,36 @@ public class VidapetController {
 
         Map<String, Object> cita = vidapetService.obtenerCita(citaId);
 
+        Integer mascotaId = (Integer) cita.get("mascota_id");
+
+        Map<String, Object> mascota =
+                new HashMap<>(vidapetService.obtenerMascotaPorId(mascotaId.longValue()));
+
+        Map<String, Object> propietario =
+                vidapetService.obtenerPropietarioPorMascota(mascotaId.longValue());
+
+        // 🔥 veterinario اضافه شد
+        Map<String, Object> veterinario =
+                vidapetService.obtenerVeterinarioPorCita(citaId);
+
+        mascota.put("mascota_nombre", mascota.get("nombre"));
+
         Map<String, Object> consulta = new HashMap<>();
         consulta.put("id", null);
-        consulta.put("mascota_id", cita.get("mascota_id"));
+        consulta.put("mascota_id", mascotaId);
         consulta.put("cita_id", citaId);
         consulta.put("diagnostico", "");
 
+        Map<String, Object> data = new HashMap<>();
+        data.putAll(mascota);
+        data.putAll(propietario);
+        data.putAll(veterinario); // 🔥 مهم
+
         model.addAttribute("consulta", consulta);
-
-        // 🔥 IMPORTANT: add data (fix error)
-        model.addAttribute("data", cita);
-
+        model.addAttribute("data", data);
         model.addAttribute("tratamientos", new ArrayList<>());
 
         return "consulta_form";
-    }
-    @GetMapping("/consultas/{id}")
-    public String verConsulta(@PathVariable int id, Model model) {
-
-        model.addAttribute("data",
-                vidapetService.obtenerConsultaCompleta(id));
-
-        return "consulta_detalle";
     }
     @PostMapping("/consultas/guardar-desde-cita")
     public String guardarConsultaDesdeCita(
@@ -560,26 +587,28 @@ public class VidapetController {
 
     // ================= VETERINARIOS (FIXED) =================
     @GetMapping("/veterinarios")
-    public String listarVeterinarios(@RequestParam(required = false) String search, Model model) {
-        model.addAttribute("veterinarios", vidapetService.listarVeterinarios(search));
+    public String listarVeterinarios(@RequestParam(required = false) String search,
+                                     Model model) {
+
+        model.addAttribute("veterinarios",
+                vidapetService.listarVeterinarios(search));
+
         return "veterinarios";
     }
-
     @GetMapping("/veterinarios/nuevo")
-    public String nuevoVeterinario(Model model) {
-        Map<String, Object> v = new HashMap<>();
-        v.put("id", null);
-        v.put("nombre", "");
-        v.put("apellido", "");
-        v.put("telefono", "");
-        v.put("email", "");
-        v.put("especialidad", "");
-        v.put("codigo_colegiado", "");
+    public String mostrarFormularioNuevoVeterinario(Model model) {
+        Map<String, Object> veterinario = new HashMap<>();
+        veterinario.put("id", "");
+        veterinario.put("nombre", "");
+        veterinario.put("apellido", "");
+        veterinario.put("telefono", "");
+        veterinario.put("email", "");
+        veterinario.put("especialidad", "");
+        veterinario.put("codigo_colegiado", "");
 
-        model.addAttribute("veterinario", v);
+        model.addAttribute("veterinario", veterinario);
         return "veterinario_form";
     }
-
     @PostMapping("/veterinarios/guardar")
     public String guardarVeterinario(@RequestParam String nombre,
                                      @RequestParam String apellido,
@@ -588,18 +617,20 @@ public class VidapetController {
                                      @RequestParam String especialidad,
                                      @RequestParam String codigo_colegiado) {
 
-        vidapetService.guardarVeterinario(nombre, apellido, telefono, email, especialidad, codigo_colegiado);
+        vidapetService.guardarVeterinario(
+                nombre, apellido, telefono, email, especialidad, codigo_colegiado
+        );
+
         return "redirect:/veterinarios";
     }
-
     @GetMapping("/veterinarios/editar/{id}")
-    public String editarVeterinario(@PathVariable Long id, Model model) {
-        Map<String, Object> v = vidapetService.obtenerVeterinario(id);
-        if (v == null) return "redirect:/veterinarios";
-        model.addAttribute("veterinario", v);
+    public String mostrarFormularioEditarVeterinario(@PathVariable Long id, Model model) {
+        Map<String, Object> veterinario =
+                vidapetService.obtenerVeterinarioPorId(id);
+
+        model.addAttribute("veterinario", veterinario);
         return "veterinario_form";
     }
-
     @PostMapping("/veterinarios/actualizar")
     public String actualizarVeterinario(@RequestParam Long id,
                                         @RequestParam String nombre,
@@ -609,10 +640,12 @@ public class VidapetController {
                                         @RequestParam String especialidad,
                                         @RequestParam String codigo_colegiado) {
 
-        vidapetService.actualizarVeterinario(id, nombre, apellido, telefono, email, especialidad, codigo_colegiado);
+        vidapetService.actualizarVeterinario(
+                id, nombre, apellido, telefono, email, especialidad, codigo_colegiado
+        );
+
         return "redirect:/veterinarios";
     }
-
     @GetMapping("/veterinarios/eliminar/{id}")
     public String eliminarVeterinario(@PathVariable Long id) {
         vidapetService.eliminarVeterinario(id);

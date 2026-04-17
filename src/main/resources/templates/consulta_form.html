@@ -43,7 +43,7 @@
 
 
                 <img th:if="${data != null and data['foto'] != null and data['foto'] != ''}"
-                     th:src="@{'/' + ${data['foto']}}"
+                     th:src="${data != null and data.foto != null ? '/' + data.foto : 'https://via.placeholder.com/220'}"
                      class="img-fluid rounded shadow"
                      style="width:220px;height:220px;object-fit:cover;">
 
@@ -103,6 +103,16 @@
                 </p>
 
             </div>
+
+        </div>
+        <div class="card shadow-sm p-4 mt-3">
+
+            <h5 class="text-success mb-3">🩺 Veterinario</h5>
+
+            <p class="mb-1">
+                <b>Nombre:</b>
+                <span th:text="${data['nombre'] + ' ' + data['apellido']}"></span>
+            </p>
 
         </div>
     </div>

@@ -1,9 +1,10 @@
-/* ===== Base ===== */
+ /* ===== Base ===== */
 body {
     margin: 0;
     font-family: "Segoe UI", Tahoma, sans-serif;
-    background: linear-gradient(180deg, #f6d9d4, #defae3);
-    color: #2f2f3a;
+
+    background: linear-gradient(180deg, #fde2e4, #e2f0cb);
+    color: #374151;
 }
 
 /* ===== Layout ===== */
@@ -12,20 +13,23 @@ body {
     min-height: 100vh;
 }
 
-/* ===== Sidebar ===== */
+/* ===== Sidebar (SOFT PASTEL GLASS) ===== */
 .sidebar {
     width: 240px;
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(12px);
+
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(14px);
+
     padding: 24px;
-    box-shadow: 5px 0 20px rgba(0,0,0,0.05);
-    border-right: 1px solid rgba(255,255,255,0.4);
+
+    box-shadow: 4px 0 18px rgba(0,0,0,0.05);
+    border-right: 1px solid rgba(255,255,255,0.6);
 }
 
 .sidebar h2 {
     text-align: center;
-    color: #b76e79; /* صورتی تیره ملایم */
+    color: #c08497;
     margin-bottom: 25px;
     font-weight: 700;
 }
@@ -34,18 +38,23 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+
     padding: 10px 12px;
     margin: 8px 0;
+
     border-radius: 12px;
     text-decoration: none;
-    color: #374151;
-    background: rgba(255,255,255,0.4);
+
+    color: #4b5563;
+
+    background: rgba(255,255,255,0.5);
+
     transition: all 0.25s ease;
 }
 
 .sidebar a:hover {
-    background: rgba(255, 255, 255, 0.7);
-    transform: translateX(6px);
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateX(5px);
     color: #111827;
 }
 
@@ -53,9 +62,12 @@ body {
 .sidebar-contact {
     margin-top: 25px;
     padding-top: 15px;
-    border-top: 1px solid rgba(255,255,255,0.5);
+
+    border-top: 1px solid rgba(255,255,255,0.6);
+
     font-size: 12px;
     color: #374151;
+
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -65,14 +77,17 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+
     margin: 0;
-    background: rgba(255,255,255,0.45);
     padding: 8px 10px;
+
+    background: rgba(255,255,255,0.55);
+
     border-radius: 10px;
 }
 
 .sidebar-contact i {
-    color: #b76e79;
+    color: #c08497;
 }
 
 /* ===== Main ===== */
@@ -80,6 +95,7 @@ body {
     flex: 1;
     min-width: 0;
     overflow-x: auto;
+
     padding: 30px;
     background: transparent;
 }
@@ -89,55 +105,67 @@ body {
     margin-bottom: 15px;
 }
 
-/* ===== Button ===== */
+/* ===== Button (PASTEL SOFT) ===== */
 button {
     padding: 10px 16px;
     border: none;
     border-radius: 12px;
+
     cursor: pointer;
-    background: linear-gradient(135deg, #f6a5a0, #9ae6b4);
+
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+
     color: #1f2937;
     font-weight: 600;
+
     transition: all 0.25s ease;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
 button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.12);
 }
 
-/* ===== Table ===== */
+/* ===== Table (CLEAN PASTEL) ===== */
 table {
     width: 100%;
     border-collapse: collapse;
+
     background: rgba(255,255,255,0.85);
     backdrop-filter: blur(6px);
+
     border-radius: 14px;
     overflow: hidden;
+
     margin-top: 20px;
+
     box-shadow: 0 8px 18px rgba(0,0,0,0.05);
 }
 
 thead {
-    background: rgba(246, 217, 212, 0.7);
+    background: linear-gradient(135deg, #fde2e4, #e2f0cb);
     color: #6b4f4f;
 }
 
 th, td {
     padding: 12px;
     text-align: center;
+
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    color: #374151;
 }
 
 tbody tr:hover {
-    background: rgba(222, 250, 227, 0.5);
+    background: rgba(252, 231, 243, 0.4);
 }
 
 /* ===== Image ===== */
 img {
     border-radius: 10px;
     object-fit: cover;
+
     box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
 
@@ -145,4 +173,9 @@ img {
 span {
     color: #9ca3af;
     font-size: 13px;
+}
+
+/* ===== Smooth transitions ===== */
+* {
+    transition: all 0.2s ease;
 }

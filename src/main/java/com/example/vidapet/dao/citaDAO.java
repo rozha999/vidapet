@@ -32,10 +32,14 @@ public class citaDAO {
         map.put("mascota_nombre", rs.getString("mascota_nombre"));
         map.put("propietario_nombre", rs.getString("propietario_nombre"));
         map.put("propietario_apellido", rs.getString("propietario_apellido"));
+
+        // ✅ این دو تا حیاتی هستند
         map.put("veterinario_nombre", rs.getString("veterinario_nombre"));
+        map.put("veterinario_apellido", rs.getString("veterinario_apellido"));
 
         return map;
     };
+
 
     public List<Map<String, Object>> findFiltered(String mascota,
                                                   String propietario,
@@ -43,22 +47,27 @@ public class citaDAO {
                                                   String orden) {
 
         String sql = """
-            SELECT c.id,
-                   c.mascota_id,
-                   c.propietario_id,
-                   c.veterinario_id,
-                   c.fecha,
-                   c.nota,
-                   c.estado,
-                   c.consulta_id,
-                   m.nombre AS mascota_nombre,
-                   p.nombre AS propietario_nombre,
-                   p.apellido AS propietario_apellido,
-                   v.nombre AS veterinario_nombre
-            FROM cita c
-            JOIN mascota m ON c.mascota_id = m.id
-            JOIN propietario p ON c.propietario_id = p.id
-            LEFT JOIN veterinario v ON c.veterinario_id = v.id
+SELECT c.id,
+       c.mascota_id,
+       c.propietario_id,
+       c.veterinario_id,
+       c.fecha,
+       c.nota,
+       c.estado,
+       c.consulta_id,
+
+       m.nombre AS mascota_nombre,
+
+       p.nombre AS propietario_nombre,
+       p.apellido AS propietario_apellido,
+
+       v.nombre AS veterinario_nombre,
+       v.apellido AS veterinario_apellido
+
+FROM cita c
+JOIN mascota m ON c.mascota_id = m.id
+JOIN propietario p ON c.propietario_id = p.id
+LEFT JOIN veterinario v ON c.veterinario_id = v.id
             WHERE 1=1
         """;
 
@@ -84,13 +93,16 @@ public class citaDAO {
         return jdbcTemplate.query(sql, rowMapper, params.toArray());
     }
 
-    public void save(int mascotaId, int propietarioId,
-                     LocalDateTime fecha, String nota) {
+    public void save(int mascotaId,
+                     int propietarioId,
+                     Integer veterinarioId,
+                     LocalDateTime fecha,
+                     String nota) {
 
         jdbcTemplate.update("""
-            INSERT INTO cita (mascota_id, propietario_id, fecha, nota, estado)
-            VALUES (?, ?, ?, ?, 'ESPERANDO')
-        """, mascotaId, propietarioId, fecha, nota);
+        INSERT INTO cita (mascota_id, propietario_id, veterinario_id, fecha, nota, estado)
+        VALUES (?, ?, ?, ?, ?, 'ESPERANDO')
+    """, mascotaId, propietarioId, veterinarioId, fecha, nota);
     }
 
     public Map<String, Object> findById(int id) {

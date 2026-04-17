@@ -90,4 +90,13 @@ public class MascotaDAO {
     public void delete(Long id) {
         jdbcTemplate.update("DELETE FROM mascota WHERE id=?", id);
     }
+    public Map<String, Object> findPropietarioByMascota(Long mascotaId) {
+
+        return jdbcTemplate.queryForMap("""
+        SELECT p.id, p.nombre, p.apellido
+        FROM mascota m
+        JOIN propietario p ON m.propietario_id = p.id
+        WHERE m.id = ?
+    """, mascotaId);
+    }
 }

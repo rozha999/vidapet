@@ -26,34 +26,45 @@ public class ConsultaDAO {
 
     private final RowMapper<Map<String, Object>> rowMapper = (rs, rowNum) -> {
         Map<String, Object> map = new HashMap<>();
+
         map.put("id", rs.getInt("id"));
         map.put("mascota_id", rs.getInt("mascota_id"));
         map.put("diagnostico", rs.getString("diagnostico"));
-        map.put("mascota_nombre", rs.getString("mascota_nombre"));
+
+        String mascotaNombre = rs.getString("mascota_nombre");
+        map.put("mascota_nombre",
+                mascotaNombre != null ? mascotaNombre : "Sin mascota");
+
         return map;
     };
-
     /* ---------------- FIND ALL ---------------- */
 
     public List<Map<String, Object>> findAll() {
 
         String sql = """
-            SELECT c.id, c.mascota_id, c.diagnostico, m.nombre AS mascota_nombre
-            FROM consulta c
-            JOIN mascota m ON c.mascota_id = m.id
-        """;
+        SELECT 
+            c.id,
+            c.mascota_id,
+            c.diagnostico,
+            COALESCE(m.nombre, 'Sin mascota') AS mascota_nombre
+        FROM consulta c
+        LEFT JOIN mascota m ON m.id = c.mascota_id
+    """;
 
         return jdbcTemplate.query(sql, rowMapper);
     }
-
     /* ---------------- FIND BY ID ---------------- */
 
     public Map<String, Object> findById(int id) {
 
         String sql = """
-        SELECT c.id, c.mascota_id, c.diagnostico, m.nombre AS mascota_nombre
+        SELECT 
+            c.id,
+            c.mascota_id,
+            c.diagnostico,
+            COALESCE(m.nombre, 'Sin mascota') AS mascota_nombre
         FROM consulta c
-        JOIN mascota m ON c.mascota_id = m.id
+        LEFT JOIN mascota m ON m.id = c.mascota_id
         WHERE c.id = ?
     """;
 
@@ -69,15 +80,18 @@ public class ConsultaDAO {
     public List<Map<String, Object>> findByMascotaId(int mascotaId) {
 
         String sql = """
-            SELECT c.id, c.mascota_id, c.diagnostico, m.nombre AS mascota_nombre
-            FROM consulta c
-            JOIN mascota m ON c.mascota_id = m.id
-            WHERE c.mascota_id = ?
-        """;
+        SELECT 
+            c.id,
+            c.mascota_id,
+            c.diagnostico,
+            COALESCE(m.mascota_nombre, 'Sin mascota') AS mascota_nombre
+        FROM consulta c
+        LEFT JOIN mascota m ON m.id = c.mascota_id
+        WHERE c.mascota_id = ?
+    """;
 
         return jdbcTemplate.query(sql, new Object[]{mascotaId}, rowMapper);
     }
-
     /* ---------------- SAVE ---------------- */
 
     public int save(int mascotaId, String diagnostico) {
@@ -136,7 +150,6 @@ public class ConsultaDAO {
 
         return consultas;
     }
-
     /* ---------------- FIND BY ID WITH TRATAMIENTOS ---------------- */
 
     public Map<String, Object> findConsultaWithTratamientos(int id) {

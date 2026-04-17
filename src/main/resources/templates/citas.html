@@ -45,6 +45,7 @@
         <tr>
             <th>Mascota</th>
             <th>Propietario</th>
+            <th>Veterinario</th>
 
             <th>
                 Fecha
@@ -65,11 +66,22 @@
 
             <td th:text="${c.propietario_nombre + ' ' + c.propietario_apellido}"></td>
 
+            <!-- ✅ VETERINARIO SAFE -->
+            <td>
+    <span th:if="${c.veterinario_nombre != null}">
+        <span th:text="${c.veterinario_nombre}"></span>
+        <span th:text="' ' + ${c.veterinario_apellido}"></span>
+    </span>
+
+                <span th:if="${c.veterinario_nombre == null}">
+        Sin asignar
+    </span>
+            </td>
+
             <td th:text="${c.fecha}"></td>
 
             <td th:text="${c.nota}"></td>
 
-            <!-- ===== ESTADO ===== -->
             <td>
                 <span th:switch="${c.estado}">
                     <span th:case="'ESPERANDO'">🟡 Esperando</span>
@@ -79,14 +91,13 @@
                 </span>
             </td>
 
-            <!-- ===== CONSULTA ===== -->
             <td>
                 <a th:if="${c.consulta_id != null}"
                    th:href="@{'/consultas/' + ${c.consulta_id}}">
                     👁 Ver consulta
                 </a>
             </td>
-            <!-- ===== ACCIONES ===== -->
+
             <td>
 
                 <a th:href="@{'/citas/editar/' + ${c.id}}">Editar</a>
@@ -98,13 +109,8 @@
                     ▶ Iniciar
                 </a>
 
-                <a th:href="@{'/citas/estado/' + ${c.id} + '/ATENDIDO'}">
-                    ✔ Finalizar
-                </a>
-
                 <br/>
 
-                <!-- Crear consulta SOLO si no existe -->
                 <a th:if="${c.estado == 'ATENDIENDO' and c.consulta_id == null}"
                    th:href="@{'/consultas/nueva-desde-cita/' + ${c.id}}">
                     ➕ Consulta

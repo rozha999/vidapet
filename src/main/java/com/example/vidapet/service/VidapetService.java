@@ -40,7 +40,16 @@ public class VidapetService {
 
     /*================= CITAS =================*/
     // CITAS
+    public Map<String, Object> obtenerVeterinarioPorCita(int citaId) {
+        String sql = """
+        SELECT v.nombre, v.apellido
+        FROM cita c
+        JOIN veterinario v ON c.veterinario_id = v.id
+        WHERE c.id = ?
+    """;
 
+        return jdbcTemplate.queryForMap(sql, citaId);
+    }
     public List<Map<String, Object>> listarCitas(
             String mascota,
             String propietario,
@@ -52,9 +61,11 @@ public class VidapetService {
 
     public void guardarCita(int mascotaId,
                             int propietarioId,
+                            Integer veterinarioId,
                             LocalDateTime fecha,
                             String nota) {
-        citaDAO.save(mascotaId, propietarioId, fecha, nota);
+
+        citaDAO.save(mascotaId, propietarioId, veterinarioId, fecha, nota);
     }
 
     public Map<String, Object> obtenerCita(int id) {
@@ -91,7 +102,9 @@ public class VidapetService {
                 consultaId, citaId
         );
     }
-
+    public Map<String, Object> obtenerPropietarioPorMascota(Long id) {
+        return mascotaDAO.findPropietarioByMascota(id);
+    }
     /*---------------------------- PROPIETARIOS ----------------------------*/
 
     public List<Map<String,Object>> listarPropietarios(String search) {
@@ -194,33 +207,63 @@ public class VidapetService {
 
     /* ================= VETERINARIOS ================= */
 
-    public List<Map<String, Object>> listarVeterinarios(String search) {
-        if (search == null || search.isBlank()) {
+        // 📌 لیست + جستجو
+        public List<Map<String, Object>> listarVeterinarios(String search) {
+            if (search != null && !search.trim().isEmpty()) {
+                return veterinarioDAO.search(search);
+            }
             return veterinarioDAO.findAll();
         }
-        return veterinarioDAO.search(search);
+
+        // 📌 گرفتن یک دامپزشک با id
+        public Map<String, Object> obtenerVeterinarioPorId(Long id) {
+            return veterinarioDAO.findById(id);
+        }
+
+        // 📌 ذخیره
+        public void guardarVeterinario(String nombre,
+                                       String apellido,
+                                       String telefono,
+                                       String email,
+                                       String especialidad,
+                                       String codigo_colegiado) {
+
+            veterinarioDAO.save(
+                    nombre,
+                    apellido,
+                    telefono,
+                    email,
+                    especialidad,
+                    codigo_colegiado
+            );
+        }
+
+        // 📌 آپدیت
+        public void actualizarVeterinario(Long id,
+                                          String nombre,
+                                          String apellido,
+                                          String telefono,
+                                          String email,
+                                          String especialidad,
+                                          String codigo_colegiado) {
+
+            veterinarioDAO.update(
+                    id,
+                    nombre,
+                    apellido,
+                    telefono,
+                    email,
+                    especialidad,
+                    codigo_colegiado
+            );
+        }
+
+        // 📌 حذف
+        public void eliminarVeterinario(Long id) {
+            veterinarioDAO.delete(id);
+        }
     }
 
-    public List<Map<String, Object>> buscarVeterinarios(String search) {
-        return veterinarioDAO.search(search);
-    }
 
-    public void guardarVeterinario(String n, String a, String t,
-                                   String e, String esp, String cod) {
-        veterinarioDAO.save(n, a, t, e, esp, cod);
-    }
 
-    public void actualizarVeterinario(Long id, String n, String a,
-                                      String t, String e, String esp, String cod) {
-        veterinarioDAO.update(id, n, a, t, e, esp, cod);
-    }
-
-    public void eliminarVeterinario(Long id) {
-        veterinarioDAO.delete(id);
-    }
-
-    public Map<String, Object> obtenerVeterinario(Long id) {
-        return veterinarioDAO.findById(id);
-    }
-}
 

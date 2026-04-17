@@ -1,140 +1,252 @@
-/* فونت و بک‌گراند کلی */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    background: linear-gradient(135deg, #f4f7fb, #e6f0ff);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: linear-gradient(180deg, #f6fbff 0%, #f7fdf9 100%);
+    color: #1f2a37;
+    margin: 0;
 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.navbar {
-    height: 120px;
-    width: 100%;
+/* =======================
+   Variables
+======================= */
+:root {
+    --primary: #3b82f6;
+    --secondary: #22c55e;
+
+    --text: #1f2a37;
+    --muted: #6b7280;
+
+    --radius: 16px;
+
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.06);
+    --shadow-md: 0 10px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 18px 35px rgba(0,0,0,0.12);
 }
 
-.navbar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255,255,255,0.55); /* روشن کننده */
+/* =======================
+   NAVBAR
+======================= */
+.custom-navbar {
+    background: linear-gradient(90deg, #0f172a, #1e293b);
+    padding: 14px 0;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
 }
 
-/* لوگو */
-.navbar-brand img {
-    width: 124px;        /* 👈 بزرگ‌تر شد */
-    height: 124px;
-    object-fit: cover;
-    border-radius: 12px; /* گوشه‌های نرم */
-    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
-    transition: 0.3s ease;
-}
-
-/* hover روی لوگو */
-.navbar-brand img:hover {
-    transform: scale(1.1);
-}
-
-/* اگر خواستی متن کنار لوگو */
 .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    text-decoration: none;
 }
-/* عنوان صفحه */
+
+.logo {
+    height: 65px;
+    transition: transform 0.25s ease;
+    filter: brightness(1.1) contrast(1.1);
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(-2deg);
+}
+
+.navbar-brand h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* =======================
+   MENU
+======================= */
+.navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.navbar-menu .nav-link {
+    color: #e5e7eb;
+    font-weight: 600;
+    font-size: 14px;
+
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 12px;
+
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+
+    transition: all 0.25s ease;
+}
+
+.navbar-menu .nav-link:hover {
+    background: rgba(59,130,246,0.25);
+    border-color: rgba(59,130,246,0.4);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.navbar-menu .nav-link.active {
+    background: linear-gradient(90deg, #3b82f6, #22c55e);
+    border: none;
+    color: #ffffff;
+}
+
+/* =======================
+   TYPOGRAPHY
+======================= */
 h1 {
     font-weight: 700;
-    color: #4a4a4a;
+    color: #1f2a37;
 }
 
 p {
-    color: #6c757d;
+    color: var(--muted);
 }
 
-/* کارت‌ها */
+/* =======================
+   DASHBOARD CARDS (PASTEL)
+======================= */
 .dashboard-card {
+    position: relative;
+
+    border-radius: var(--radius);
     border: none;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    cursor: pointer;
+
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+
+    transition: all 0.25s ease;
+
+    animation: fadeUp 0.5s ease both;
+
     overflow: hidden;
 }
 
-/* افکت هاور */
-.dashboard-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+/* pastel colors */
+.bg-pastel1 {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
 }
 
-/* آیکون‌ها */
+.bg-pastel2 {
+    background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+}
+
+.bg-pastel3 {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+}
+
+.bg-pastel4 {
+    background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+}
+
+.bg-pastel5 {
+    background: linear-gradient(135deg, #ffedd5, #fed7aa);
+}
+
+/* hover */
+.dashboard-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.12);
+}
+
+/* icons */
 .dashboard-card i,
 .dashboard-card svg {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .dashboard-card:hover i,
 .dashboard-card:hover svg {
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
-/* رنگ‌های پاستلی پزشکی */
-.bg-pastel1 {
-    background: linear-gradient(135deg, #d4f1f9, #b2ebf2);
+/* text */
+.dashboard-card h1,
+.dashboard-card h2,
+.dashboard-card h3,
+.dashboard-card h5,
+.dashboard-card p {
+    color: #1f2a37;
 }
 
-.bg-pastel2 {
-    background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+/* =======================
+   ANIMATION
+======================= */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.bg-pastel3 {
-    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-}
-
-.bg-pastel5 {
-    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-}
-
-/* متن داخل کارت */
-.card-title {
-    font-weight: 600;
-    margin-top: 10px;
-}
-
-.card-text {
-    font-size: 0.9rem;
-}
-
-/* سایه نرم برای حس کلینیکی */
-.shadow-sm {
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
-}
+/* =======================
+   FOOTER
+======================= */
 .clinic-footer {
-    background: linear-gradient(135deg, #ffffff, #f4f7fb);
-    border-top: 1px solid #e6e6e6;
-    margin-top: 50px;
+    background: #ffffff;
+    border-top: 1px solid #e6eef5;
+    color: #555;
 }
 
 .clinic-footer h6 {
-    color: #6b5b95;
+    color: #1f2a37;
+    font-weight: 700;
 }
 
 .social-icons i {
-    font-size: 1.2rem;
+    font-size: 20px;
     margin: 0 8px;
-    color: #6b5b95;
     cursor: pointer;
-    transition: 0.3s;
+    color: #64748b;
+    transition: 0.2s ease;
 }
 
 .social-icons i:hover {
-    color: #e91e63;
-    transform: scale(1.2);
+    color: #3b82f6;
+    transform: translateY(-2px);
 }
 
-
-/* ریسپانسیو بهتر */
+/* =======================
+   RESPONSIVE
+======================= */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 1.6rem;
+    .navbar-menu {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .navbar-menu .nav-link {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .logo {
+        height: 55px;
+    }
+
+    .navbar-brand h1 {
+        font-size: 18px;
+    }
+
+    .dashboard-card {
+        margin-bottom: 15px;
     }
 }
