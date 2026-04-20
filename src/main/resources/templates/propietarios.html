@@ -12,14 +12,18 @@
 
 <div class="layout">
 
-    <!-- ===== Sidebar ===== -->
     <div class="sidebar">
         <h2>🐾 VidaPet</h2>
         <a href="/">
             <i class="fas fa-home"></i> Home
         </a>
+
         <a href="/propietarios">
             <i class="fas fa-user"></i> Propietarios
+        </a>
+
+        <a href="/especies">
+            <i class="fas fa-paw"></i> Especies
         </a>
 
         <a href="/mascotas">
@@ -72,13 +76,13 @@
                 <td th:text="${propietario['email']}"></td>
                 <td>
                     <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}" class="btn">
-                        <i class="fas fa-edit"></i> Editar
+                        <i class="fas fa-edit"></i>
                     </a>
 
                     <a th:href="@{'/propietarios/eliminar/' + ${propietario['id']}}"
                        onclick="return confirm('¿Está seguro?');"
                        class="btn">
-                        <i class="fas fa-trash-alt"></i> Eliminar
+                        <i class="fas fa-trash-alt"></i>
                     </a>
                 </td>
             </tr>

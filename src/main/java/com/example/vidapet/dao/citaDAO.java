@@ -45,7 +45,6 @@ public class citaDAO {
                                                   String propietario,
                                                   LocalDate fecha,
                                                   String orden) {
-
         String sql = """
 SELECT c.id,
        c.mascota_id,
@@ -54,13 +53,11 @@ SELECT c.id,
        c.fecha,
        c.nota,
        c.estado,
-       c.consulta_id,
+       con.id AS consulta_id, -- اینجا تغییر کرد: گرفتن ID از جدول مشاوره
 
        m.nombre AS mascota_nombre,
-
        p.nombre AS propietario_nombre,
        p.apellido AS propietario_apellido,
-
        v.nombre AS veterinario_nombre,
        v.apellido AS veterinario_apellido
 
@@ -68,8 +65,9 @@ FROM cita c
 JOIN mascota m ON c.mascota_id = m.id
 JOIN propietario p ON c.propietario_id = p.id
 LEFT JOIN veterinario v ON c.veterinario_id = v.id
-            WHERE 1=1
-        """;
+LEFT JOIN consulta con ON c.id = con.cita_id -- جوین با جدول مشاوره
+WHERE 1=1
+""";
 
         List<Object> params = new ArrayList<>();
 

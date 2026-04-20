@@ -1,5 +1,6 @@
 package com.example.vidapet.controller;
 
+import com.example.vidapet.dao.ConsultaDAO;
 import com.example.vidapet.service.VidapetService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import java.time.YearMonth;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.*;
@@ -93,6 +95,7 @@ public class VidapetController {
 
     /*------------------------------- MASCOTAS ----------------------------------*/
 
+    /*------------------------------- MASCOTAS ----------------------------------*/
 
     @GetMapping("/mascotas")
     public String listarMascotas(Model model) {
@@ -102,11 +105,10 @@ public class VidapetController {
 
     @GetMapping("/mascotas/nuevo")
     public String nuevaMascota(Model model) {
-
         Map<String, Object> mascota = new HashMap<>();
         mascota.put("id", "");
         mascota.put("nombre", "");
-        mascota.put("especie", "");
+        mascota.put("especie_id", "");
         mascota.put("raza", "");
         mascota.put("fecha_nacimiento", "");
         mascota.put("propietario_id", "");
@@ -114,36 +116,36 @@ public class VidapetController {
 
         model.addAttribute("mascota", mascota);
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+        model.addAttribute("especies", vidapetService.listarEspecies(null)); // لیست گونه‌ها اضافه شد
 
         return "mascota_form";
     }
 
-    /*====================== GUARDAR ======================*/
     @PostMapping("/mascotas/guardar")
     public String guardarMascota(
             @RequestParam String nombre,
-            @RequestParam String especie,
+            @RequestParam Long especie_id, // هماهنگ با رابطه جدید
             @RequestParam String raza,
             @RequestParam("fecha_nacimiento") String fechaNacimientoStr,
-            @RequestParam Long propietario_id,
-            @RequestParam(required = false) MultipartFile foto
+            @RequestParam(required = false) Long propietario_id, // برای جلوگیری از ارور 400
+            @RequestParam(required = false) MultipartFile foto,
+            RedirectAttributes ra
     ) throws Exception {
 
+        // مدیریت خطای صاحب
+        if (propietario_id == null) {
+            ra.addFlashAttribute("error", "Debe seleccionar un propietario válido de la lista.");
+            return "redirect:/mascotas/nuevo";
+        }
+
         String filePath = "";
-
         if (foto != null && !foto.isEmpty()) {
-
             String fileName = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
-
             Path uploadDir = Paths.get("uploads");
-
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }
-
-            Path filePathDisk = uploadDir.resolve(fileName);
-            Files.write(filePathDisk, foto.getBytes());
-
+            Files.write(uploadDir.resolve(fileName), foto.getBytes());
             filePath = "uploads/" + fileName;
         }
 
@@ -151,7 +153,7 @@ public class VidapetController {
 
         vidapetService.guardarMascota(
                 nombre,
-                especie,
+                especie_id, // ارسال ID گونه
                 raza,
                 fechaNacimiento,
                 propietario_id,
@@ -163,7 +165,6 @@ public class VidapetController {
 
     @GetMapping("/mascotas/editar/{id}")
     public String editarMascota(@PathVariable Long id, Model model) {
-
         Map<String, Object> mascota = vidapetService.obtenerMascotaPorId(id);
 
         if (mascota == null) {
@@ -172,65 +173,48 @@ public class VidapetController {
 
         model.addAttribute("mascota", mascota);
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+        model.addAttribute("especies", vidapetService.listarEspecies(null)); // لیست گونه‌ها اضافه شد
 
         return "mascota_form";
     }
-    // ===== NEW API: obtener propietario por mascota =====
-    @GetMapping("/mascotas/{id}/propietario")
-    @ResponseBody
-    public Map<String, Object> getPropietarioByMascota(@PathVariable Long id) {
-        return vidapetService.obtenerPropietarioPorMascota(id);
-    }
-    /*====================== ACTUALIZAR ======================*/
+
     @PostMapping("/mascotas/actualizar")
     public String actualizarMascota(
             @RequestParam Long id,
             @RequestParam String nombre,
-            @RequestParam String especie,
+            @RequestParam Long especie_id, // هماهنگ با رابطه جدید
             @RequestParam String raza,
             @RequestParam("fecha_nacimiento") String fechaNacimientoStr,
-            @RequestParam Long propietario_id,
-            @RequestParam(required = false) MultipartFile foto
+            @RequestParam(required = false) Long propietario_id,
+            @RequestParam(required = false) MultipartFile foto,
+            RedirectAttributes ra
     ) throws Exception {
 
-        Map<String, Object> mascotaExistente =
-                vidapetService.obtenerMascotaPorId(id);
-
-        if (mascotaExistente == null) {
-            return "redirect:/mascotas";
+        if (propietario_id == null) {
+            ra.addFlashAttribute("error", "Debe seleccionar un propietario válido.");
+            return "redirect:/mascotas/editar/" + id;
         }
 
-        String filePath = "";
-
-        Object fotoDB = mascotaExistente.get("foto");
-        if (fotoDB != null) {
-            filePath = fotoDB.toString();
-        }
+        Map<String, Object> mascotaExistente = vidapetService.obtenerMascotaPorId(id);
+        String filePath = (mascotaExistente != null && mascotaExistente.get("foto") != null)
+                ? mascotaExistente.get("foto").toString() : "";
 
         if (foto != null && !foto.isEmpty()) {
-
             String fileName = System.currentTimeMillis() + "_" + foto.getOriginalFilename();
-
             Path uploadDir = Paths.get("uploads");
-
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }
-
-            Path filePathDisk = uploadDir.resolve(fileName);
-            Files.write(filePathDisk, foto.getBytes());
-
+            Files.write(uploadDir.resolve(fileName), foto.getBytes());
             filePath = "uploads/" + fileName;
         }
-
-        LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
 
         vidapetService.actualizarMascota(
                 id,
                 nombre,
-                especie,
+                especie_id,
                 raza,
-                fechaNacimiento,
+                LocalDate.parse(fechaNacimientoStr),
                 propietario_id,
                 filePath
         );
@@ -238,15 +222,11 @@ public class VidapetController {
         return "redirect:/mascotas";
     }
 
-    /*====================== DELETE ======================*/
     @GetMapping("/mascotas/eliminar/{id}")
     public String eliminarMascota(@PathVariable Long id) {
-
         vidapetService.eliminarMascota(id);
-
         return "redirect:/mascotas";
     }
-
     /*---------------------------- TRATAMIENTOS ----------------------------*/
 
     @GetMapping("/tratamientos")
@@ -308,19 +288,19 @@ public class VidapetController {
     /*==================== CONSULTAS ====================*/
 
     @GetMapping("/consultas")
-    public String listarConsultas(@RequestParam(required = false) String search,
-                                  Model model) {
+    public String listarConsultas(@RequestParam(required = false) String search, Model model) {
+        List<Map<String, Object>> consultas;
 
         if (search != null && !search.isBlank()) {
-            model.addAttribute("consultas",
-                    vidapetService.buscarConsultas(search));
+            // جستجو بر اساس نام حیوان (این متد در DAO شما هست)
+            consultas = vidapetService.buscarConsultas(search);
         } else {
-            model.addAttribute("consultas",
-                    vidapetService.listarConsultasConTratamientos());
+            // نمایش همه معاینات
+            consultas = vidapetService.listarConsultas();
         }
 
-        model.addAttribute("search", search);
-
+        model.addAttribute("consultas", consultas);
+        model.addAttribute("search", search); // برای اینکه کلمه جستجو شده در باکس باقی بماند
         return "consultas";
     }
     @GetMapping("/consultas/nueva")
@@ -430,7 +410,21 @@ public class VidapetController {
         vidapetService.guardarTratamiento(id, tratamiento, fecha_inicio, fecha_fin, observaciones);
         return "redirect:/consultas";
     }
+    @GetMapping("/consultas/{id}")
+    public String verDetalleConsulta(@PathVariable int id, Model model) {
+        // گرفتن دیتای کامل
+        Map<String, Object> data = vidapetService.obtenerConsultaDetalleCompleto(id);
 
+        // فرستادن به صفحه HTML
+        model.addAttribute("data", data);
+
+        return "consulta_detalle"; // نام فایل HTML که قبلاً ساختیم
+    }
+    @GetMapping("/api/mascotas/{id}/propietario")
+    @ResponseBody // مهم: برای اینکه خروجی فقط داده باشد نه صفحه وب
+    public Map<String, Object> getPropietarioByMascota(@PathVariable Long id) {
+        return vidapetService.obtenerPropietarioPorMascota(id);
+    }
     /*================= CITAS =================*/
     @GetMapping("/citas")
     public String getCitas(
@@ -454,11 +448,8 @@ public class VidapetController {
     }
     @GetMapping("/citas/nueva")
     public String nuevaCita(Model model) {
-
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
-        model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
+        model.addAttribute("mascotas", vidapetService.listarMascotas()); // لیست حیوانات
         model.addAttribute("veterinarios", vidapetService.listarVeterinarios(null));
-
         return "cita_form";
     }
 
@@ -508,39 +499,35 @@ public class VidapetController {
 
     @GetMapping("/consultas/nueva-desde-cita/{citaId}")
     public String nuevaDesdeCita(@PathVariable int citaId, Model model) {
-
         Map<String, Object> cita = vidapetService.obtenerCita(citaId);
-
         Integer mascotaId = (Integer) cita.get("mascota_id");
 
-        Map<String, Object> mascota =
-                new HashMap<>(vidapetService.obtenerMascotaPorId(mascotaId.longValue()));
-
-        Map<String, Object> propietario =
-                vidapetService.obtenerPropietarioPorMascota(mascotaId.longValue());
-
-        // 🔥 veterinario اضافه شد
-        Map<String, Object> veterinario =
-                vidapetService.obtenerVeterinarioPorCita(citaId);
-
-        mascota.put("mascota_nombre", mascota.get("nombre"));
+        // 🔥 نکته مهم: از متدی استفاده کن که اطلاعات کامل پت (شامل گونه و صاحب) را برمی‌گرداند
+        // اگر متد findConsultaFull را داری که قبلاً نوشتیم، اینجا از آن استفاده کن
+        // یا مطمئن شو که این متد اطلاعات کامل را می‌آورد:
+        Map<String, Object> data = vidapetService.obtenerDetalleParaNuevaConsulta(mascotaId, citaId);
 
         Map<String, Object> consulta = new HashMap<>();
-        consulta.put("id", null);
-        consulta.put("mascota_id", mascotaId);
         consulta.put("cita_id", citaId);
+        consulta.put("mascota_id", mascotaId);
         consulta.put("diagnostico", "");
 
-        Map<String, Object> data = new HashMap<>();
-        data.putAll(mascota);
-        data.putAll(propietario);
-        data.putAll(veterinario); // 🔥 مهم
-
         model.addAttribute("consulta", consulta);
-        model.addAttribute("data", data);
+        model.addAttribute("data", data); // این دیتا باید شامل 'especie' و 'propietario_email' باشد
         model.addAttribute("tratamientos", new ArrayList<>());
 
         return "consulta_form";
+    }
+    @GetMapping("/consultas/buscar")
+    public String buscarConsultas(@RequestParam(name = "nombre", required = false) String nombre, Model model) {
+
+        // استفاده از متد "Seguro" که در سرویس ساختید
+        List<Map<String, Object>> resultados = vidapetService.buscarConsultasSeguro(nombre);
+
+        model.addAttribute("consultas", resultados);
+        model.addAttribute("nombre", nombre);
+
+        return "consultas";
     }
     @PostMapping("/consultas/guardar-desde-cita")
     public String guardarConsultaDesdeCita(
@@ -552,14 +539,10 @@ public class VidapetController {
             @RequestParam(required = false) List<LocalDate> fecha_fin,
             @RequestParam(required = false) List<String> observaciones
     ) {
-
-        int consultaId = vidapetService.guardarConsultaDesdeCita(
-                cita_id, mascota_id, diagnostico
-        );
+        int consultaId = vidapetService.guardarConsultaDesdeCita(cita_id, mascota_id, diagnostico);
 
         if (tratamientos != null) {
             for (int i = 0; i < tratamientos.size(); i++) {
-
                 vidapetService.guardarTratamiento(
                         consultaId,
                         tratamientos.get(i),
@@ -570,7 +553,8 @@ public class VidapetController {
             }
         }
 
-        return "redirect:/consultas";
+        // تغییر این خط:
+        return "redirect:/citas";
     }
     @PostMapping("/citas/actualizar")
     public String actualizarCita(
@@ -651,4 +635,120 @@ public class VidapetController {
         vidapetService.eliminarVeterinario(id);
         return "redirect:/veterinarios";
     }
+
+
+    /*---------------------------- LISTAR ----------------------------*/
+
+    @GetMapping("/especies")
+    public String listarEspecies(@RequestParam(required = false) String search,
+                                 Model model) {
+
+        model.addAttribute("especies",
+                vidapetService.listarEspecies(search));
+
+        model.addAttribute("search", search);
+
+        return "especies";
+    }
+
+    /*---------------------------- NUEVO ----------------------------*/
+
+    @GetMapping("/especies/nuevo")
+    public String mostrarFormularioNuevoEspecie(Model model) {
+        Map<String, Object> especie = new HashMap<>();
+        especie.put("id", "");       // این خیلی مهم است که خالی باشد نه نال
+        especie.put("nombre", "");
+        especie.put("foto", "");
+
+        // دقت کن اسم ویژگی "especie" باشد
+        model.addAttribute("especie", especie);
+
+        return "especie_form";
+    }
+    /*---------------------------- GUARDAR ----------------------------*/
+
+    @PostMapping("/especies/guardar")
+    public String guardarEspecie(@RequestParam String nombre,
+                                 @RequestParam("archivoFoto") MultipartFile archivoFoto,
+                                 RedirectAttributes redirectAttributes) throws Exception {
+
+        if (nombre.isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "El nombre es obligatorio");
+            return "redirect:/especies/nuevo";
+        }
+
+        String pathFinal = "";
+
+        // منطق ذخیره فایل روی هارد
+        if (archivoFoto != null && !archivoFoto.isEmpty()) {
+            String nombreArchivo = System.currentTimeMillis() + "_" + archivoFoto.getOriginalFilename();
+            Path rutaUploads = Paths.get("uploads");
+
+            if (!Files.exists(rutaUploads)) {
+                Files.createDirectories(rutaUploads);
+            }
+
+            Path rutaCompleta = rutaUploads.resolve(nombreArchivo);
+            Files.write(rutaCompleta, archivoFoto.getBytes());
+
+            // این همان آدرسی است که در دیتابیس ذخیره می‌شود
+            pathFinal = "uploads/" + nombreArchivo;
+        }
+
+        vidapetService.guardarEspecie(nombre, pathFinal);
+        redirectAttributes.addFlashAttribute("success", "Especie creada correctamente");
+
+        return "redirect:/especies";
+    }
+    /*---------------------------- EDITAR ----------------------------*/
+
+    @GetMapping("/especies/editar/{id}")
+    public String mostrarFormularioEditarEspecie(@PathVariable Long id, Model model) {
+        Map<String, Object> especie = vidapetService.obtenerEspeciePorId(id);
+
+        if (especie == null) {
+            return "redirect:/especies"; // اگر پیدا نشد برگرد به لیست
+        }
+
+        model.addAttribute("especie", especie);
+        return "especie_form";
+    }
+
+    /*---------------------------- ACTUALIZAR ----------------------------*/
+
+    @PostMapping("/especies/actualizar")
+    public String actualizarEspecie(@RequestParam Long id,
+                                    @RequestParam String nombre,
+                                    @RequestParam(value = "archivoFoto", required = false) MultipartFile archivoFoto, // تغییر به MultipartFile
+                                    RedirectAttributes redirectAttributes) throws Exception {
+
+        Map<String, Object> especieExistente = vidapetService.obtenerEspeciePorId(id);
+        String pathFinal = (especieExistente.get("foto") != null) ? especieExistente.get("foto").toString() : "";
+
+        if (archivoFoto != null && !archivoFoto.isEmpty()) {
+            String nombreArchivo = System.currentTimeMillis() + "_" + archivoFoto.getOriginalFilename();
+            Path rutaUploads = Paths.get("uploads");
+            if (!Files.exists(rutaUploads)) Files.createDirectories(rutaUploads);
+            Files.write(rutaUploads.resolve(nombreArchivo), archivoFoto.getBytes());
+            pathFinal = "uploads/" + nombreArchivo;
+        }
+
+        vidapetService.actualizarEspecie(id, nombre, pathFinal);
+        redirectAttributes.addFlashAttribute("success", "Especie actualizada");
+        return "redirect:/especies";
+    }
+
+    /*---------------------------- ELIMINAR ----------------------------*/
+
+    @GetMapping("/especies/eliminar/{id}")
+    public String eliminarEspecie(@PathVariable Long id,
+                                  RedirectAttributes redirectAttributes) {
+
+        vidapetService.eliminarEspecie(id);
+
+        redirectAttributes.addFlashAttribute("success", "Especie eliminada");
+
+        return "redirect:/especies";
+    }
 }
+

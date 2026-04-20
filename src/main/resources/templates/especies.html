@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/propietario.css">
+  <title>Lista de Especies</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <h2>🐾 VidaPet</h2>
+    <a href="/">
+      <i class="fas fa-home"></i> Home
+    </a>
+
+    <a href="/propietarios">
+      <i class="fas fa-user"></i> Propietarios
+    </a>
+
+    <a href="/especies">
+      <i class="fas fa-paw"></i> Especies
+    </a>
+
+    <a href="/mascotas">
+      <i class="fas fa-dog"></i> Mascotas
+    </a>
+
+    <a href="/citas">
+      <i class="fas fa-calendar"></i> Citas
+    </a>
+
+    <a href="/consultas">
+      <i class="fas fa-stethoscope"></i> Consultas
+    </a>
+  </div>
+
+  <div class="main">
+
+    <h1>Lista de Especies</h1>
+
+    <a th:href="@{/especies/nuevo}" class="btn">
+      <i class="fas fa-plus"></i> Agregar Especie
+    </a>
+
+    <table border="1" style="margin-top: 20px;">
+      <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr th:each="especie : ${especies}">
+        <td style="text-align: center;">
+          <img th:if="${especie['foto'] != null and especie['foto'] != ''}"
+               th:src="@{'/' + ${especie['foto']}}"
+               style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 1px solid #ddd;">
+
+          <i th:unless="${especie['foto'] != null and especie['foto'] != ''}"
+             class="fas fa-paw" style="font-size: 24px; color: #ccc;"></i>
+        </td>
+
+        <td th:text="${especie['nombre']}"></td>
+
+        <td>
+          <a th:href="@{'/especies/editar/' + ${especie['id']}}" class="btn">
+            <i class="fas fa-edit"></i>
+          </a>
+
+          <a th:href="@{'/especies/eliminar/' + ${especie['id']}}"
+             onclick="return confirm('¿Está seguro de eliminar esta especie?');"
+             class="btn">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+</body>
+</html>

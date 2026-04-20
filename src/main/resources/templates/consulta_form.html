@@ -2,24 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Consulta - VidaPet</title>
+    <title>Nueva Consulta - VidaPet</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/fconsulta.css}">
 </head>
 
 <body>
 
-<!-- ===== SIDEBAR ===== -->
 <div class="sidebar">
     <h2>🐾 VidaPet</h2>
-
     <a href="/"><i class="fas fa-home"></i> Home</a>
     <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
-    <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
+    <a href="/especies"><i class="fas fa-paw"></i> Especies</a> <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
     <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
     <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
 </div>
@@ -27,186 +24,135 @@
 
 <div class="container py-4">
 
-    <!-- HEADER -->
     <div class="mb-4">
-        <h2 class="fw-bold">🐾 Consulta Médica</h2>
-        <p class="text-muted mb-0">Historial clínico de la mascota</p>
+        <h2 class="fw-bold">🩺 Registro de Consulta</h2>
+        <p class="text-muted mb-0">Completa el diagnóstico y tratamiento para la mascota</p>
     </div>
 
-    <!-- TOP SECTION -->
     <div class="row g-4">
 
-        <!-- LEFT: IMAGE -->
         <div class="col-md-4">
-            <div class="card shadow-sm p-3 text-center h-100 d-flex align-items-center justify-content-center">
-
-
-
+            <div class="card shadow-sm p-3 text-center h-100 d-flex align-items-center justify-content-center border-0">
                 <img th:if="${data != null and data['foto'] != null and data['foto'] != ''}"
-                     th:src="${data != null and data.foto != null ? '/' + data.foto : 'https://via.placeholder.com/220'}"
-                     class="img-fluid rounded shadow"
-                     style="width:220px;height:220px;object-fit:cover;">
+                     th:src="${'/' + data['foto']}"
+                     class="img-fluid rounded-circle shadow-sm"
+                     style="width:200px; height:200px; object-fit:cover; border: 5px solid #f8f9fa;">
 
                 <img th:if="${data == null or data['foto'] == null or data['foto'] == ''}"
-                     src="https://via.placeholder.com/220"
-                     class="img-fluid rounded shadow"
-                     style="width:220px;height:220px;object-fit:cover;">
+                     src="https://via.placeholder.com/200?text=No+Photo"
+                     class="img-fluid rounded-circle shadow-sm"
+                     style="width:200px; height:200px; object-fit:cover;">
             </div>
         </div>
 
-        <!-- RIGHT: INFO -->
         <div class="col-md-8">
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="card shadow-sm p-4 border-0 border-start border-primary border-5">
+                        <h3 class="text-primary fw-bold mb-3" th:text="${data['mascota_nombre']}">Nombre</h3>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="mb-1"><b>Especie:</b> <span th:text="${data['especie']}">-</span></p>
+                                <p class="mb-1"><b>Raza:</b> <span th:text="${data['raza']}">-</span></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="mb-0">
+                                    <b>Nacimiento:</b>
+                                    <span th:text="${data['fecha_nacimiento'] != null ? #dates.format(data['fecha_nacimiento'], 'dd/MM/yyyy') : 'N/A'}"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- PET INFO -->
-            <div class="card shadow-sm p-4 mb-3">
+                <div class="col-md-6">
+                    <div class="card shadow-sm p-3 border-0 h-100">
+                        <h6 class="text-secondary fw-bold mb-2"><i class="fas fa-user-tie me-2"></i>Propietario</h6>
+                        <p class="small mb-1"><b th:text="${data['propietario_nombre'] + ' ' + data['propietario_apellido']}"></b></p>
+                        <p class="small mb-1 text-muted" th:text="${data['propietario_telefono']}"></p>
+                        <p class="small mb-0 text-muted" th:text="${data['propietario_email']}"></p>
+                    </div>
+                </div>
 
-                <h3 class="text-primary fw-bold"
-                    th:text="${data['mascota_nombre']}"></h3>
-
-                <hr class="my-3 opacity-25">
-
-                <p class="mb-1">
-                    <b>Especie:</b>
-                    <span th:text="${data['especie']}"></span>
-                </p>
-
-                <p class="mb-1">
-                    <b>Raza:</b>
-                    <span th:text="${data['raza']}"></span>
-                </p>
-
-                <p class="mb-0">
-                    <b>Fecha nacimiento:</b>
-                    <span th:text="${#temporals.format(data['fecha_nacimiento'], 'dd/MM/yyyy')}"></span>
-                </p>
-
+                <div class="col-md-6">
+                    <div class="card shadow-sm p-3 border-0 h-100 bg-light">
+                        <h6 class="text-success fw-bold mb-2"><i class="fas fa-user-md me-2"></i>Veterinario</h6>
+                        <p class="small mb-0 fw-bold" th:text="${data['nombre'] + ' ' + data['apellido']}">Nombre Vet</p>
+                        <span class="badge bg-success mt-2" style="width: fit-content;">En Turno</span>
+                    </div>
+                </div>
             </div>
-
-            <!-- OWNER INFO -->
-            <div class="card shadow-sm p-4">
-
-                <h5 class="text-secondary mb-3">👤 Propietario</h5>
-
-                <p class="mb-1">
-                    <b>Nombre:</b>
-                    <span th:text="${data['propietario_nombre'] + ' ' + data['propietario_apellido']}"></span>
-                </p>
-
-                <p class="mb-1">
-                    <b>Tel:</b>
-                    <span th:text="${data['propietario_telefono']}"></span>
-                </p>
-
-                <p class="mb-0">
-                    <b>Email:</b>
-                    <span th:text="${data['propietario_email']}"></span>
-                </p>
-
-            </div>
-
-        </div>
-        <div class="card shadow-sm p-4 mt-3">
-
-            <h5 class="text-success mb-3">🩺 Veterinario</h5>
-
-            <p class="mb-1">
-                <b>Nombre:</b>
-                <span th:text="${data['nombre'] + ' ' + data['apellido']}"></span>
-            </p>
-
         </div>
     </div>
 
-    <hr class="my-4 opacity-25">
-
-    <!-- FORM -->
-    <div class="card shadow-sm p-4 mt-4">
-
-        <h4 class="mb-3">🩺 Nueva Consulta</h4>
-
-        <div class="alert alert-info py-2 mb-3">
-            ℹ️ Añade tratamientos si es necesario
-        </div>
+    <div class="card shadow-sm p-4 mt-4 border-0">
+        <h4 class="mb-4 fw-bold text-dark border-bottom pb-2">🩺 Detalle de la Consulta</h4>
 
         <form th:action="@{/consultas/guardar-desde-cita}" method="post">
-
             <input type="hidden" name="cita_id" th:value="${consulta['cita_id']}">
             <input type="hidden" name="mascota_id" th:value="${consulta['mascota_id']}">
 
-            <div class="mb-3">
-                <label class="form-label">Diagnóstico</label>
-                <textarea name="diagnostico" class="form-control" rows="3" required></textarea>
+            <div class="mb-4">
+                <label class="form-label fw-bold">Diagnóstico Clínico</label>
+                <textarea name="diagnostico" class="form-control" rows="4"
+                          placeholder="Describe los síntomas y el estado general..." required></textarea>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="mb-0">💊 Tratamientos</h5>
-
-                <button type="button"
-                        class="btn btn-outline-primary btn-sm"
-                        onclick="agregarTratamiento()">
-                    ➕ Agregar
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-pills me-2"></i>Tratamientos</h5>
+                <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="agregarTratamiento()">
+                    <i class="fas fa-plus me-1"></i> Añadir Tratamiento
                 </button>
             </div>
 
-            <div id="tratamientos-container"></div>
+            <div id="tratamientos-container" class="mb-4">
+            </div>
 
-            <div class="mt-4 d-flex gap-2">
-
-                <button type="submit" class="btn btn-success px-4 shadow-sm">
-                    💾 Guardar Consulta
+            <div class="mt-5 pt-3 border-top d-flex gap-3">
+                <button type="submit" class="btn btn-success px-5 py-2 shadow-sm fw-bold">
+                    <i class="fas fa-save me-2"></i> Finalizar y Guardar
                 </button>
-
-                <a href="/citas" class="btn btn-outline-secondary">
-                    Cancelar
+                <a href="/citas" class="btn btn-outline-secondary px-4 py-2">
+                    Descartar
                 </a>
-
             </div>
-
         </form>
     </div>
 
-    <!-- FOOTER -->
-    <div class="text-center text-muted mt-4 small">
-        VidaPet Clinic System • Gestión veterinaria
+    <div class="text-center text-muted mt-5 mb-4 small">
+        VidaPet Management System &copy; 2026
     </div>
-
 </div>
 
 <script>
     function agregarTratamiento() {
         const container = document.getElementById('tratamientos-container');
-
         const html = `
-        <div class="border rounded p-3 mb-2 bg-light position-relative">
+        <div class="card mb-3 border-0 bg-light shadow-sm animate__animated animate__fadeIn">
+            <div class="card-body position-relative pt-4">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
+                        onclick="this.closest('.card').remove()"></button>
 
-            <button type="button"
-                    class="btn-close position-absolute top-0 end-0 m-2"
-                    onclick="this.parentElement.remove()"></button>
-
-            <div class="mb-2">
-                <label class="form-label">Tratamiento</label>
-                <input class="form-control" name="tratamientos">
-            </div>
-
-            <div class="row g-2">
-                <div class="col-md-6">
-                    <label class="form-label">Fecha inicio</label>
-                    <input type="date" class="form-control" name="fecha_inicio">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label small fw-bold">Medicamento / Procedimiento</label>
+                        <input class="form-control" name="tratamientos" placeholder="Ej: Amoxicilina 250mg" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small">Fecha Inicio</label>
+                        <input type="date" class="form-control form-control-sm" name="fecha_inicio">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small">Fecha Fin</label>
+                        <input type="date" class="form-control form-control-sm" name="fecha_fin">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label small text-muted">Observaciones de dosis</label>
+                        <input class="form-control form-control-sm" name="observaciones" placeholder="Ej: 1 cada 8 horas">
+                    </div>
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Fecha fin</label>
-                    <input type="date" class="form-control" name="fecha_fin">
-                </div>
             </div>
-
-            <div class="mt-2">
-                <label class="form-label">Observaciones</label>
-                <input class="form-control" name="observaciones">
-            </div>
-
         </div>`;
-
         container.insertAdjacentHTML('beforeend', html);
     }
 </script>

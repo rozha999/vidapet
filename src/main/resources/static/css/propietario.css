@@ -1,184 +1,157 @@
- /* ===== Base ===== */
-body {
+/* ===== RESET ===== */
+* {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-
-    background: linear-gradient(180deg, #f8fbff, #f1f7ff);
-    color: #374151;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-/* ===== Layout ===== */
+/* ===== BODY ===== */
+body {
+    background: #f4f8fb;
+    color: #333;
+}
+
+/* ===== LAYOUT ===== */
 .layout {
     display: flex;
     min-height: 100vh;
 }
 
-/* ===== Sidebar (SOFT CLINIC BLUE) ===== */
+/* ===== SIDEBAR ===== */
 .sidebar {
     width: 240px;
-
-    background: linear-gradient(160deg, #dbeafe, #e0f2fe);
-
-    padding: 24px;
-
-    box-shadow: 4px 0 16px rgba(0,0,0,0.05);
+    background: #dbeafe; /* pastel blue */
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.05);
 }
 
 .sidebar h2 {
-    text-align: center;
-    font-size: 20px;
-
-    color: #3b82f6;
-
     margin-bottom: 30px;
+    color: #1e3a8a;
 }
 
 .sidebar a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    padding: 10px 12px;
-    margin: 8px 0;
-
+    display: block;
+    padding: 12px;
+    margin-bottom: 10px;
     text-decoration: none;
+    color: #1e40af;
+    border-radius: 8px;
+    transition: 0.3s;
+}
 
-    color: #475569;
-
-    border-radius: 14px;
-
-    background: rgba(255,255,255,0.7);
-
-    transition: 0.25s ease;
+.sidebar a i {
+    margin-right: 8px;
 }
 
 .sidebar a:hover {
-    background: rgba(219,234,254,0.9);
-    transform: translateX(4px);
-    color: #1f2937;
+    background: #bfdbfe;
 }
 
-/* ===== Main ===== */
+/* ===== MAIN ===== */
 .main {
     flex: 1;
-    padding: 28px;
-
-    background: #f8fbff;
+    padding: 30px;
 }
 
-/* ===== Buttons (CLINIC BLUE SOFT) ===== */
+/* ===== TITLE ===== */
+h1 {
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
+
+/* ===== BUTTON ===== */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    padding: 10px 16px;
-    margin: 5px;
-
-    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-
-    color: #1f2937;
-
-    border-radius: 14px;
-
+    display: inline-block;
+    padding: 10px 15px;
+    background: #93c5fd;
+    color: #1e3a8a;
     text-decoration: none;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-
-    border: 1px solid rgba(59,130,246,0.15);
-
-    transition: 0.25s ease;
+    border-radius: 8px;
+    transition: 0.3s;
+    margin-bottom: 15px;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-
-    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
-
-    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    background: #60a5fa;
+    color: white;
 }
 
-/* ===== Search ===== */
+/* ===== SEARCH ===== */
 .search-container {
-    text-align: center;
-    margin: 20px 0 30px;
+    margin-bottom: 20px;
 }
 
 .search-container input {
-    padding: 10px 14px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
     width: 250px;
-
-    border: none;
-    border-radius: 14px;
-
-    background: #eef6ff;
-
-    outline: none;
-}
-
-.search-container input:focus {
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
 }
 
 .search-container button {
-    padding: 10px 14px;
-
+    padding: 10px 15px;
+    background: #bfdbfe;
     border: none;
-    border-radius: 14px;
-
-    background: linear-gradient(135deg, #93c5fd, #bfdbfe);
-
-    color: white;
-
+    border-radius: 8px;
     cursor: pointer;
+    color: #1e3a8a;
+    transition: 0.3s;
 }
 
 .search-container button:hover {
-    opacity: 0.9;
+    background: #93c5fd;
 }
 
-/* ===== Table (CLEAN MEDICAL LOOK) ===== */
+/* ===== TABLE ===== */
 table {
     width: 100%;
     border-collapse: collapse;
-
     background: white;
-
-    border-radius: 16px;
+    border-radius: 10px;
     overflow: hidden;
-
-    box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 thead {
-    background: linear-gradient(135deg, #dbeafe, #e0f2fe);
-    color: #3b82f6;
+    background: #bfdbfe;
 }
 
-th, td {
+thead th {
     padding: 12px;
-    text-align: center;
+    text-align: left;
+    color: #1e3a8a;
+}
 
-    border-bottom: 1px solid #eef2ff;
-
-    color: #374151;
+tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 tbody tr:hover {
-    background: #f1f7ff;
-    transition: 0.2s;
+    background: #f1f5f9;
 }
 
-/* ===== Icons ===== */
-i {
-    color: #3b82f6;
+/* ===== ACTION BUTTONS ===== */
+td .btn {
+    padding: 6px 10px;
+    font-size: 14px;
     margin-right: 5px;
 }
 
-/* ===== Smooth ===== */
-* {
-    transition: all 0.2s ease;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .search-container input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }

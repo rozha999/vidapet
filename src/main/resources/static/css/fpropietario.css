@@ -1,136 +1,97 @@
-/* ===== بک‌گراند کلی ===== */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+/* ===== RESET ===== */
+* {
     margin: 0;
-    padding: 30px;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== BODY ===== */
+body {
+    background: #f4f8fb;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    color: #2d2d44;
+    height: 100vh;
 }
 
-/* ===== کارت فرم ===== */
+/* ===== CARD FORM ===== */
 .card-form {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 30px 35px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 460px;
-    box-shadow: 0 15px 40px rgba(80, 70, 200, 0.15);
-    animation: fadeIn 0.5s ease;
+    background: white;
+    padding: 30px;
+    width: 400px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* ===== انیمیشن ===== */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ===== عنوان ===== */
+/* ===== TITLE ===== */
 .card-form h1 {
-    text-align: center;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     margin-bottom: 20px;
-    font-weight: 800;
+    text-align: center;
+    color: #1e3a8a;
 }
 
-/* ===== لیبل ===== */
+/* ===== LABEL ===== */
 label {
     display: block;
     margin-top: 12px;
     margin-bottom: 5px;
-    font-weight: 600;
-    color: #444;
+    color: #1e40af;
+    font-weight: 500;
 }
 
-/* ===== input ===== */
+/* ===== INPUT ===== */
 input {
     width: 100%;
-    padding: 11px 12px;
-    border-radius: 12px;
-    border: 1px solid #e0e7ff;
-    background: #f9faff;
-    transition: all 0.3s ease;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
     outline: none;
-    font-size: 0.95rem;
-}
-
-input::placeholder {
-    color: #a0a0c0;
-}
-
-input:hover {
-    border-color: #c7d2fe;
-}
-
-input:focus {
-    border-color: #7c3aed;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(124, 58, 237, 0.25);
-}
-
-/* ===== دکمه ===== */
-button {
-    width: 100%;
-    margin-top: 22px;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.25);
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(124, 58, 237, 0.35);
-}
-
-button:active {
-    transform: scale(0.98);
-}
-
-/* ===== لینک ===== */
-.card-form a {
-    display: block;
-    text-align: center;
-    margin-top: 18px;
-    color: #6366f1;
-    font-weight: 600;
-    text-decoration: none;
     transition: 0.3s;
 }
 
-.card-form a:hover {
-    color: #7c3aed;
-    transform: translateY(-1px);
+input:focus {
+    border-color: #93c5fd;
+    box-shadow: 0 0 5px rgba(147,197,253,0.5);
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: #93c5fd;
+    color: #1e3a8a;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #60a5fa;
+    color: white;
+}
+
+/* ===== LINK ===== */
+a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #2563eb;
+    font-size: 14px;
+}
+
+a:hover {
     text-decoration: underline;
 }
 
-/* ===== حالت خطا ===== */
-input.error {
-    border-color: #ef4444;
-    background: #fff5f5;
-}
-
-/* ===== ریسپانسیو ===== */
-@media (max-width: 500px) {
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
     .card-form {
+        width: 90%;
         padding: 20px;
     }
 }

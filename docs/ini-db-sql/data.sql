@@ -60,7 +60,11 @@ CREATE TABLE cita (
   notas TEXT,
   FOREIGN KEY (mascota_id) REFERENCES mascota(id) ON DELETE CASCADE
 );
-
+CREATE TABLE especie (
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                         nombre VARCHAR(100) NOT NULL,
+                         foto VARCHAR(255)
+);
 USE vidapet;
 
 -- =======================

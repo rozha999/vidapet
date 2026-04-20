@@ -1,22 +1,19 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Cita Form</title>
+    <title>Cita Form - VidaPet</title>
     <link rel="stylesheet" th:href="@{/css/fcita.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="container mt-5">
 
-<h1 th:text="${cita != null} ? '✏️ Editar Cita' : '➕ Nueva Cita'"></h1>
+<div class="card shadow p-4">
+    <h1 class="mb-4" th:text="${cita != null and cita.id != null} ? '✏️ Editar Cita' : '➕ Nueva Cita'"></h1>
 
-<form th:action="@{${cita != null} ? '/citas/actualizar' : '/citas/guardar'}" method="post">
+    <form th:action="@{${cita != null and cita.id != null} ? '/citas/actualizar' : '/citas/guardar'}" method="post">
 
-    <!-- ID (solo para editar) -->
-    <input type="hidden" name="id" th:value="${cita?.id}">
+        <input type="hidden" name="id" th:value="${cita?.id}">
 
-    <form action="/citas/guardar" method="post">
-
-        <!-- MASCOTA -->
         <div class="mb-3">
             <label>Mascota</label>
             <select id="mascotaSelect" name="mascota_id" class="form-control" required>
@@ -28,59 +25,71 @@
             </select>
         </div>
 
-        <!-- PROPIETARIO (AUTO) -->
         <div class="mb-3">
             <label>Propietario</label>
             <input type="hidden" id="propietario_id" name="propietario_id">
-            <input type="text" id="propietario_nombre" class="form-control" readonly>
+            <input type="text" id="propietario_nombre" class="form-control" readonly
+                   placeholder="Se cargará automáticamente" style="background-color: #e9ecef;">
         </div>
 
-        <!-- VETERINARIO -->
         <div class="mb-3">
-            <label>Veterinario</label>
-            <select name="veterinario_id" class="form-control">
+            <label class="form-label">Veterinario</label>
+            <select name="veterinario_id" class="form-select">
                 <option value="">Selecciona veterinario</option>
-
                 <option th:each="v : ${veterinarios}"
                         th:value="${v.id}"
+                        th:selected="${cita != null and cita.veterinario_id == v.id}"
                         th:text="${v.nombre + ' ' + v.apellido}">
                 </option>
             </select>
         </div>
 
-        <!-- FECHA -->
         <div class="mb-3">
-            <label>Fecha</label>
-            <input type="datetime-local" name="fecha" class="form-control" required>
+            <label class="form-label">Fecha</label>
+            <input type="datetime-local" name="fecha" class="form-control"
+                   th:value="${cita?.fecha}" required>
         </div>
 
-        <!-- NOTA -->
         <div class="mb-3">
-            <label>Nota</label>
-            <textarea name="nota" class="form-control"></textarea>
+            <label class="form-label">Nota</label>
+            <textarea name="nota" class="form-control" rows="3" th:text="${cita?.nota}"></textarea>
         </div>
 
-        <button class="btn btn-primary">Guardar Cita</button>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">Guardar Cita</button>
+            <a href="/citas" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
     </form>
-    <script>
-        document.getElementById("mascotaSelect").addEventListener("change", function () {
+</div>
 
-            const mascotaId = this.value;
+<script>
+    document.getElementById("mascotaSelect").addEventListener("change", function () {
+        const mascotaId = this.value;
+        const idInput = document.getElementById("propietario_id");
+        const nameInput = document.getElementById("propietario_nombre");
 
-            if (!mascotaId) return;
+        if (!mascotaId) {
+            idInput.value = "";
+            nameInput.value = "";
+            return;
+        }
 
-            fetch("/mascotas/" + mascotaId + "/propietario")
-                .then(res => res.json())
-                .then(data => {
-
-                    document.getElementById("propietario_id").value = data.id;
-                    document.getElementById("propietario_nombre").value =
-                        data.nombre + " " + data.apellido;
-                });
-        });
-    </script>
-<br>
-<a href="/citas">⬅ Volver</a>
+        // درخواست به سرور برای گرفتن اطلاعات صاحب
+        fetch("/api/mascotas/" + mascotaId + "/propietario")
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    // پر کردن فیلدها با اطلاعات دریافتی
+                    idInput.value = data.id;
+                    nameInput.value = data.nombre + " " + data.apellido;
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                nameInput.value = "Error al buscar propietario";
+            });
+    });
+</script>
 
 </body>
 </html>

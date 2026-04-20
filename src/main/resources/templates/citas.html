@@ -1,127 +1,119 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Citas</title>
-
+    <title>Citas - VidaPet</title>
     <link rel="stylesheet" th:href="@{/css/cita.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* چند استایل کوچک برای دکمه‌های وضعیت */
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .bg-esperando { background: #fef3c7; color: #92400e; }
+        .bg-atendiendo { background: #dbeafe; color: #1e40af; }
+        .bg-atendido { background: #dcfce7; color: #166534; }
+        .btn-view { color: #6366f1; font-weight: bold; text-decoration: none; }
+        .btn-view:hover { text-decoration: underline; }
+    </style>
 </head>
-
 <body>
 
-<!-- ===== SIDEBAR ===== -->
 <div class="sidebar">
     <h2>🐾 VidaPet</h2>
+    <a href="/">
+        <i class="fas fa-home"></i> Home
+    </a>
 
-    <a href="/"><i class="fas fa-home"></i> Home</a>
-    <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
-    <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
-    <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
-    <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
+    <a href="/propietarios">
+        <i class="fas fa-user"></i> Propietarios
+    </a>
+
+    <a href="/especies">
+        <i class="fas fa-paw"></i> Especies
+    </a>
+
+    <a href="/mascotas">
+        <i class="fas fa-dog"></i> Mascotas
+    </a>
+
+    <a href="/citas">
+        <i class="fas fa-calendar"></i> Citas
+    </a>
+
+    <a href="/consultas">
+        <i class="fas fa-stethoscope"></i> Consultas
+    </a>
 </div>
 
-<!-- ===== CONTENT ===== -->
 <div class="content">
+    <h1>📅 Gestión de Citas</h1>
 
-    <h1>📅 Citas</h1>
-
-    <!-- ===== TOOLBAR ===== -->
     <div class="toolbar">
-
         <a class="btn" href="/citas/nueva">➕ Nueva Cita</a>
-
         <form class="filter-bar" method="get" action="/citas">
             <input type="text" name="mascota" placeholder="🐶 Mascota..." />
             <input type="text" name="propietario" placeholder="👤 Propietario..." />
             <input type="date" name="fecha" />
             <button type="submit">Buscar</button>
         </form>
-
     </div>
 
-    <!-- ===== TABLE ===== -->
     <table>
-
         <tr>
             <th>Mascota</th>
             <th>Propietario</th>
             <th>Veterinario</th>
-
             <th>
                 Fecha
                 <a th:href="@{/citas(orden='asc')}"><i class="fas fa-arrow-up"></i></a>
                 <a th:href="@{/citas(orden='desc')}"><i class="fas fa-arrow-down"></i></a>
             </th>
-
-            <th>Nota</th>
             <th>Estado</th>
-            <th>Consulta</th>
             <th>Acciones</th>
         </tr>
 
-        <!-- ===== ROW ===== -->
         <tr th:each="c : ${citas}">
-
-            <td th:text="${c.mascota_nombre}"></td>
-
+            <td th:text="${c.mascota_nombre}" style="font-weight: bold;"></td>
             <td th:text="${c.propietario_nombre + ' ' + c.propietario_apellido}"></td>
 
-            <!-- ✅ VETERINARIO SAFE -->
             <td>
-    <span th:if="${c.veterinario_nombre != null}">
-        <span th:text="${c.veterinario_nombre}"></span>
-        <span th:text="' ' + ${c.veterinario_apellido}"></span>
-    </span>
-
-                <span th:if="${c.veterinario_nombre == null}">
-        Sin asignar
-    </span>
-            </td>
-
-            <td th:text="${c.fecha}"></td>
-
-            <td th:text="${c.nota}"></td>
-
-            <td>
-                <span th:switch="${c.estado}">
-                    <span th:case="'ESPERANDO'">🟡 Esperando</span>
-                    <span th:case="'ATENDIENDO'">🔵 Atendiendo</span>
-                    <span th:case="'ATENDIDO'">🟢 Atendido</span>
-                    <span th:case="*">⚪ Sin estado</span>
+                <span th:if="${c.veterinario_nombre != null}">
+                    <i class="fas fa-user-md"></i> [[${c.veterinario_nombre}]] [[${c.veterinario_apellido}]]
                 </span>
+                <span th:unless="${c.veterinario_nombre != null}" class="text-muted small">Sin asignar</span>
+            </td>
+
+            <td th:text="${#temporals.format(c.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+
+            <td>
+                <div th:switch="${c.estado}">
+                    <span th:case="'ESPERANDO'" class="status-badge bg-esperando">🟡 Esperando</span>
+                    <span th:case="'ATENDIENDO'" class="status-badge bg-atendiendo">🔵 Atendiendo</span>
+                    <span th:case="'ATENDIDO'" class="status-badge bg-atendido">🟢 Atendido</span>
+                    <span th:case="*" class="status-badge" style="background:#eee">⚪ Sin estado</span>
+                </div>
             </td>
 
             <td>
+                <a th:if="${c.consulta_id == null}"
+                   th:href="@{'/consultas/nueva-desde-cita/' + ${c.id}}"
+                   class="btn-action" style="color: #2563eb;">
+                    <i class="fas fa-play"></i> Iniciar
+                </a>
+
                 <a th:if="${c.consulta_id != null}"
-                   th:href="@{'/consultas/' + ${c.consulta_id}}">
-                    👁 Ver consulta
+                   th:href="@{'/consultas/' + ${c.consulta_id}}"
+                   class="btn-view">
+                    <i class="fas fa-eye"></i> Ver Consulta
+                </a>
+
+                <span class="mx-1 text-muted">|</span>
+
+                <a th:href="@{'/citas/editar/' + ${c.id}}" title="Editar"><i class="fas fa-edit text-warning"></i></a>
+                <a th:href="@{'/citas/eliminar/' + ${c.id}}" title="Eliminar" onclick="return confirm('¿Eliminar?')">
+                    <i class="fas fa-trash text-danger"></i>
                 </a>
             </td>
-
-            <td>
-
-                <a th:href="@{'/citas/editar/' + ${c.id}}">Editar</a>
-                <a th:href="@{'/citas/eliminar/' + ${c.id}}">Eliminar</a>
-
-                <br/>
-
-                <a th:href="@{'/citas/estado/' + ${c.id} + '/ATENDIENDO'}">
-                    ▶ Iniciar
-                </a>
-
-                <br/>
-
-                <a th:if="${c.estado == 'ATENDIENDO' and c.consulta_id == null}"
-                   th:href="@{'/consultas/nueva-desde-cita/' + ${c.id}}">
-                    ➕ Consulta
-                </a>
-
-            </td>
-
         </tr>
-
     </table>
-
 </div>
 
 </body>

@@ -13,10 +13,8 @@
 
 <div class="layout">
 
-    <!-- ===== Sidebar ===== -->
     <div class="sidebar">
         <h2>🐾 VidaPet</h2>
-
         <a href="/">
             <i class="fas fa-home"></i> Home
         </a>
@@ -25,8 +23,8 @@
             <i class="fas fa-user"></i> Propietarios
         </a>
 
-        <a href="/veterinarios">
-            <i class="fas fa-user-md"></i> Veterinarios
+        <a href="/especies">
+            <i class="fas fa-paw"></i> Especies
         </a>
 
         <a href="/mascotas">
@@ -41,7 +39,6 @@
             <i class="fas fa-stethoscope"></i> Consultas
         </a>
     </div>
-
     <!-- ===== Main Content ===== -->
     <div class="main">
 
@@ -84,13 +81,13 @@
 
                 <td>
                     <a th:href="@{'/veterinarios/editar/' + ${veterinario['id']}}" class="btn">
-                        <i class="fas fa-edit"></i> Editar
+                        <i class="fas fa-edit"></i>
                     </a>
 
                     <a th:href="@{'/veterinarios/eliminar/' + ${veterinario['id']}}"
                        onclick="return confirm('¿Está seguro?');"
                        class="btn">
-                        <i class="fas fa-trash-alt"></i> Eliminar
+                        <i class="fas fa-trash-alt"></i>
                     </a>
                 </td>
             </tr>
