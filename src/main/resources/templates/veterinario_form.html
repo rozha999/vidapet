@@ -2,101 +2,61 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="css/propietario.css">
-  <title>Formulario Veterinario</title>
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" th:href="@{/css/fveterinario.css}">
+  <title th:text="${#strings.isEmpty(veterinario['id']) ? 'Nuevo Veterinario' : 'Editar Veterinario'}"></title>
 </head>
 <body>
 
-<div class="layout">
+<div class="page">
 
-  <!-- ===== Sidebar ===== -->
-  <div class="sidebar">
-    <h2>🐾 VidaPet</h2>
+  <div class="card">
 
-    <a href="/">
-      <i class="fas fa-home"></i> Home
-    </a>
+    <!-- عنوان -->
+    <h2 th:text="${#strings.isEmpty(veterinario['id']) ? 'Nuevo Veterinario' : 'Editar Veterinario'}"></h2>
 
-    <a href="/propietarios">
-      <i class="fas fa-user"></i> Propietarios
-    </a>
-
-    <a href="/veterinarios">
-      <i class="fas fa-user-md"></i> Veterinarios
-    </a>
-
-    <a href="/mascotas">
-      <i class="fas fa-dog"></i> Mascotas
-    </a>
-
-    <a href="/citas">
-      <i class="fas fa-calendar"></i> Citas
-    </a>
-
-    <a href="/consultas">
-      <i class="fas fa-stethoscope"></i> Consultas
-    </a>
-  </div>
-
-  <!-- ===== Main Content ===== -->
-  <div class="main">
-
-    <h1 th:text="${veterinario['id']} == '' ? 'Nuevo Veterinario' : 'Editar Veterinario'"></h1>
-
-    <form th:action="@{${veterinario['id']} == '' ? '/veterinarios/guardar' : '/veterinarios/actualizar'}"
+    <!-- فرم -->
+    <form th:action="${#strings.isEmpty(veterinario['id']) ? '/veterinarios/guardar' : '/veterinarios/actualizar'}"
           method="post">
 
-      <!-- ID (hidden) -->
-      <input type="hidden" name="id" th:value="${veterinario['id']}" />
+      <input type="hidden" name="id" th:value="${veterinario['id']}">
 
-      <div class="form-group">
-        <label>Nombre:</label>
-        <input type="text" name="nombre" th:value="${veterinario['nombre']}" required />
-      </div>
+      <!-- Nombre -->
+      <label>Nombre:</label>
+      <input type="text" name="nombre" th:value="${veterinario['nombre']}" required>
 
-      <div class="form-group">
-        <label>Apellido:</label>
-        <input type="text" name="apellido" th:value="${veterinario['apellido']}" required />
-      </div>
+      <!-- Apellido -->
+      <label>Apellido:</label>
+      <input type="text" name="apellido" th:value="${veterinario['apellido']}" required>
 
-      <div class="form-group">
-        <label>Teléfono:</label>
-        <input type="text" name="telefono" th:value="${veterinario['telefono']}" />
-      </div>
+      <!-- Teléfono -->
+      <label>Teléfono:</label>
+      <input type="text" name="telefono" th:value="${veterinario['telefono']}">
 
-      <div class="form-group">
-        <label>Email:</label>
-        <input type="email" name="email" th:value="${veterinario['email']}" />
-      </div>
+      <!-- Email -->
+      <label>Email:</label>
+      <input type="email" name="email" th:value="${veterinario['email']}">
 
-      <div class="form-group">
-        <label>Especialidad:</label>
-        <input type="text" name="especialidad" th:value="${veterinario['especialidad']}" />
-      </div>
+      <!-- Especialidad -->
+      <label>Especialidad:</label>
+      <input type="text" name="especialidad" th:value="${veterinario['especialidad']}">
 
-      <div class="form-group">
-        <label>Código Colegiado:</label>
-        <input type="text" name="codigo_colegiado" th:value="${veterinario['codigo_colegiado']}" />
-      </div>
+      <!-- Código colegiado -->
+      <label>Código Colegiado:</label>
+      <input type="text" name="codigo_colegiado" th:value="${veterinario['codigo_colegiado']}">
 
-      <div class="form-actions">
-        <button type="submit" class="btn">
-          <i class="fas fa-save"></i> Guardar
-        </button>
-
-        <a href="/veterinarios" class="btn">
-          <i class="fas fa-arrow-left"></i> Cancelar
-        </a>
-      </div>
+      <!-- Button -->
+      <button type="submit"
+              th:text="${#strings.isEmpty(veterinario['id']) ? 'Guardar' : 'Actualizar'}">
+      </button>
 
     </form>
 
+    <!-- back -->
+    <a class="back" href="/veterinarios">← Volver a la lista</a>
+
   </div>
+
 </div>
 
 </body>
 </html>
-

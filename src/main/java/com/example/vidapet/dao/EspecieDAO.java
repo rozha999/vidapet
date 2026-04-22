@@ -17,53 +17,73 @@ public class EspecieDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // ================= ROW MAPPER =================
     private final RowMapper<Map<String, Object>> rowMapper = (rs, rowNum) -> {
         Map<String, Object> map = new HashMap<>();
-
         map.put("id", rs.getLong("id"));
         map.put("nombre", rs.getString("nombre"));
         map.put("foto", rs.getString("foto"));
-
         return map;
     };
 
+    // ================= FIND ALL =================
     public List<Map<String, Object>> findAll() {
-        return jdbcTemplate.query("SELECT * FROM especie", rowMapper);
+        return jdbcTemplate.query(
+                "SELECT id, nombre, foto FROM especie ORDER BY id DESC",
+                rowMapper
+        );
     }
 
+    // ================= FIND BY ID =================
     public Map<String, Object> findById(Long id) {
-        return jdbcTemplate.queryForMap(
-                "SELECT * FROM especie WHERE id=?",
+        try {
+            return jdbcTemplate.queryForMap(
+                    "SELECT id, nombre, foto FROM especie WHERE id=?",
+                    id
+            );
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    // ================= SAVE =================
+    public void save(String nombre, String foto) {
+        jdbcTemplate.update(
+                "INSERT INTO especie (nombre, foto) VALUES (?, ?)",
+                nombre,
+                foto
+        );
+    }
+
+    // ================= UPDATE =================
+    public void update(Long id, String nombre, String foto) {
+        jdbcTemplate.update(
+                "UPDATE especie SET nombre=?, foto=? WHERE id=?",
+                nombre,
+                foto,
                 id
         );
     }
 
-    public void save(String nombre, String foto) {
-        jdbcTemplate.update("""
-            INSERT INTO especie (nombre, foto)
-            VALUES (?, ?)
-        """, nombre, foto);
-    }
-
-    public void update(Long id, String nombre, String foto) {
-        jdbcTemplate.update("""
-            UPDATE especie
-            SET nombre=?, foto=?
-            WHERE id=?
-        """, nombre, foto, id);
-    }
-
+    // ================= DELETE =================
     public void delete(Long id) {
-        jdbcTemplate.update("DELETE FROM especie WHERE id=?", id);
+        jdbcTemplate.update(
+                "DELETE FROM especie WHERE id=?",
+                id
+        );
     }
 
+    // ================= SEARCH =================
     public List<Map<String, Object>> search(String s) {
+
         String sql = """
-            SELECT * FROM especie
+            SELECT id, nombre, foto
+            FROM especie
             WHERE LOWER(nombre) LIKE LOWER(?)
+            ORDER BY id DESC
         """;
 
-        String k = "%" + s + "%";
-        return jdbcTemplate.query(sql, rowMapper, k);
+        return jdbcTemplate.query(sql, rowMapper, "%" + s.trim() + "%");
     }
 }
+

@@ -1,97 +1,116 @@
-/* ===== RESET ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-/* ===== BODY ===== */
+/* ===== Base ===== */
 body {
-    background: #f4f8fb;
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+
+    /* 🌊 آبی روشن‌تر و تمیز */
+    background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
+
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+
+    color: #334155;
 }
 
-/* ===== CARD FORM ===== */
+/* ===== Card ===== */
 .card-form {
     background: white;
+    width: 420px;
     padding: 30px;
-    width: 400px;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-radius: 18px;
+
+    box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15);
+    animation: fadeIn 0.5s ease;
 }
 
-/* ===== TITLE ===== */
+/* Title */
 .card-form h1 {
-    margin-bottom: 20px;
     text-align: center;
-    color: #1e3a8a;
+    color: #0284c7; /* آبی اصلی */
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-weight: 800;
 }
 
-/* ===== LABEL ===== */
-label {
+/* ===== Labels ===== */
+.card-form label {
     display: block;
     margin-top: 12px;
     margin-bottom: 5px;
-    color: #1e40af;
+    font-size: 0.9rem;
+    color: #475569;
     font-weight: 500;
 }
 
-/* ===== INPUT ===== */
-input {
+/* ===== Inputs ===== */
+.card-form input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #bae6fd;
     outline: none;
+    font-size: 0.95rem;
+    background: #f8fafc;
     transition: 0.3s;
 }
 
-input:focus {
-    border-color: #93c5fd;
-    box-shadow: 0 0 5px rgba(147,197,253,0.5);
+.card-form input:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+    background: white;
 }
 
-/* ===== BUTTON ===== */
-button {
+/* ===== Button ===== */
+.card-form button {
     width: 100%;
     margin-top: 20px;
     padding: 12px;
+
     border: none;
-    border-radius: 10px;
-    background: #93c5fd;
-    color: #1e3a8a;
-    font-size: 16px;
+    border-radius: 12px;
+
+    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+    color: white;
+
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
+
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
+}
+
+.card-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.35);
+}
+
+/* ===== Back link ===== */
+.card-form a {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 500;
     transition: 0.3s;
 }
 
-button:hover {
-    background: #60a5fa;
-    color: white;
-}
-
-/* ===== LINK ===== */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    text-decoration: none;
-    color: #2563eb;
-    font-size: 14px;
-}
-
-a:hover {
+.card-form a:hover {
+    color: #0284c7;
     text-decoration: underline;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 480px) {
-    .card-form {
-        width: 90%;
-        padding: 20px;
+/* ===== Animation ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

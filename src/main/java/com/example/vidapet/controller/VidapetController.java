@@ -1,7 +1,9 @@
 package com.example.vidapet.controller;
 
 import com.example.vidapet.dao.ConsultaDAO;
+import com.example.vidapet.dao.EspecieDAO;
 import com.example.vidapet.service.VidapetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -348,23 +350,91 @@ public class VidapetController {
     // ======================================================
     // 🧬 بخش گونه‌ها (ESPECIES)
     // ======================================================
-    @GetMapping("/especies")
-    public String listarEspecies(@RequestParam(required = false) String search, Model model) {
-        model.addAttribute("especies", vidapetService.listarEspecies(search));
-        model.addAttribute("search", search);
-        return "especies";
+    @Controller
+    @RequestMapping("/especies")
+    public class EspecieController {
+
+        @Autowired
+        private VidapetService vidapetService;
+
+        // ===== LISTAR =====
+        @GetMapping
+        public String listarEspecies(@RequestParam(required = false) String search,
+                                     Model model) {
+            model.addAttribute("especies", vidapetService.listarEspecies(search));
+            model.addAttribute("search", search);
+            return "especies";
+        }
+
+        @GetMapping("/nuevo")
+        public String nuevo(Model model) {
+            model.addAttribute("especie", new HashMap<>()); // ✔ چون Map استفاده می‌کنی
+            return "especie_form";
+        }
+
+        @GetMapping("/editar/{id}")
+        public String editar(@PathVariable Long id, Model model) {
+
+            Map<String, Object> especie = vidapetService.obtenerPorId(id);
+
+            model.addAttribute("especie", especie);
+
+            return "especie_form";
+        }
+
+        // ===== GUARDAR =====
+        @PostMapping("/guardar")
+        public String guardar(@RequestParam String nombre,
+                              @RequestParam("archivoFoto") MultipartFile archivoFoto,
+                              RedirectAttributes ra) throws Exception {
+
+            if (nombre == null || nombre.isBlank()) {
+                ra.addFlashAttribute("error", "Nombre obligatorio");
+                return "redirect:/especies/nuevo";
+            }
+
+            String path = handleFileUpload(archivoFoto);
+
+            vidapetService.guardarEspecie(nombre, path);
+
+            return "redirect:/especies";
+        }
+
+
+
+        // ===== ACTUALIZAR =====
+        @PostMapping("/actualizar")
+        public String actualizar(@RequestParam Long id,
+                                 @RequestParam String nombre,
+                                 @RequestParam(value = "archivoFoto", required = false) MultipartFile archivoFoto)
+                throws Exception {
+
+            String path = handleFileUpload(archivoFoto);
+
+            vidapetService.actualizarEspecie(id, nombre, path);
+
+            return "redirect:/especies";
+        }
+
+        // ===== ELIMINAR =====
+        @GetMapping("/eliminar/{id}")
+        public String eliminar(@PathVariable Long id) {
+            vidapetService.eliminarEspecie(id);
+            return "redirect:/especies";
+        }
+
+        // ===== FILE UPLOAD (helper) =====
+        private String handleFileUpload(MultipartFile file) throws Exception {
+            if (file == null || file.isEmpty()) return null;
+
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            String path = "uploads/" + fileName;
+
+            file.transferTo(new java.io.File(path));
+
+            return path;
+        }
     }
-
-    @PostMapping("/especies/guardar")
-    public String guardarEspecie(@RequestParam String nombre, @RequestParam("archivoFoto") MultipartFile archivoFoto,
-                                 RedirectAttributes ra) throws Exception {
-        if (nombre.isBlank()) { ra.addFlashAttribute("error", "Nombre obligatorio"); return "redirect:/especies/nuevo"; }
-
-        String pathFinal = handleFileUpload(archivoFoto);
-        vidapetService.guardarEspecie(nombre, pathFinal);
-        return "redirect:/especies";
-    }
-
     // ======================================================
     // 🛠 متدهای کمکی (HELPER METHODS) - برای جلوگیری از تکرار کد
     // ======================================================

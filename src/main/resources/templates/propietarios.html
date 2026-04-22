@@ -2,62 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/propietario.css">
+    <link rel="stylesheet" href="/css/propietario.css">
     <title>Lista de Propietarios</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="layout">
 
+    <!-- ===== Sidebar ===== -->
     <div class="sidebar">
-        <h2>🐾 VidaPet</h2>
-        <a href="/">
-            <i class="fas fa-home"></i> Home
-        </a>
+        <h1>| VidaPET</h1>
 
-        <a href="/propietarios">
-            <i class="fas fa-user"></i> Propietarios
-        </a>
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
+        <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
+        <a href="/veterinarios"><i class="fas fa-user-md"></i> Veterinarios</a>
+        <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
+        <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
+        <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
 
-        <a href="/especies">
-            <i class="fas fa-paw"></i> Especies
-        </a>
-
-        <a href="/mascotas">
-            <i class="fas fa-dog"></i> Mascotas
-        </a>
-
-        <a href="/citas">
-            <i class="fas fa-calendar"></i> Citas
-        </a>
-
-        <a href="/consultas">
-            <i class="fas fa-stethoscope"></i> Consultas
-        </a>
+        <img src="/images/www.png" class="logo" alt="VidaPet">
     </div>
 
-    <!-- ===== Main Content ===== -->
+    <!-- ===== Main ===== -->
     <div class="main">
 
         <h1>Lista de Propietarios</h1>
 
-        <a th:href="@{/propietarios/nuevo}" class="btn">
-            <i class="fas fa-plus"></i> Agregar
-        </a>
+        <div class="top-bar">
+            <a th:href="@{/propietarios/nuevo}" class="btn">
+                <i class="fas fa-plus"></i> Agregar
+            </a>
 
-        <div class="search-container">
-            <form method="get" action="/propietarios">
-                <input type="text" name="search" placeholder="Buscar por nombre o apellido..." />
-                <button type="submit">
-                    <i class="fas fa-search"></i> Buscar
-                </button>
-            </form>
+            <div class="search-container">
+                <form method="get" action="/propietarios">
+                    <input type="text" name="search" placeholder="Buscar por nombre o apellido...">
+                    <button type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
         </div>
 
-        <table border="1">
+        <!-- ===== Table ===== -->
+        <table>
             <thead>
             <tr>
                 <th>Nombre</th>
@@ -74,18 +65,29 @@
                 <td th:text="${propietario['apellido']}"></td>
                 <td th:text="${propietario['telefono']}"></td>
                 <td th:text="${propietario['email']}"></td>
-                <td>
-                    <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}" class="btn">
-                        <i class="fas fa-edit"></i>
+
+                <!-- ✔️ دقیقاً مثل Mascotas -->
+                <td class="actions">
+                    <a th:href="@{'/propietarios/editar/' + ${propietario['id']}}"
+                       class="icon-btn edit">
+                        <i class="fas fa-pen"></i>
                     </a>
 
                     <a th:href="@{'/propietarios/eliminar/' + ${propietario['id']}}"
-                       onclick="return confirm('¿Está seguro?');"
-                       class="btn">
-                        <i class="fas fa-trash-alt"></i>
+                       class="icon-btn delete"
+                       onclick="return confirm('¿Eliminar propietario?');">
+                        <i class="fas fa-trash"></i>
                     </a>
                 </td>
             </tr>
+
+            <!-- ✔️ اگر لیست خالی بود -->
+            <tr th:if="${#lists.isEmpty(propietarios)}">
+                <td colspan="5" style="text-align:center; padding:20px; color:#94a3b8;">
+                    No hay propietarios registrados
+                </td>
+            </tr>
+
             </tbody>
         </table>
 

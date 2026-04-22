@@ -107,8 +107,13 @@ public class VidapetService {
         return consultaDAO.searchByMascota(nombre);
     }
 
-    public Map<String, Object> obtenerDetalleParaNuevaConsulta(int mascotaId, int citaId) {
-        return consultaDAO.obtenerDetalleCompletoParaFormulario(mascotaId, citaId);
+    public Map<String, Object> obtenerDetalleParaNuevaConsulta(Integer mascotaId, Integer citaId) {
+        Map<String, Object> details = new HashMap<>();
+        // واکشی اطلاعات حیوان
+        details.put("mascota", mascotaDAO.findById(Long.valueOf(mascotaId)));
+        // واکشی اطلاعات نوبت
+        details.put("cita", citaDAO.findById(citaId));
+        return details;
     }
 
     /*==================== PROPIETARIOS ====================*/
@@ -188,11 +193,46 @@ public class VidapetService {
     }
 
     /*================= ESPECIES =================*/
+    // ================= LISTAR =================
     public List<Map<String, Object>> listarEspecies(String search) {
-        return (search != null && !search.isBlank()) ? especieDAO.search(search) : especieDAO.findAll();
+        if (search != null && !search.trim().isEmpty()) {
+            return especieDAO.search(search.trim());
+        }
+        return especieDAO.findAll();
     }
 
+    // ================= GUARDAR =================
     public void guardarEspecie(String nombre, String foto) {
-        especieDAO.save(nombre, foto);
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre es obligatorio");
+        }
+
+        especieDAO.save(nombre.trim(), foto);
     }
+
+    // ================= BUSCAR POR ID =================
+    public Map<String, Object> obtenerPorId(Long id) {
+        return especieDAO.findById(id);
+    }
+
+    // ================= ACTUALIZAR =================
+    public void actualizarEspecie(Long id, String nombre, String foto) {
+
+        if (id == null) {
+            throw new IllegalArgumentException("ID obligatorio");
+        }
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nombre obligatorio");
+        }
+
+        especieDAO.update(id, nombre.trim(), foto);
+    }
+
+    // ================= ELIMINAR =================
+    public void eliminarEspecie(Long id) {
+        especieDAO.delete(id);
+    }
+
 }

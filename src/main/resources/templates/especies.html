@@ -2,50 +2,47 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/propietario.css">
+  <link rel="stylesheet" href="/css/especie.css">
   <title>Lista de Especies</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
 <div class="layout">
 
+  <!-- ===== Sidebar ===== -->
   <div class="sidebar">
-    <h2>🐾 VidaPet</h2>
-    <a href="/">
-      <i class="fas fa-home"></i> Home
-    </a>
+    <h1>| VidaPET</h1>
 
-    <a href="/propietarios">
-      <i class="fas fa-user"></i> Propietarios
-    </a>
+    <a href="/"><i class="fas fa-home"></i> Home</a>
+    <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
+    <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
+    <a href="/veterinarios"><i class="fas fa-user-md"></i> Veterinarios</a>
 
-    <a href="/especies">
-      <i class="fas fa-paw"></i> Especies
-    </a>
+    <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
 
-    <a href="/mascotas">
-      <i class="fas fa-dog"></i> Mascotas
-    </a>
+    <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
+    <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
 
-    <a href="/citas">
-      <i class="fas fa-calendar"></i> Citas
-    </a>
-
-    <a href="/consultas">
-      <i class="fas fa-stethoscope"></i> Consultas
-    </a>
+    <img src="/images/www.png" class="logo" alt="VidaPet">
   </div>
 
+  <!-- ===== Main ===== -->
   <div class="main">
 
     <h1>Lista de Especies</h1>
 
-    <a th:href="@{/especies/nuevo}" class="btn">
-      <i class="fas fa-plus"></i> Agregar Especie
-    </a>
+    <div class="top-bar">
+      <a th:href="@{/especies/nuevo}" class="btn">
+        <i class="fas fa-plus"></i> Agregar
+      </a>
+    </div>
 
-    <table border="1" style="margin-top: 20px;">
+    <!-- ===== Table ===== -->
+    <table>
       <thead>
       <tr>
         <th>Imagen</th>
@@ -56,29 +53,42 @@
 
       <tbody>
       <tr th:each="especie : ${especies}">
-        <td style="text-align: center;">
+
+        <!-- تصویر -->
+        <td class="img-cell">
           <img th:if="${especie['foto'] != null and especie['foto'] != ''}"
                th:src="@{'/' + ${especie['foto']}}"
-               style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 1px solid #ddd;">
+               class="avatar">
 
           <i th:unless="${especie['foto'] != null and especie['foto'] != ''}"
-             class="fas fa-paw" style="font-size: 24px; color: #ccc;"></i>
+             class="fas fa-paw default-icon"></i>
         </td>
 
         <td th:text="${especie['nombre']}"></td>
 
-        <td>
-          <a th:href="@{'/especies/editar/' + ${especie['id']}}" class="btn">
-            <i class="fas fa-edit"></i>
+        <!-- دکمه‌ها مثل بقیه -->
+        <td class="actions">
+          <a th:href="@{'/especies/editar/' + ${especie['id']}}"
+             class="icon-btn edit">
+            <i class="fas fa-pen"></i>
           </a>
 
           <a th:href="@{'/especies/eliminar/' + ${especie['id']}}"
-             onclick="return confirm('¿Está seguro de eliminar esta especie?');"
-             class="btn">
-            <i class="fas fa-trash-alt"></i>
+             onclick="return confirm('¿Eliminar especie?');"
+             class="icon-btn delete">
+            <i class="fas fa-trash"></i>
           </a>
         </td>
+
       </tr>
+
+      <!-- حالت خالی -->
+      <tr th:if="${#lists.isEmpty(especies)}">
+        <td colspan="3" style="text-align:center; padding:20px; color:#94a3b8;">
+          No hay especies registradas
+        </td>
+      </tr>
+
       </tbody>
     </table>
 
