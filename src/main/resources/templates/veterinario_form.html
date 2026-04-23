@@ -3,59 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" th:href="@{/css/fveterinario.css}">
-  <title th:text="${#strings.isEmpty(veterinario['id']) ? 'Nuevo Veterinario' : 'Editar Veterinario'}"></title>
+  <title th:text="${#strings.isEmpty(veterinario['id']) ? 'Nuevo Veterinario' : 'Editar Veterinario'}">VidaPET</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-<div class="page">
+<div class="layout">
 
-  <div class="card">
-
-    <!-- عنوان -->
-    <h2 th:text="${#strings.isEmpty(veterinario['id']) ? 'Nuevo Veterinario' : 'Editar Veterinario'}"></h2>
-
-    <!-- فرم -->
-    <form th:action="${#strings.isEmpty(veterinario['id']) ? '/veterinarios/guardar' : '/veterinarios/actualizar'}"
-          method="post">
-
-      <input type="hidden" name="id" th:value="${veterinario['id']}">
-
-      <!-- Nombre -->
-      <label>Nombre:</label>
-      <input type="text" name="nombre" th:value="${veterinario['nombre']}" required>
-
-      <!-- Apellido -->
-      <label>Apellido:</label>
-      <input type="text" name="apellido" th:value="${veterinario['apellido']}" required>
-
-      <!-- Teléfono -->
-      <label>Teléfono:</label>
-      <input type="text" name="telefono" th:value="${veterinario['telefono']}">
-
-      <!-- Email -->
-      <label>Email:</label>
-      <input type="email" name="email" th:value="${veterinario['email']}">
-
-      <!-- Especialidad -->
-      <label>Especialidad:</label>
-      <input type="text" name="especialidad" th:value="${veterinario['especialidad']}">
-
-      <!-- Código colegiado -->
-      <label>Código Colegiado:</label>
-      <input type="text" name="codigo_colegiado" th:value="${veterinario['codigo_colegiado']}">
-
-      <!-- Button -->
-      <button type="submit"
-              th:text="${#strings.isEmpty(veterinario['id']) ? 'Guardar' : 'Actualizar'}">
-      </button>
-
-    </form>
-
-    <!-- back -->
-    <a class="back" href="/veterinarios">← Volver a la lista</a>
-
+  <div class="sidebar">
+    <h1>| VidaPET</h1>
+    <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
+    <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
+    <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
+    <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
+    <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
+    <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
+    <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+    <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
   </div>
 
+  <div class="main">
+
+    <h1 th:text="${#strings.isEmpty(veterinario['id']) ? 'Nuevo Veterinario' : 'Editar Veterinario'}"></h1>
+
+    <div class="card-form">
+      <form th:action="${#strings.isEmpty(veterinario['id']) ? '/veterinarios/guardar' : '/veterinarios/actualizar'}"
+            method="post">
+
+        <input type="hidden" name="id" th:value="${veterinario['id']}">
+
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Nombre:</label>
+          <input type="text" name="nombre" th:value="${veterinario['nombre']}" required placeholder="Ej: Carlos">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-user-tag"></i> Apellido:</label>
+          <input type="text" name="apellido" th:value="${veterinario['apellido']}" required placeholder="Ej: Ruiz">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-phone"></i> Teléfono:</label>
+          <input type="text" name="telefono" th:value="${veterinario['telefono']}" placeholder="Ej: 600123456">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email:</label>
+          <input type="email" name="email" th:value="${veterinario['email']}" placeholder="doctor@vidapet.com">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-graduation-cap"></i> Especialidad:</label>
+          <input type="text" name="especialidad" th:value="${veterinario['especialidad']}" placeholder="Ej: Cirugía, Dermatología...">
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-id-badge"></i> Código Colegiado:</label>
+          <input type="text" name="codigo_colegiado" th:value="${veterinario['codigo_colegiado']}" placeholder="Ej: COL-12345">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn">
+            <i class="fas fa-save"></i>
+            <span th:text="${#strings.isEmpty(veterinario['id']) ? ' Guardar' : ' Actualizar'}"></span>
+          </button>
+          <a class="btn-secondary" href="/veterinarios">
+            <i class="fas fa-arrow-left"></i> Volver a la lista
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
 </div>
 
 </body>

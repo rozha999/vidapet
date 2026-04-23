@@ -63,13 +63,11 @@ public class VidapetService {
         citaDAO.update(id, mascotaId, propietarioId, fecha, nota);
     }
 
-    /*==================== CONSULTAS (اصلاح شده) ====================*/
+    /*==================== CONSULTAS  ====================*/
 
     public int guardarConsultaDesdeCita(int citaId, String diagnostico) {
-        // 1. ذخیره در جدول consulta (بدون mascota_id)
         int consultaId = consultaDAO.save(citaId, diagnostico);
 
-        // 2. به‌روزرسانی وضعیت نوبت به 'ATENDIDO' و لینک کردن به معاینه
         jdbcTemplate.update("UPDATE cita SET consulta_id = ?, estado = 'ATENDIDO' WHERE id = ?", consultaId, citaId);
 
         return consultaId;
@@ -84,7 +82,6 @@ public class VidapetService {
     }
 
     public void actualizarConsulta(int id, String diagnostico) {
-        // حذف mascotaId از اینجا چون در دیتابیس دیگر این ستون را نداریم
         consultaDAO.update(id, diagnostico);
     }
 
@@ -109,13 +106,43 @@ public class VidapetService {
 
     public Map<String, Object> obtenerDetalleParaNuevaConsulta(Integer mascotaId, Integer citaId) {
         Map<String, Object> details = new HashMap<>();
-        // واکشی اطلاعات حیوان
-        details.put("mascota", mascotaDAO.findById(Long.valueOf(mascotaId)));
-        // واکشی اطلاعات نوبت
-        details.put("cita", citaDAO.findById(citaId));
+
+
+        Map<String, Object> mascota = mascotaDAO.findById(Long.valueOf(mascotaId));
+
+
+        Map<String, Object> cita = citaDAO.findById(citaId);
+
+        if (mascota != null) {
+            details.put("mascota_nombre", mascota.get("nombre"));
+            details.put("especie", mascota.get("especie_nombre"));
+            details.put("raza", mascota.get("raza"));
+            details.put("fecha_nacimiento", mascota.get("fecha_nacimiento"));
+            details.put("foto", mascota.get("foto"));
+
+
+            details.put("propietario_nombre", mascota.get("propietario_nombre"));
+            details.put("propietario_apellido", mascota.get("propietario_apellido"));
+
+            Map<String, Object> propFull = propietarioDAO.findById((Long) mascota.get("propietario_id"));
+            details.put("propietario_telefono", propFull.get("telefono"));
+            details.put("propietario_email", propFull.get("email"));
+        }
+
+        if (cita != null) {
+            Integer vetId = (Integer) cita.get("veterinario_id");
+            if (vetId != null) {
+                Map<String, Object> vet = veterinarioDAO.findById(Long.valueOf(vetId));
+                details.put("nombre", vet.get("nombre"));
+                details.put("apellido", vet.get("apellido"));
+            } else {
+                details.put("nombre", "تعیین");
+                details.put("apellido", "نشده");
+            }
+        }
+
         return details;
     }
-
     /*==================== PROPIETARIOS ====================*/
     public List<Map<String, Object>> listarPropietarios(String search) {
         return (search == null || search.isBlank()) ? propietarioDAO.findAll() : propietarioDAO.search(search);
@@ -137,11 +164,15 @@ public class VidapetService {
         propietarioDAO.delete(id);
     }
 
+
     /*==================== MASCOTAS ====================*/
-    public List<Map<String, Object>> listarMascotas() {
+
+    public List<Map<String, Object>> listarMascotas(String search) {
+        if (search != null && !search.isBlank()) {
+            return mascotaDAO.search(search);
+        }
         return mascotaDAO.findAll();
     }
-
     public void guardarMascota(String nombre, Long especieId, String raza, LocalDate fechaNacimiento, Long propietarioId, String foto) {
         mascotaDAO.save(nombre, especieId, raza, fechaNacimiento, propietarioId, foto);
     }

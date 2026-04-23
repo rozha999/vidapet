@@ -1,90 +1,249 @@
-/* ===== BACKGROUND ===== */
+/* =========================================
+   ۱. پایه و تنظیمات اصلی (Base & Layout)
+   ========================================= */
 body {
+    background: linear-gradient(135deg, #eef2ff 0%, #f5f7ff 100%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #9484f1, #72bed5);
+    color: #334155;
     min-height: 100vh;
+}
+
+.layout {
+    display: flex;
+}
+
+/* =========================================
+   ۲. سایدبار (Sidebar)
+   ========================================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: #ffffff;
+    padding: 25px 15px;
+    box-shadow: 4px 0 20px rgba(99, 102, 241, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.sidebar h1 {
+    color: #6366f1;
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #64748b;
+    padding: 12px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #eef2ff;
+    color: #6366f1;
+    transform: translateX(5px);
+}
+
+/* هایلایت صفحه فعال */
+.sidebar a[href="/citas"] {
+    background: linear-gradient(90deg, #a5b4fc, #818cf8);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+/* لوگو انتهای سایدبار */
+.logo {
+    margin-top: auto;
+    margin-bottom: 20px;
+    height: 210px;
+    width: auto;
+    align-self: center;
+    opacity: 0.2;
+    filter: brightness(1.1) blur(0.5px);
+    transition: opacity 0.3s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+/* =========================================
+   ۳. محتوای اصلی (Main Content)
+   ========================================= */
+.main {
+    margin-left: 260px; /* ایجاد فضا برای سایدبار ثابت */
+    padding: 40px;
+    width: calc(100% - 260px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.6s ease;
+    box-sizing: border-box;
+}
+
+.main h1 {
+    color: #4f46e5;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+/* =========================================
+   ۴. کارت فرم (Form Card)
+   ========================================= */
+.card-form {
+    background: white;
+    width: 100%;
+    max-width: 550px;
+    padding: 35px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.08);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    color: #4f46e5;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group label i {
+    color: #818cf8;
+}
+
+/* استایل ورودی‌ها (Inputs) */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 13px 15px;
+    border-radius: 12px;
+    border: 1px solid #e0e7ff;
+    outline: none;
+    transition: 0.3s;
+    background: #f8fafc;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: #334155;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #818cf8;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+/* فیلدهای فقط خواندنی */
+.readonly-input {
+    background-color: #f1f5f9 !important;
+    color: #64748b;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+/* =========================================
+   ۵. دکمه‌های عملیاتی (Guardar & Cancelar)
+   ========================================= */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+/* دکمه ذخیره (Guardar) */
+.btn-save {
+    background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-/* ===== CARD ===== */
-form {
-    background: #ffffff;
-    padding: 30px 40px;
-    border-radius: 15px;
-    width: 400px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-/* ===== TITLE ===== */
-h1 {
-    position: absolute;
-    top: 40px;
-    color: white;
-    font-size: 28px;
-}
-
-/* ===== LABELS ===== */
-label {
-    font-weight: 600;
-    color: #333;
-}
-
-/* ===== INPUTS ===== */
-select,
-input[type="datetime-local"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    transition: 0.3s;
-    font-size: 14px;
-}
-
-/* ===== FOCUS EFFECT ===== */
-select:focus,
-input:focus,
-textarea:focus {
-    border-color: #6a5cff;
-    outline: none;
-    box-shadow: 0 0 8px rgba(106,92,255,0.5);
-}
-
-/* ===== BUTTON ===== */
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #43415a, #051e2c);
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
+    gap: 10px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 }
 
-/* ===== BUTTON HOVER ===== */
-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+    filter: brightness(1.1);
 }
 
-/* ===== LINK ===== */
-a {
-    display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: white;
+.btn-save:active {
+    transform: translateY(0);
+}
+
+/* دکمه انصراف (Cancelar) */
+.btn-cancel {
+    background-color: transparent;
+    color: #94a3b8;
+    padding: 12px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 0.95rem;
     text-decoration: none;
-    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
 }
 
-a:hover {
-    text-decoration: underline;
+.btn-cancel:hover {
+    background-color: #fff1f2;
+    color: #ef4444;
+    border-color: #fecaca;
+    transform: scale(0.98);
+}
+
+/* =========================================
+   ۶. انیمیشن و واکنش‌گرایی (Animation & Responsive)
+   ========================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar { width: 70px; padding: 15px 5px; }
+    .sidebar h1, .sidebar a span, .logo { display: none; }
+    .main { margin-left: 70px; width: calc(100% - 70px); }
 }

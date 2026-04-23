@@ -1,97 +1,236 @@
+/* ==========================================================================
+   1. ESTRUCTURA GLOBAL (Layout & Sidebar)
+   ========================================================================== */
 body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Arial;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+    color: #334155;
 }
 
-/* وسط‌چین کردن صفحه */
-.page {
-    min-height: 100vh;
+.layout {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    min-height: 100vh;
 }
 
-/* کارت */
-.card {
-    background: white;
-    width: 450px;
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
-    animation: fadeIn 0.5s ease;
-}
-
-/* عنوان */
-.card h2 {
-    text-align: center;
-    color: #0284c7;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-}
-
-/* فرم */
-form {
+/* Sidebar Estilo VidaPET */
+.sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    padding: 25px 0;
     display: flex;
     flex-direction: column;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.03);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar h1 {
+    font-size: 1.5rem;
+    color: #0ea5e9;
+    padding: 0 25px;
+    margin-bottom: 30px;
+    font-weight: 800;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #64748b;
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.sidebar a i {
+    width: 20px;
+    font-size: 1.1rem;
+}
+
+.sidebar a:hover {
+    background-color: #f0f9ff;
+    color: #0ea5e9;
+}
+
+.logo {
+    margin-top: auto; /* چسبیدن به انتهای سایدبار */
+    margin-bottom: 20px;
+    height: 210px;
+    width: auto;
+    align-self: center;
+    opacity: 0.2; /* حالت محو */
+    filter: brightness(1.1) blur(0.5px);
+    transition: opacity 0.3s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+/* ==========================================================================
+   2. ÁREA PRINCIPAL (Main & Card Form)
+   ========================================================================== */
+.main {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el formulario */
+}
+
+.main h1 {
+    color: #0369a1;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+/* Tarjeta del Formulario */
+.card-form {
+    background: #ffffff;
+    width: 100%;
+    max-width: 550px;
+    padding: 35px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(56, 189, 248, 0.1);
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Grupos de Control */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #0369a1;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
     gap: 10px;
 }
 
-/* label */
-label {
-    font-size: 13px;
-    color: #0369a1;
-    font-weight: 600;
+.form-group label i {
+    color: #38bdf8;
+    font-size: 1rem;
 }
 
-/* input */
-input {
-    padding: 10px;
-    border-radius: 10px;
+/* Inputs, Selects y Datalists */
+.form-group input {
+    padding: 12px 16px;
+    border-radius: 12px;
     border: 1px solid #cbd5e1;
     outline: none;
-    transition: 0.2s;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f8fafc;
 }
 
-input:focus {
+.form-group input:focus {
     border-color: #38bdf8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
 }
 
-/* دکمه */
-button {
-    margin-top: 10px;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #38bdf8, #818cf8);
-    color: white;
-    font-weight: bold;
+/* Estilo para input file */
+.file-input {
+    padding: 10px !important;
+    border: 2px dashed #cbd5e1 !important;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-button:hover {
+.file-input:hover {
+    border-color: #38bdf8 !important;
+    background-color: #f0f9ff;
+}
+
+/* ==========================================================================
+   3. ACCIONES Y BOTONES
+   ========================================================================== */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Botón Guardar / Actualizar */
+.btn {
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(56, 189, 248, 0.25);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
 }
 
-/* لینک برگشت */
-.back {
-    display: block;
-    margin-top: 15px;
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Botón Volver */
+.btn-secondary {
     text-align: center;
-    color: #0ea5e9;
     text-decoration: none;
+    color: #64748b;
+    font-size: 0.9rem;
     font-weight: 600;
+    transition: color 0.2s;
 }
 
-.back:hover {
+.btn-secondary:hover {
+    color: #0ea5e9;
     text-decoration: underline;
 }
+.logo {
+    margin-top: auto; /* چسبیدن به انتهای سایدبار */
+    margin-bottom: 20px;
+    height: 210px;
+    width: auto;
+    align-self: center;
+    opacity: 0.2; /* حالت محو */
+    filter: brightness(1.1) blur(0.5px);
+    transition: opacity 0.3s;
+}
 
-/* انیمیشن */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.logo:hover {
+    opacity: 0.8;
+}
+/* Animaciones */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* Podrías ocultarlo o hacerlo colapsable en móviles */
+    }
+    .main {
+        padding: 20px;
+    }
 }

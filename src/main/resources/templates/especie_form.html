@@ -2,24 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Formulario de Especie</title>
-  <link rel="stylesheet" href="/css/propietario.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <style>
-    .form-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-    .form-group input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
-    .preview-img { margin-top: 10px; border-radius: 10px; border: 2px solid #eee; }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/fespecie.css}"> <title th:text="${especie['id'] == '' ? 'Nueva Especie' : 'Editar Especie'}">VidaPET</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-<div class="layout">
-  <div class="main">
-    <div class="form-card">
-      <h2 th:text="${especie['id'] == '' ? 'Nueva Especie' : 'Editar Especie'}"></h2>
-      <hr>
 
+<div class="layout">
+
+  <div class="sidebar">
+    <h1>| VidaPET</h1>
+    <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
+    <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
+    <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
+    <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
+    <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
+    <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
+    <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+
+    <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
+  </div>
+
+  <div class="main">
+
+    <h1 th:text="${especie['id'] == '' ? 'Nueva Especie' : 'Editar Especie'}"></h1>
+
+    <div class="card-form">
       <form th:action="${especie['id'] == '' ? '/especies/guardar' : '/especies/actualizar'}"
             method="post"
             enctype="multipart/form-data">
@@ -27,31 +34,32 @@
         <input type="hidden" name="id" th:value="${especie['id']}" />
 
         <div class="form-group">
-          <label>Nombre de la Especie:</label>
-          <input type="text" name="nombre" th:value="${especie['nombre']}" required placeholder="Ej: Canino, Felino...">
+          <label><i class="fas fa-tag"></i> Nombre de la Especie:</label>
+          <input type="text" name="nombre" th:value="${especie['nombre']}" required placeholder="Ej: Canino, Felino, Ave...">
         </div>
 
         <div class="form-group">
-          <label>Seleccionar Foto:</label>
-          <input type="file" name="archivoFoto" accept="image/*">
+          <label><i class="fas fa-image"></i> Seleccionar Foto:</label>
+          <input type="file" name="archivoFoto" accept="image/*" class="file-input">
 
-          <div th:if="${especie['foto'] != null and especie['foto'] != ''}" class="mt-2">
-            <p style="font-size: 0.8em; color: #666;">Foto actual:</p>
-            <img th:src="@{'/' + ${especie['foto']}}" width="120" class="preview-img">
+          <div th:if="${especie['foto'] != null and especie['foto'] != ''}" style="margin-top: 15px; text-align: center;">
+            <p style="font-size: 0.8em; color: #64748b; margin-bottom: 5px;">Foto actual:</p>
+            <img th:src="@{'/' + ${especie['foto']}}" width="150" style="border-radius: 12px; border: 2px solid #e0f2fe;">
           </div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button type="submit" class="btn" style="background-color: #28a745; color: white; border: none; cursor: pointer;">
-            <i class="fas fa-save"></i> Guardar
+        <div class="form-actions">
+          <button type="submit" class="btn">
+            <i class="fas fa-save"></i> Guardar Especie
           </button>
-          <a href="/especies" class="btn" style="background-color: #6c757d; text-decoration: none; text-align: center;">
-            Cancelar
+          <a href="/especies" class="btn-secondary">
+            <i class="fas fa-times"></i> Cancelar
           </a>
         </div>
       </form>
     </div>
   </div>
 </div>
+
 </body>
 </html>

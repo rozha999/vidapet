@@ -2,96 +2,115 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+
     <link rel="stylesheet" th:href="@{/css/fmascota.css}">
-    <title th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}"></title>
+    <link rel="stylesheet" href="/css/mascota.css">
+    <title th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}">VidaPET</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-<div class="page">
+<div class="layout">
 
-    <div class="card">
+    <div class="sidebar">
+        <h1>| VidaPET</h1>
+        <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
+        <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
+        <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
+        <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
+        <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
+        <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
+        <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+        <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
+    </div>
 
-        <!-- عنوان -->
-        <h2 th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}"></h2>
+    <div class="main">
 
-        <!-- فرم -->
-        <form th:action="${#strings.isEmpty(mascota['id']) ? '/mascotas/guardar' : '/mascotas/actualizar'}"
-              method="post"
-              enctype="multipart/form-data">
+        <h1 th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}">Formulario Mascota</h1>
 
-            <input type="hidden" name="id" th:value="${mascota['id']}">
+        <div class="card-form">
+            <form th:action="${#strings.isEmpty(mascota['id']) ? '/mascotas/guardar' : '/mascotas/actualizar'}"
+                  method="post"
+                  enctype="multipart/form-data">
 
-            <!-- Nombre -->
-            <label>Nombre:</label>
-            <input type="text" name="nombre" th:value="${mascota['nombre']}" required>
+                <input type="hidden" name="id" th:value="${mascota['id']}">
 
-            <!-- Especie -->
-            <label>Especie:</label>
-            <input type="text"
-                   id="especieInput"
-                   list="especiesList"
-                   th:value="${mascota['especie_nombre']}"
-                   placeholder="Buscar especie..." required>
+                <div class="form-group">
+                    <label><i class="fas fa-signature"></i> Nombre:</label>
+                    <input type="text" name="nombre" th:value="${mascota['nombre']}" required placeholder="Nombre de la mascota">
+                </div>
 
-            <datalist id="especiesList">
-                <option th:each="e : ${especies}"
-                        th:value="${e['nombre']}"
-                        th:data-id="${e['id']}"></option>
-            </datalist>
+                <div class="form-group">
+                    <label><i class="fas fa-paw"></i> Especie:</label>
+                    <input type="text"
+                           id="especieInput"
+                           list="especiesList"
+                           th:value="${mascota['especie_nombre']}"
+                           placeholder="Escribe para buscar especie..." required>
 
-            <input type="hidden" name="especie_id" id="especie_id"
-                   th:value="${mascota['especie_id']}">
+                    <datalist id="especiesList">
+                        <option th:each="e : ${especies}"
+                                th:value="${e['nombre']}"
+                                th:data-id="${e['id']}"></option>
+                    </datalist>
+                    <input type="hidden" name="especie_id" id="especie_id" th:value="${mascota['especie_id']}">
+                </div>
 
-            <!-- Raza -->
-            <label>Raza:</label>
-            <input type="text" name="raza" th:value="${mascota['raza']}" required>
+                <div class="form-group">
+                    <label><i class="fas fa-dna"></i> Raza:</label>
+                    <input type="text" name="raza" th:value="${mascota['raza']}" required placeholder="Ej: Labrador, Siamés...">
+                </div>
 
-            <!-- Fecha -->
-            <label>Fecha de Nacimiento:</label>
-            <input type="date" name="fecha_nacimiento"
-                   th:value="${mascota['fecha_nacimiento']}" required>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-alt"></i> Fecha de Nacimiento:</label>
+                    <input type="date" name="fecha_nacimiento" th:value="${mascota['fecha_nacimiento']}" required>
+                </div>
 
-            <!-- Propietario -->
-            <label>Propietario:</label>
-            <input type="text"
-                   id="propietarioInput"
-                   list="propietariosList"
-                   th:value="${mascota['propietario_nombre']}"
-                   placeholder="Buscar propietario..." required>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Propietario:</label>
+                    <input type="text"
+                           id="propietarioInput"
+                           list="propietariosList"
+                           th:value="${mascota['propietario_nombre']}"
+                           placeholder="Escribe para buscar dueño..." required>
 
-            <datalist id="propietariosList">
-                <option th:each="p : ${propietarios}"
-                        th:value="${p['nombre']} + ' ' + ${p['apellido']}"
-                        th:data-id="${p['id']}"></option>
-            </datalist>
+                    <datalist id="propietariosList">
+                        <option th:each="p : ${propietarios}"
+                                th:value="${p['nombre']} + ' ' + ${p['apellido']}"
+                                th:data-id="${p['id']}"></option>
+                    </datalist>
+                    <input type="hidden" name="propietario_id" id="propietario_id" th:value="${mascota['propietario_id']}">
+                </div>
 
-            <input type="hidden" name="propietario_id" id="propietario_id"
-                   th:value="${mascota['propietario_id']}">
+                <div class="form-group">
+                    <label><i class="fas fa-camera"></i> Foto:</label>
+                    <input type="file" name="foto" accept="image/*" class="file-input">
+                </div>
 
-            <!-- Foto -->
-            <label>Foto:</label>
-            <input type="file" name="foto" accept="image/*">
-
-            <button type="submit"
-                    th:text="${#strings.isEmpty(mascota['id']) ? 'Guardar' : 'Actualizar'}">
-            </button>
-        </form>
-
-        <!-- volver -->
-        <a class="back" href="/mascotas">← Volver a la lista</a>
-
+                <div class="form-actions">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i>
+                        <span th:text="${#strings.isEmpty(mascota['id']) ? ' Guardar' : ' Actualizar'}"></span>
+                    </button>
+                    <a th:href="@{/mascotas}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<!-- JS -->
 <script>
     function setupSearchableList(inputId, hiddenId, listId) {
         const input = document.getElementById(inputId);
         const hidden = document.getElementById(hiddenId);
-        const options = document.querySelectorAll("#" + listId + " option");
 
         input.addEventListener("input", function () {
-            hidden.value = "";
+            const list = document.getElementById(listId);
+            const options = list.querySelectorAll("option");
+            hidden.value = ""; // Reset por defecto
             options.forEach(opt => {
                 if (opt.value === input.value) {
                     hidden.value = opt.getAttribute("data-id");

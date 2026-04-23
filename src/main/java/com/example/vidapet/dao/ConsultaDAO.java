@@ -23,7 +23,7 @@ public class ConsultaDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /* ---------------- ROW MAPPER (اصلاح شده بدون mascota_id) ---------------- */
+    /* ---------------- ROW MAPPER  ---------------- */
     private final RowMapper<Map<String, Object>> rowMapper = (rs, rowNum) -> {
         Map<String, Object> map = new HashMap<>();
         map.put("id", rs.getInt("id"));
@@ -39,7 +39,7 @@ public class ConsultaDAO {
         return map;
     };
 
-    /* ---------------- FIND ALL (اصلاح شده با JOIN) ---------------- */
+    /* ---------------- FIND ALL  ---------------- */
     public List<Map<String, Object>> findAll() {
         String sql = """
             SELECT 
@@ -74,7 +74,7 @@ public class ConsultaDAO {
         }
     }
 
-    /* ---------------- SAVE (اصلاح شده - بدون mascota_id) ---------------- */
+    /* ---------------- SAVE  ---------------- */
     public int save(int citaId, String diagnostico) {
         String sql = "INSERT INTO consulta (cita_id, diagnostico) VALUES (?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -97,13 +97,11 @@ public class ConsultaDAO {
 
     /* ---------------- DELETE ---------------- */
     public void delete(int id) {
-        // اول حذف درمان‌های وابسته برای جلوگیری از ارور Foreign Key
         jdbcTemplate.update("DELETE FROM tratamiento WHERE consulta_id=?", id);
-        // سپس حذف خود معاینه
         jdbcTemplate.update("DELETE FROM consulta WHERE id=?", id);
     }
 
-    /* ---------------- FULL DETAIL (برای صفحه مشاهده جزئیات) ---------------- */
+    /* ---------------- FULL DETAIL ---------------- */
     public Map<String, Object> obtenerDetalleCompleto(int consultaId) {
         String sql = """
             SELECT 

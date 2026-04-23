@@ -1,124 +1,206 @@
+/* ===== ۱. پایه و ساختار اصلی (Base & Layout) ===== */
 body {
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
     color: #334155;
-}
-
-/* وسط‌چین صفحه */
-.layout {
     min-height: 100vh;
+}
+
+.layout {
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* کارت فرم */
-.form-card {
+/* ===== ۲. سایدبار (Sidebar - دقیقاً طبق استایل شما) ===== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
     background: white;
-    width: 480px;
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15);
-    animation: fadeIn 0.5s ease;
+    padding: 25px 15px;
+    box-shadow: 4px 0 20px rgba(186, 230, 253, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
 }
 
-/* عنوان */
-.form-card h2 {
+.sidebar h1 {
+    color: #0ea5e9;
+    font-size: 1.8rem;
+    font-weight: 800;
     text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #64748b;
+    padding: 12px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #f0f9ff;
     color: #0284c7;
-    margin-bottom: 10px;
-    font-size: 1.6rem;
+    transform: translateX(5px);
 }
 
-/* خط جداکننده */
-.form-card hr {
-    border: none;
-    height: 1px;
-    background: #e2e8f0;
-    margin: 15px 0 20px;
+/* هایلایت صفحه فعلی (Active Page) */
+.sidebar a[href="/especies"] {
+    background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
 }
 
-/* گروه‌ها */
+/* لوگو انتهای سایدبار */
+.logo {
+    margin-top: auto;
+    margin-bottom: 20px;
+    height: 210px;
+    width: auto;
+    align-self: center;
+    opacity: 0.2;
+    filter: brightness(1.1) blur(0.5px);
+    transition: opacity 0.3s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+/* ===== ۳. بخش اصلی محتوا (Main Content) ===== */
+.main {
+    margin-left: 260px;
+    padding: 40px;
+    width: calc(100% - 260px);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* فرم را در وسط قرار می‌دهد */
+    animation: fadeIn 0.6s ease;
+}
+
+.main h1 {
+    color: #0369a1;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    font-weight: 800;
+}
+
+/* ===== ۴. کارت فرم (Card Form) ===== */
+.card-form {
+    background: white;
+    width: 100%;
+    max-width: 550px;
+    padding: 35px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.1);
+}
+
 .form-group {
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 13px;
+    font-size: 0.95rem;
     color: #0369a1;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* input */
-.form-group input {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #cbd5e1;
+.form-group label i {
+    color: #38bdf8;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
     outline: none;
-    transition: 0.2s;
-    font-size: 14px;
+    transition: 0.3s;
+    background: #f8fafc;
 }
 
 .form-group input:focus {
     border-color: #38bdf8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
 }
 
-/* عکس */
-.preview-img {
-    margin-top: 10px;
-    border-radius: 12px;
-    border: 2px solid #e0f2fe;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* دکمه‌ها */
-button, .btn {
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: 0.3s;
-}
-
-/* دکمه ذخیره */
-button {
-    background: linear-gradient(90deg, #38bdf8, #818cf8);
-    color: white;
-    border: none;
+.file-input {
     cursor: pointer;
-    flex: 1;
 }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(56, 189, 248, 0.3);
+/* ===== ۵. دکمه‌ها (Buttons) ===== */
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
 }
 
-/* دکمه cancel */
 .btn {
-    display: inline-block;
-    flex: 1;
+    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
     color: white;
-    text-align: center;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
 }
 
 .btn:hover {
-    opacity: 0.9;
     transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
 }
 
-/* دکمه‌ها کنار هم */
-div[style*="display: flex"] {
-    margin-top: 20px;
+.btn-secondary {
+    text-align: center;
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px;
+    transition: 0.2s;
 }
 
-/* انیمیشن */
+.btn-secondary:hover {
+    color: #0ea5e9;
+}
+
+/* تصویر پیش‌نمایش */
+.card-form img {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== ۶. انیمیشن (Animation) ===== */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

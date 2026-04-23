@@ -54,6 +54,7 @@
                 <th>Propietario</th>
                 <th>Veterinario</th>
                 <th>Fecha</th>
+                <th>Nota</th>   <!-- ⭐ NUEVO -->
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -78,6 +79,9 @@
                 </td>
 
                 <td th:text="${#temporals.format(c.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+
+                <!-- ⭐ NOTA -->
+                <td th:text="${c.nota}"></td>
 
                 <!-- estado -->
                 <td>

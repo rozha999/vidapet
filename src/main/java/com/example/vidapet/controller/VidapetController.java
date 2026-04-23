@@ -23,9 +23,8 @@ import java.util.*;
 public class VidapetController {
 
     private final VidapetService vidapetService;
-    // اضافه شده برای حل مشکل ارور جستجو
 
-    // سازنده اصلاح شده (Dependency Injection)
+    //  (Dependency Injection)
     public VidapetController(VidapetService vidapetService) {
         this.vidapetService = vidapetService;
     }
@@ -89,12 +88,13 @@ public class VidapetController {
     // ======================================================
     // (MASCOTAS)
     // ======================================================
+
     @GetMapping("/mascotas")
-    public String listarMascotas(Model model) {
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
+    public String listarMascotas(@RequestParam(required = false) String search, Model model) {
+        model.addAttribute("mascotas", vidapetService.listarMascotas(search));
+        model.addAttribute("search", search);
         return "mascotas";
     }
-
     @GetMapping("/mascotas/nuevo")
     public String nuevaMascota(Model model) {
         Map<String, Object> mascota = new HashMap<>();
@@ -188,15 +188,14 @@ public class VidapetController {
         Map<String, Object> cita = vidapetService.obtenerCita(citaId);
         if (cita == null) return "redirect:/citas";
 
-        // گرفتن ID حیوان برای نمایش اطلاعات در فرم (بدون ذخیره در جدول Consulta)
+
         Integer mascotaId = (Integer) cita.get("mascota_id");
 
         Map<String, Object> data = vidapetService.obtenerDetalleParaNuevaConsulta(mascotaId, citaId);
 
         Map<String, Object> consulta = new HashMap<>();
         consulta.put("cita_id", citaId);
-        consulta.put("diagnostico", ""); // دیگر mascota_id را اینجا نمی‌گذاریم
-
+        consulta.put("diagnostico", "");
         model.addAttribute("consulta", consulta);
         model.addAttribute("data", data);
         model.addAttribute("tratamientos", new ArrayList<>());
@@ -212,10 +211,10 @@ public class VidapetController {
             @RequestParam(required = false) List<LocalDate> fecha_fin,
             @RequestParam(required = false) List<String> observaciones
     ) {
-        // ۱. ذخیره معاینه (فقط با cita_id)
+
         int consultaId = vidapetService.guardarConsultaDesdeCita(cita_id, diagnostico);
 
-        // ۲. ذخیره درمان‌ها در صورت وجود
+
         if (tratamientos != null && !tratamientos.isEmpty()) {
             saveTratamientosList(consultaId, tratamientos, fecha_inicio, fecha_fin, observaciones);
         }
@@ -246,11 +245,10 @@ public class VidapetController {
 
     @GetMapping("/citas/nueva")
     public String nuevaCita(Model model) {
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
+        model.addAttribute("mascotas", vidapetService.listarMascotas(null));
         model.addAttribute("veterinarios", vidapetService.listarVeterinarios(null));
         return "cita_form";
     }
-
     @PostMapping("/citas/guardar")
     public String guardarCita(@RequestParam int mascota_id, @RequestParam int propietario_id,
                               @RequestParam(required = false) Integer veterinario_id,
@@ -267,23 +265,35 @@ public class VidapetController {
     }
 
     @GetMapping("/citas/eliminar/{id}")
-    public String eliminarCita(@PathVariable("id") int id) { // حتماً PathVariable باشد
+    public String eliminarCita(@PathVariable("id") int id) {
         vidapetService.eliminarCita(id);
         return "redirect:/citas";
     }
-    // در کلاس VidapetController
 
     @GetMapping("/citas/editar/{id}")
     public String editarCita(@PathVariable int id, Model model) {
-        // گرفتن اطلاعات نوبت
+
         Map<String, Object> cita = vidapetService.obtenerCita(id);
 
         model.addAttribute("cita", cita);
-        model.addAttribute("mascotas", vidapetService.listarMascotas());
+        model.addAttribute("mascotas", vidapetService.listarMascotas(null));
         model.addAttribute("propietarios", vidapetService.listarPropietarios(null));
         model.addAttribute("veterinarios", vidapetService.listarVeterinarios(null));
 
-        return "cita_form"; // باز کردن فرم نوبت برای ویرایش
+        return "cita_form";
+    }
+    @GetMapping("/api/mascotas/{id}/info")
+    @ResponseBody
+    public Map<String, Object> getMascotaInfo(@PathVariable Long id) {
+
+        Map<String, Object> mascota = vidapetService.obtenerMascotaPorId(id);
+        Map<String, Object> propietario = vidapetService.obtenerPropietarioPorMascota(id);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("mascota", mascota);
+        result.put("propietario", propietario);
+
+        return result;
     }
     // ======================================================
     // (VETERINARIOS)
@@ -293,7 +303,7 @@ public class VidapetController {
         model.addAttribute("veterinarios", vidapetService.listarVeterinarios(search));
         return "veterinarios";
     }
-    // در کلاس VidapetController
+
 
     @GetMapping("/veterinarios/nuevo")
     public String mostrarFormularioNuevoVeterinario(Model model) {
@@ -307,7 +317,7 @@ public class VidapetController {
         veterinario.put("codigo_colegiado", "");
 
         model.addAttribute("veterinario", veterinario);
-        return "veterinario_form"; // مطمئن شوید فایلی به این نام در templates دارید
+        return "veterinario_form";
     }
 
     @PostMapping("/veterinarios/guardar")
@@ -316,17 +326,15 @@ public class VidapetController {
         vidapetService.guardarVeterinario(nombre, apellido, telefono, email, especialidad, codigo_colegiado);
         return "redirect:/veterinarios";
     }
-    // در کلاس VidapetController بخش Veterinarios
 
-    // نمایش فرم ویرایش با داده‌های قبلی
+
     @GetMapping("/veterinarios/editar/{id}")
     public String mostrarFormularioEditarVeterinario(@PathVariable Long id, Model model) {
         Map<String, Object> veterinario = vidapetService.obtenerVeterinarioPorId(id);
         model.addAttribute("veterinario", veterinario);
-        return "veterinario_form"; // نام فایل HTML فرم شما
+        return "veterinario_form";
     }
 
-    // دریافت اطلاعات جدید و ثبت در دیتابیس
     @PostMapping("/veterinarios/actualizar")
     public String actualizarVeterinario(@RequestParam Long id,
                                         @RequestParam String nombre,
@@ -340,7 +348,7 @@ public class VidapetController {
         return "redirect:/veterinarios";
     }
 
-    // حذف دامپزشک
+
     @GetMapping("/veterinarios/eliminar/{id}")
     public String eliminarVeterinario(@PathVariable Long id) {
         vidapetService.eliminarVeterinario(id);
@@ -348,7 +356,7 @@ public class VidapetController {
     }
 
     // ======================================================
-    // 🧬 بخش گونه‌ها (ESPECIES)
+    //  (ESPECIES)
     // ======================================================
     @Controller
     @RequestMapping("/especies")
@@ -368,7 +376,7 @@ public class VidapetController {
 
         @GetMapping("/nuevo")
         public String nuevo(Model model) {
-            model.addAttribute("especie", new HashMap<>()); // ✔ چون Map استفاده می‌کنی
+            model.addAttribute("especie", new HashMap<>());
             return "especie_form";
         }
 
@@ -435,8 +443,7 @@ public class VidapetController {
             return path;
         }
     }
-    // ======================================================
-    // 🛠 متدهای کمکی (HELPER METHODS) - برای جلوگیری از تکرار کد
+
     // ======================================================
     private String handleFileUpload(MultipartFile file) throws Exception {
         if (file == null || file.isEmpty()) return "";
@@ -457,11 +464,10 @@ public class VidapetController {
             }
         }
     }
-    // اضافه کردن در انتهای VidapetController
+
     @GetMapping("/api/mascotas/{id}/propietario")
-    @ResponseBody // این خط بسیار مهم است (چون صفحه وب برنمی‌گرداند، فقط دیتا می‌دهد)
+    @ResponseBody
     public Map<String, Object> getPropietarioByMascota(@PathVariable Long id) {
-        // شما باید این متد را در سرویس خود داشته باشید
         return vidapetService.obtenerPropietarioPorMascota(id);
     }
 }

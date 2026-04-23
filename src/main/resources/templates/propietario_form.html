@@ -2,63 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/propietario.css}">
   <link rel="stylesheet" th:href="@{/css/fpropietario.css}">
-  <title th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</title>
+  <title th:text="${propietario['id'] != ''} ? 'Editar Propietario' : 'Nuevo Propietario'">VidaPET</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
-<!-- ===== کارت فرم ===== -->
-<div class="card-form">
+<div class="layout">
 
-  <!-- عنوان فرم -->
-  <h1 th:text="${propietario['id']} != '' ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
+  <div class="sidebar">
+    <h1>| VidaPET</h1>
+    <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
+    <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
+    <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
+    <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
+    <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
+    <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
+    <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+    <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
+  </div>
 
-  <!-- فرم برای ایجاد مالک جدید -->
-  <form th:if="${propietario['id']} == ''"
-        th:action="@{/propietarios/guardar}"
-        method="post">
+  <div class="main">
 
-    <input type="hidden" name="id" th:value="${propietario['id']}" />
+    <h1 th:text="${propietario['id'] != ''} ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
 
-    <label>Nombre:</label>
-    <input type="text" name="nombre" th:value="${propietario['nombre']}" required/>
+    <div class="card-form">
+      <form th:action="${propietario['id'] != ''} ? @{/propietarios/actualizar} : @{/propietarios/guardar}"
+            method="post">
 
-    <label>Apellido:</label>
-    <input type="text" name="apellido" th:value="${propietario['apellido']}" required/>
+        <input type="hidden" name="id" th:value="${propietario['id']}" />
 
-    <label>Teléfono:</label>
-    <input type="text" name="telefono" th:value="${propietario['telefono']}" required/>
+        <div class="form-group">
+          <label><i class="fas fa-id-card"></i> Nombre:</label>
+          <input type="text" name="nombre" th:value="${propietario['nombre']}" required placeholder="Ej: Juan"/>
+        </div>
 
-    <label>Email:</label>
-    <input type="email" name="email" th:value="${propietario['email']}" required/>
+        <div class="form-group">
+          <label><i class="fas fa-user-tag"></i> Apellido:</label>
+          <input type="text" name="apellido" th:value="${propietario['apellido']}" required placeholder="Ej: Pérez"/>
+        </div>
 
-    <button type="submit">Guardar</button>
-  </form>
+        <div class="form-group">
+          <label><i class="fas fa-phone"></i> Teléfono:</label>
+          <input type="text" name="telefono" th:value="${propietario['telefono']}" required placeholder="Ej: 0987654321"/>
+        </div>
 
-  <!-- فرم برای ویرایش مالک موجود -->
-  <form th:if="${propietario['id']} != ''"
-        th:action="@{/propietarios/actualizar}"
-        method="post">
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email:</label>
+          <input type="email" name="email" th:value="${propietario['email']}" required placeholder="correo@ejemplo.com"/>
+        </div>
 
-    <input type="hidden" name="id" th:value="${propietario['id']}"/>
-
-    <label>Nombre:</label>
-    <input type="text" name="nombre" th:value="${propietario['nombre']}" required/>
-
-    <label>Apellido:</label>
-    <input type="text" name="apellido" th:value="${propietario['apellido']}" required/>
-
-    <label>Teléfono:</label>
-    <input type="text" name="telefono" th:value="${propietario['telefono']}" required/>
-
-    <label>Email:</label>
-    <input type="email" name="email" th:value="${propietario['email']}" required/>
-
-    <button type="submit">Actualizar</button>
-  </form>
-
-  <!-- لینک بازگشت به لیست -->
-  <a href="/propietarios">Volver a la lista</a>
+        <div class="form-actions">
+          <button type="submit" class="btn">
+            <i class="fas fa-save"></i>
+            <span th:text="${propietario['id'] != ''} ? ' Actualizar' : ' Guardar'"></span>
+          </button>
+          <a th:href="@{/propietarios}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a la lista
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 </body>

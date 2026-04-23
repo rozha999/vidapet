@@ -18,7 +18,7 @@ public class MascotaDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // این RowMapper برای تبدیل نتایج کوئری‌هایی که شامل اطلاعات JOIN شده هستند استفاده می‌شود
+
     private final RowMapper<Map<String, Object>> rowMapperFull = (rs, rowNum) -> {
         Map<String, Object> map = new HashMap<>();
         map.put("id", rs.getLong("id"));
@@ -37,9 +37,7 @@ public class MascotaDAO {
         return map;
     };
 
-    /**
-     * واکشی تمام حیوانات به همراه نام صاحب و نام گونه
-     */
+
     public List<Map<String, Object>> findAll() {
         String sql = """
                 SELECT m.id, m.nombre, m.raza, m.fecha_nacimiento, m.foto, 
@@ -53,9 +51,7 @@ public class MascotaDAO {
         return jdbcTemplate.query(sql, rowMapperFull);
     }
 
-    /**
-     * پیدا کردن یک حیوان خاص بر اساس ID
-     */
+
     public Map<String, Object> findById(Long id) {
         String sql = """
                 SELECT m.id, m.nombre, m.raza, m.fecha_nacimiento, m.foto, 
@@ -70,9 +66,7 @@ public class MascotaDAO {
         return jdbcTemplate.queryForObject(sql, rowMapperFull, id);
     }
 
-    /**
-     * ذخیره حیوان جدید (حالا به جای رشته especie، آیدی especie_id را می‌گیرد)
-     */
+
     public void save(String nombre, Long especieId, String raza,
                      LocalDate fechaNacimiento, Long propietarioId, String foto) {
         String sql = """
@@ -82,9 +76,6 @@ public class MascotaDAO {
         jdbcTemplate.update(sql, nombre, especieId, raza, fechaNacimiento, propietarioId, foto);
     }
 
-    /**
-     * بروزرسانی اطلاعات حیوان
-     */
     public void update(Long id, String nombre, Long especieId, String raza,
                        LocalDate fechaNacimiento, Long propietarioId, String foto) {
         String sql = """
@@ -95,16 +86,11 @@ public class MascotaDAO {
         jdbcTemplate.update(sql, nombre, especieId, raza, fechaNacimiento, propietarioId, foto, id);
     }
 
-    /**
-     * حذف حیوان
-     */
     public void delete(Long id) {
         jdbcTemplate.update("DELETE FROM mascota WHERE id=?", id);
     }
 
-    /**
-     * جستجوی حیوانات بر اساس نام
-     */
+
     public List<Map<String, Object>> search(String s) {
         String sql = """
                 SELECT m.id, m.nombre, m.raza, m.fecha_nacimiento, m.foto, 
@@ -127,14 +113,32 @@ public class MascotaDAO {
         WHERE m.id = ?
     """;
         try {
-            // استفاده از این روش امن‌تر است
+
             List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, mascotaId);
             if (result.isEmpty()) {
-                return Collections.emptyMap(); // اگر پیدا نشد مپ خالی برگردان
+                return Collections.emptyMap();
             }
             return result.get(0);
         } catch (Exception e) {
             return Collections.emptyMap();
         }
     }
+    public List<Map<String, Object>> buscarPorNombre(String nombre) {
+        String sql = "SELECT m.*, e.nombre as especie_nombre, p.nombre as propietario_nombre, p.apellido as propietario_apellido " +
+                "FROM mascota m " +
+                "JOIN especie e ON m.especie_id = e.id " +
+                "JOIN propietario p ON m.propietario_id = p.id " +
+                "WHERE m.nombre LIKE ? OR p.nombre LIKE ?";
+
+        return jdbcTemplate.queryForList(sql, "%" + nombre + "%", "%" + nombre + "%");
+    }
+    public List<Map<String, Object>> listarTodas() {
+        String sql = "SELECT m.*, e.nombre as especie_nombre, p.nombre as propietario_nombre, p.apellido as propietario_apellido " +
+                "FROM mascota m " +
+                "LEFT JOIN especie e ON m.especie_id = e.id " +
+                "LEFT JOIN propietario p ON m.propietario_id = p.id";
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
 }
