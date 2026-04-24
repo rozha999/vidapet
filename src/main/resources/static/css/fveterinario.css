@@ -1,4 +1,6 @@
-/* ===== Base (Ya la tienes en tu CSS principal) ===== */
+/* ==========================================================================
+   1. BASE & LAYOUT
+   ========================================================================== */
 body {
     background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -11,8 +13,10 @@ body {
     display: flex;
 }
 
-/* ===== Sidebar (Copiado exactamente de tu CSS) ===== */
-.sidebar {
+/* ==========================================================================
+   2. SIDEBAR SEMÁNTICA (aside.sidebar)
+   ========================================================================== */
+aside.sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -23,11 +27,11 @@ body {
     box-shadow: 4px 0 20px rgba(186, 230, 253, 0.2);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    box-sizing: border-box;
     z-index: 1000;
 }
 
-.sidebar h1 {
+aside.sidebar h1 {
     color: #0ea5e9;
     font-size: 1.8rem;
     font-weight: 800;
@@ -35,7 +39,13 @@ body {
     margin-bottom: 30px;
 }
 
-.sidebar a {
+aside.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+aside.sidebar a {
     text-decoration: none;
     color: #64748b;
     padding: 12px 20px;
@@ -44,40 +54,69 @@ body {
     align-items: center;
     gap: 12px;
     transition: all 0.3s ease;
+    font-weight: 500;
 }
 
-.sidebar a:hover {
+aside.sidebar a:hover,
+aside.sidebar a.active {
     background-color: #f0f9ff;
     color: #0284c7;
     transform: translateX(5px);
 }
 
-/* ===== Contenido Principal del Formulario ===== */
-.main {
-    margin-left: 260px; /* Esto deja espacio para el sidebar fijo */
+/* Estado activo específico para veterinarios (opcional) */
+aside.sidebar a[href*="veterinarios"] {
+    background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+/* LOGO INTEGRADO */
+.logo {
+    margin-top: auto;
+    margin-bottom: 20px;
+    height: 180px; /* Ajustado para que no sature */
+    width: auto;
+    align-self: center;
+    opacity: 0.15;
+    filter: brightness(1.1) grayscale(1);
+    transition: all 0.4s ease;
+}
+
+aside.sidebar:hover .logo {
+    opacity: 0.8;
+    filter: brightness(1.1) grayscale(0);
+}
+
+/* ==========================================================================
+   3. CONTENIDO PRINCIPAL (main.main)
+   ========================================================================== */
+main.main {
+    margin-left: 260px;
     padding: 40px;
     width: calc(100% - 260px);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra la tarjeta */
-    animation: fadeIn 0.6s ease;
+    align-items: center;
+    box-sizing: border-box;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.main h1 {
+main.main h1 {
     color: #0369a1;
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 25px;
     font-weight: 800;
 }
 
-/* ===== Tarjeta del Formulario ===== */
-.card-form {
+/* TARJETA DEL FORMULARIO (section.card-form) */
+section.card-form {
     background: white;
     width: 100%;
     max-width: 500px;
     padding: 35px;
     border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(14, 165, 233, 0.15);
+    box-shadow: 0 15px 35px rgba(14, 165, 233, 0.12);
 }
 
 .form-group {
@@ -96,47 +135,56 @@ body {
     gap: 10px;
 }
 
+.form-group label i {
+    color: #38bdf8;
+    width: 18px;
+}
+
 .form-group input {
     padding: 12px 15px;
-    border-radius: 14px;
+    border-radius: 12px;
     border: 1px solid #cbd5e1;
     outline: none;
-    transition: 0.3s;
+    transition: all 0.3s ease;
     width: 100%;
-    box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
+    box-sizing: border-box;
+    background-color: #f8fafc;
 }
 
 .form-group input:focus {
     border-color: #38bdf8;
-    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
 }
 
-/* ===== Botones del Formulario ===== */
+/* ACCIONES (footer.form-actions) */
 .form-actions {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 .btn {
-    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+    background: linear-gradient(90deg, #0ea5e9, #6366f1);
     color: white;
     padding: 14px;
     border: none;
     border-radius: 14px;
     font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    transition: 0.3s;
+    gap: 10px;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
 }
 
 .btn-secondary {
@@ -150,23 +198,41 @@ body {
 
 .btn-secondary:hover {
     color: #0284c7;
-}
-.logo {
-    margin-top: auto; /* چسبیدن به انتهای سایدبار */
-    margin-bottom: 20px;
-    height: 210px;
-    width: auto;
-    align-self: center;
-    opacity: 0.2; /* حالت محو */
-    filter: brightness(1.1) blur(0.5px);
-    transition: opacity 0.3s;
+    text-decoration: underline;
 }
 
-.logo:hover {
-    opacity: 0.8;
-}
-/* Animar la entrada */
+/* ==========================================================================
+   4. ANIMACIONES & RESPONSIVE
+   ========================================================================== */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive para Móvil */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    aside.sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    aside.sidebar .logo {
+        display: none;
+    }
+
+    main.main {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    section.card-form {
+        padding: 25px;
+    }
 }

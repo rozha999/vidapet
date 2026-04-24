@@ -240,3 +240,107 @@ tbody tr:hover td {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+
+@media (max-width: 768px) {
+    .main {
+        padding: 15px;
+    }
+
+    /* تبدیل جدول به حالت کارتی برای خوانایی بهتر */
+    table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+
+    thead {
+        display: none; /* حذف سرتیتر جدول در حالت موبایل */
+    }
+
+    table {
+        min-width: unset; /* حذف محدودیت عرض */
+    }
+
+    tbody tr {
+        background: white;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    td {
+        background: transparent !important;
+        padding: 5px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    td:last-child {
+        border-bottom: none;
+        padding-top: 15px;
+        justify-content: center;
+    }
+
+    /* اضافه کردن لیبل برای مشخص شدن فیلدها */
+    td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #6366f1;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
+
+    .actions {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ===== مخصوص موبایل‌های کوچک (477px و کمتر) ===== */
+@media (max-width: 477px) {
+    .sidebar h1 {
+        font-size: 1.3rem;
+    }
+
+    .sidebar a {
+        min-width: calc(50% - 10px); /* قرارگیری دو به دو منوها */
+        font-size: 0.75rem;
+        padding: 8px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container {
+        flex-direction: column;
+    }
+
+    .search-container input {
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    tbody tr {
+        padding: 12px;
+    }
+
+    td {
+        font-size: 0.85rem;
+    }
+
+    .icon-btn {
+        width: 45px; /* بزرگتر برای لمس راحت‌تر در موبایل */
+        height: 45px;
+    }
+}

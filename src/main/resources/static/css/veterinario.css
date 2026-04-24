@@ -1,4 +1,6 @@
-/* ===== پایه ===== */
+/* ==========================================================================
+   1. BASE & LAYOUT
+   ========================================================================== */
 body {
     background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -7,13 +9,14 @@ body {
     min-height: 100vh;
 }
 
-/* ===== layout ===== */
 .layout {
     display: flex;
 }
 
-/* ===== سایدبار ===== */
-.sidebar {
+/* ==========================================================================
+   2. SIDEBAR SEMÁNTICA (aside.sidebar)
+   ========================================================================== */
+aside.sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -24,10 +27,11 @@ body {
     box-shadow: 4px 0 20px rgba(186, 230, 253, 0.2);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 
-.sidebar h1 {
+aside.sidebar header h1 {
     color: #0ea5e9;
     font-size: 1.8rem;
     font-weight: 800;
@@ -35,7 +39,13 @@ body {
     margin-bottom: 30px;
 }
 
-.sidebar a {
+aside.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+aside.sidebar nav a {
     text-decoration: none;
     color: #64748b;
     padding: 12px 20px;
@@ -44,102 +54,115 @@ body {
     align-items: center;
     gap: 12px;
     transition: all 0.3s ease;
+    font-weight: 500;
 }
 
-.sidebar a:hover {
+aside.sidebar nav a:hover {
     background-color: #f0f9ff;
     color: #0284c7;
     transform: translateX(5px);
 }
 
-/* هایلایت صفحه veterinarios */
-.sidebar a[href="/veterinarios"] {
+/* Highlight página activa */
+aside.sidebar nav a.active,
+aside.sidebar nav a[href*="veterinarios"] {
     background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
     color: white;
     box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
 }
 
-/* لوگو */
+/* LOGO INTEGRADO */
+.logo-container {
+    margin-top: auto;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
 .logo {
-    margin-top: auto; /* چسبیدن به انتهای سایدبار */
-    margin-bottom: 20px;
-    height: 210px;
+    height: 180px;
     width: auto;
-    align-self: center;
-    opacity: 0.2; /* حالت محو */
-    filter: brightness(1.1) blur(0.5px);
-    transition: opacity 0.3s;
+    opacity: 0.15;
+    filter: brightness(1.1) grayscale(1);
+    transition: all 0.4s ease;
 }
 
-.logo:hover {
+aside.sidebar:hover .logo {
     opacity: 0.8;
+    filter: brightness(1.1) grayscale(0);
 }
 
-/* ===== main ===== */
-.main {
+/* ==========================================================================
+   3. CONTENIDO PRINCIPAL (main.main)
+   ========================================================================== */
+main.main {
     margin-left: 260px;
     padding: 40px;
-    width: 100%;
-    animation: fadeIn 0.6s ease;
+    width: calc(100% - 260px);
+    box-sizing: border-box;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.main h1 {
+main.main header h1 {
     color: #0369a1;
     font-size: 2.2rem;
     margin-bottom: 25px;
     font-weight: 800;
 }
 
-/* ===== top bar ===== */
+/* TOP BAR (section.top-bar) */
 .top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    gap: 20px;
 }
 
-/* ===== دکمه اصلی ===== */
 .btn {
     background: linear-gradient(90deg, #0ea5e9, #38bdf8);
     color: white;
-    padding: 10px 18px;
+    padding: 12px 22px;
     border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     transition: 0.3s;
     box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2);
+    white-space: nowrap;
 }
 
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
+    filter: brightness(1.05);
 }
 
-/* ===== سرچ ===== */
+/* BÚSQUEDA */
 .search-container form {
     display: flex;
     background: white;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(14, 165, 233, 0.1);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.08);
+    border: 1px solid #e0f2fe;
 }
 
 .search-container input {
     border: none;
-    padding: 10px 15px;
+    padding: 12px 18px;
     outline: none;
-    width: 260px;
-    font-size: 0.9rem;
+    width: 320px;
+    font-size: 0.95rem;
+    color: #475569;
 }
 
 .search-container button {
     border: none;
     background: #0ea5e9;
     color: white;
-    padding: 0 15px;
+    padding: 0 20px;
     cursor: pointer;
     transition: 0.3s;
 }
@@ -148,97 +171,126 @@ body {
     background: #0284c7;
 }
 
-/* ===== جدول ===== */
+/* ==========================================================================
+   4. TABLA DE DATOS (section.table-container)
+   ========================================================================== */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
 table {
     width: 100%;
-    background: transparent;
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 12px; /* Crea el efecto de filas separadas */
 }
 
 th {
-    padding: 15px 20px;
+    padding: 10px 20px;
     text-align: left;
-    color: #0369a1;
+    color: #64748b;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 tbody tr {
-    background-color: #f8fafc;
-    transition: all 0.2s;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+    transition: all 0.3s ease;
 }
 
 tbody tr:hover {
+    transform: translateY(-2px) scale(1.002);
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.1);
     background-color: #f0f9ff;
-    transform: scale(1.005);
 }
 
 td {
-    padding: 15px 20px;
+    padding: 16px 20px;
     color: #475569;
     border: none;
+    font-size: 0.95rem;
 }
 
-/* گردی سطرها */
-td:first-child {
-    border-radius: 15px 0 0 15px;
+/* Bordes redondeados para las filas flotantes */
+td:first-child { border-radius: 16px 0 0 16px; border-left: 3px solid transparent; }
+td:last-child { border-radius: 0 16px 16px 0; }
+
+tbody tr:hover td:first-child {
+    border-left-color: #0ea5e9;
 }
 
-td:last-child {
-    border-radius: 0 15px 15px 0;
+/* Badges y estilos de texto */
+.badge-specialty {
+    background: #f0f9ff;
+    color: #0369a1;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
-/* حذف کامل border */
-table, th, td {
-    border: none !important;
+code {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: 'Consolas', monospace;
 }
 
-/* ===== دکمه‌های اکشن ===== */
+/* ACCIONES */
 .actions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .icon-btn {
-    width: 35px;
-    height: 35px;
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    transition: all 0.2s ease;
-    font-size: 14px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* edit */
-.icon-btn.edit {
-    background-color: #e0f2fe;
-    color: #0ea5e9;
+.icon-btn.edit { background-color: #e0f2fe; color: #0ea5e9; }
+.icon-btn.edit:hover { background-color: #0ea5e9; color: white; transform: rotate(-8deg); }
+
+.icon-btn.delete { background-color: #fee2e2; color: #ef4444; }
+.icon-btn.delete:hover { background-color: #ef4444; color: white; transform: rotate(8deg); }
+
+/* ESTADO VACÍO */
+.empty-state {
+    text-align: center;
+    padding: 40px !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
-.icon-btn.edit:hover {
-    background-color: #0ea5e9;
-    color: white;
-    transform: scale(1.08);
-}
+.empty-state i { color: #cbd5e1; margin-bottom: 10px; }
 
-/* delete */
-.icon-btn.delete {
-    background-color: #fee2e2;
-    color: #ef4444;
-}
-
-.icon-btn.delete:hover {
-    background-color: #ef4444;
-    color: white;
-    transform: scale(1.08);
-}
-
-/* ===== انیمیشن ===== */
+/* ==========================================================================
+   5. ANIMACIONES & RESPONSIVE
+   ========================================================================== */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+    main.main { padding: 25px; }
+    .search-container input { width: 200px; }
+}
+
+@media (max-width: 768px) {
+    .layout { flex-direction: column; }
+    aside.sidebar { position: relative; width: 100%; height: auto; padding: 15px; }
+    aside.sidebar .logo-container { display: none; }
+    main.main { margin-left: 0; width: 100%; padding: 20px; }
+    .top-bar { flex-direction: column; align-items: stretch; }
+    .search-container input { width: 100%; }
 }

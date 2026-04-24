@@ -1,103 +1,113 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/veterinario.css">
-    <title>Lista de Veterinarios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Veterinarios - VidaPET</title>
 
-    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/veterinario.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="layout">
 
-    <!-- ===== Sidebar ===== -->
-    <div class="sidebar">
-        <h1>| VidaPET</h1>
+    <aside class="sidebar">
+        <header>
+            <h1>| VidaPET</h1>
+        </header>
 
-        <a href="/"><i class="fas fa-home"></i> Home</a>
-        <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
-        <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
-        <a href="/veterinarios"><i class="fas fa-user-md"></i> Veterinarios</a>
-        <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
-        <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
-        <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
+        <nav aria-label="Navegación principal">
+            <a th:href="@{/}"><i class="fas fa-home" aria-hidden="true"></i> <span>Home</span></a>
+            <a th:href="@{/propietarios}"><i class="fas fa-user" aria-hidden="true"></i> <span>Propietarios</span></a>
+            <a th:href="@{/mascotas}"><i class="fas fa-dog" aria-hidden="true"></i> <span>Mascotas</span></a>
+            <a th:href="@{/veterinarios}" class="active"><i class="fas fa-user-md" aria-hidden="true"></i> <span>Veterinarios</span></a>
+            <a th:href="@{/especies}"><i class="fas fa-paw" aria-hidden="true"></i> <span>Especies</span></a>
+            <a th:href="@{/citas}"><i class="fas fa-calendar" aria-hidden="true"></i> <span>Citas</span></a>
+            <a th:href="@{/consultas}"><i class="fas fa-stethoscope" aria-hidden="true"></i> <span>Consultas</span></a>
+        </nav>
 
-        <img src="/images/www.png" class="logo" alt="VidaPet">
-    </div>
+        <figure class="logo-container">
+            <img th:src="@{/images/www.png}" class="logo" alt="Logotipo VidaPet">
+        </figure>
+    </aside>
 
-    <!-- ===== Main ===== -->
-    <div class="main">
+    <main class="main">
 
-        <h1>Lista de Veterinarios</h1>
+        <header>
+            <h1>Lista de Veterinarios</h1>
+        </header>
 
-        <!-- top bar مثل بقیه -->
-        <div class="top-bar">
+        <section class="top-bar">
             <a th:href="@{/veterinarios/nuevo}" class="btn">
-                <i class="fas fa-plus"></i> Agregar
+                <i class="fas fa-plus" aria-hidden="true"></i> Agregar Veterinario
             </a>
 
             <div class="search-container">
-                <form method="get" action="/veterinarios">
+                <form method="get" th:action="@{/veterinarios}" role="search">
                     <input type="text" name="search"
-                           placeholder="Buscar por nombre, apellido o especialidad...">
+                           placeholder="Nombre, apellido o especialidad..."
+                           aria-label="Buscar veterinario">
                     <button type="submit">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-search" aria-hidden="true"></i>
                     </button>
                 </form>
             </div>
-        </div>
+        </section>
 
-        <!-- ===== Table ===== -->
-        <table>
-            <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Especialidad</th>
-                <th>Código</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
+        <section class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Especialidad</th>
+                    <th>Código</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
 
-            <tbody>
-            <tr th:each="veterinario : ${veterinarios}">
-                <td th:text="${veterinario['nombre']}"></td>
-                <td th:text="${veterinario['apellido']}"></td>
-                <td th:text="${veterinario['telefono']}"></td>
-                <td th:text="${veterinario['email']}"></td>
-                <td th:text="${veterinario['especialidad']}"></td>
-                <td th:text="${veterinario['codigo_colegiado']}"></td>
+                <tbody>
+                <tr th:each="veterinario : ${veterinarios}">
+                    <td><strong th:text="${veterinario['nombre']}"></strong></td>
+                    <td th:text="${veterinario['apellido']}"></td>
+                    <td th:text="${veterinario['telefono']}"></td>
+                    <td th:text="${veterinario['email']}"></td>
+                    <td>
+                        <span class="badge-specialty" th:text="${veterinario['especialidad']}"></span>
+                    </td>
+                    <td><code th:text="${veterinario['codigo_colegiado']}"></code></td>
 
-                <!-- ✔️ مثل بقیه صفحات -->
-                <td class="actions">
-                    <a th:href="@{'/veterinarios/editar/' + ${veterinario['id']}}"
-                       class="icon-btn edit">
-                        <i class="fas fa-pen"></i>
-                    </a>
+                    <td class="actions">
+                        <nav aria-label="Acciones de registro">
+                            <a th:href="@{'/veterinarios/editar/' + ${veterinario['id']}}"
+                               class="icon-btn edit" title="Editar">
+                                <i class="fas fa-pen" aria-hidden="true"></i>
+                            </a>
 
-                    <a th:href="@{'/veterinarios/eliminar/' + ${veterinario['id']}}"
-                       onclick="return confirm('¿Eliminar veterinario?');"
-                       class="icon-btn delete">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                </td>
-            </tr>
+                            <a th:href="@{'/veterinarios/eliminar/' + ${veterinario['id']}}"
+                               onclick="return confirm('¿Está seguro de eliminar este veterinario?');"
+                               class="icon-btn delete" title="Eliminar">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </a>
+                        </nav>
+                    </td>
+                </tr>
 
-            <!-- حالت خالی -->
-            <tr th:if="${#lists.isEmpty(veterinarios)}">
-                <td colspan="7" style="text-align:center; padding:20px; color:#94a3b8;">
-                    No hay veterinarios registrados
-                </td>
-            </tr>
+                <tr th:if="${#lists.isEmpty(veterinarios)}">
+                    <td colspan="7" class="empty-state">
+                        <i class="fas fa-user-slash fa-2x"></i>
+                        <p>No hay veterinarios registrados</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
 
-            </tbody>
-        </table>
-
-    </div>
+    </main>
 </div>
 
 </body>

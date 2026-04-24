@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Consultas - VidaPet</title>
-
-    <link rel="stylesheet" href="/css/consultas.css">
+    <link rel="stylesheet" th:href="@{/css/consultas.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-    /* ===== Base ===== */
+
+    <style>
+        /* =========================================
+       VIDA PET - CONSULTAS (FULL OPTIMIZED)
+       ========================================= */
+
+    /* ===== 1. Base & Reset ===== */
     body {
         background: linear-gradient(135deg, #eef2ff 0%, #f5f7ff 100%);
-        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         margin: 0;
         color: #334155;
         min-height: 100vh;
     }
 
-    /* ===== Layout ===== */
     .layout {
         display: flex;
     }
 
-    /* ===== Sidebar ===== */
-    .sidebar {
+    /* ===== 2. Sidebar (aside) ===== */
+    aside.sidebar {
         position: fixed;
         top: 0;
         left: 0;
@@ -30,329 +33,304 @@
         height: 100vh;
         background: #ffffff;
         padding: 25px 15px;
-        box-shadow: 4px 0 20px rgba(99, 102, 241, 0.12);
+        box-shadow: 4px 0 20px rgba(99, 102, 241, 0.1);
         display: flex;
         flex-direction: column;
         gap: 10px;
+        z-index: 1000;
+        box-sizing: border-box;
     }
 
-    .sidebar h1 {
+    aside.sidebar header h1 {
         color: #6366f1;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         font-weight: 800;
         text-align: center;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
     }
 
-    .sidebar a {
+    aside.sidebar nav {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    aside.sidebar nav a {
         text-decoration: none;
         color: #64748b;
-        padding: 12px 20px;
-        border-radius: 14px;
+        padding: 12px 18px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         gap: 12px;
-        transition: 0.3s;
+        font-weight: 500;
+        transition: all 0.3s ease;
     }
 
-    .sidebar a:hover {
-        background-color: #eef2ff;
+    aside.sidebar nav a:hover {
+        background-color: #f8faff;
         color: #6366f1;
-        transform: translateX(5px);
+        transform: translateX(4px);
     }
 
-    /* active page */
-    .sidebar a[href="/consultas"],
-    .sidebar a.active {
-        background: linear-gradient(90deg, #a5b4fc, #818cf8);
+    aside.sidebar nav a[href*="/consultas"] {
+        background: linear-gradient(90deg, #818cf8, #6366f1);
         color: white;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
     }
 
-    /* ===== Logo ===== */
-.logo {
-    margin-top: auto; /* چسبیدن به انتهای سایدبار */
-    margin-bottom: 20px;
-    height: 210px;
-    width: auto;
-    align-self: center;
-    opacity: 0.2; /* حالت محو */
-    filter: brightness(1.1) blur(0.5px);
-    transition: opacity 0.3s;
-}
+    .logo {
+        margin-top: auto;
+        margin-bottom: 10px;
+        max-height: 180px;
+        width: auto;
+        align-self: center;
+        opacity: 0.15;
+        filter: grayscale(1);
+        transition: opacity 0.4s ease;
+    }
 
-.logo:hover {
-    opacity: 0.8;
-}
+    aside.sidebar:hover .logo {
+        opacity: 0.6;
+        filter: grayscale(0);
+    }
 
-    /* ===== Main ===== */
-    .main {
+    /* ===== 3. Main Content (main) ===== */
+    main.main {
         margin-left: 260px;
         padding: 40px;
-        width: 100%;
-        animation: fadeIn 0.6s ease;
+        width: calc(100% - 260px);
+        box-sizing: border-box;
+        animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .main h1 {
-        color: #4f46e5;
-        font-size: 2.2rem;
-        margin-bottom: 25px;
+    main.main header h1 {
+        color: #1e1b4b;
+        font-size: 2rem;
+        margin-bottom: 30px;
         font-weight: 800;
     }
 
-    /* ===== Top bar ===== */
+    /* ===== 4. Top Bar & Search ===== */
     .top-bar {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: flex-start;
         margin-bottom: 20px;
     }
 
-    /* ===== Button ===== */
-    .btn {
-        background: linear-gradient(90deg, #a5b4fc, #818cf8);
-        color: white;
-        padding: 10px 18px;
-        border-radius: 12px;
-        text-decoration: none;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: 0.3s;
-        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
-    }
-
-    /* ===== Search ===== */
     .search-container {
         display: flex;
-        gap: 6px;
+        gap: 8px;
+        background: white;
+        padding: 6px;
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
     .search-container input {
-        padding: 10px 12px;
+        padding: 10px 15px;
         border-radius: 10px;
-        border: 1px solid #e0e7ff;
+        border: 1px solid #e2e8f0;
         outline: none;
-        background: #fff;
-    }
-
-    .search-container input:focus {
-        border-color: #818cf8;
-        box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+        min-width: 250px;
     }
 
     .search-container button {
         background: #6366f1;
         border: none;
         color: white;
-        padding: 10px 14px;
+        padding: 0 18px;
         border-radius: 10px;
         cursor: pointer;
-        transition: 0.3s;
     }
 
-    .search-container button:hover {
-        background: #4f46e5;
-    }
-
-    /* ===== Table ===== */
+    /* ===== 5. Compact Table (section) ===== */
     table {
         width: 100%;
         border-collapse: separate;
-        border-spacing: 0 10px;
+        border-spacing: 0 6px; /* Espacio reducido entre filas */
     }
 
     th {
         text-align: left;
-        padding: 15px;
-        color: #4f46e5;
-        font-size: 0.85rem;
+        padding: 10px 20px;
+        color: #6366f1;
+        font-size: 0.8rem;
         text-transform: uppercase;
+        font-weight: 700;
     }
 
     td {
-        padding: 15px;
-        background: #f8fafc;
-        color: #334155;
+        padding: 8px 20px; /* Altura compacta */
+        background: #ffffff;
+        color: #475569;
         border: none;
+        font-size: 0.92rem;
     }
 
-    /* hover */
+    td:first-child { border-radius: 12px 0 0 12px; }
+    td:last-child { border-radius: 0 12px 12px 0; }
+
     tbody tr:hover td {
-        background: #eef2ff;
-        transition: 0.2s;
+        background: #fcfdff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.05);
     }
 
-    /* ===== Pet name highlight ===== */
-    .pet-name {
-        font-weight: 700;
-        color: #6366f1;
-    }
-
-    /* muted text */
-    .muted {
-        color: #94a3b8;
-        font-size: 0.9rem;
-    }
-
-    /* ===== Actions ===== */
-    .actions {
+    /* ===== 6. Acciones (Botones al lado del otro) ===== */
+    .actions nav {
         display: flex;
+        flex-direction: row; /* Asegura que estén en línea */
         gap: 8px;
+        align-items: center;
     }
 
     .icon-btn {
-        width: 35px;
-        height: 35px;
-        border-radius: 10px;
+        width: 32px; /* Tamaño optimizado */
+        height: 32px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
-        transition: 0.2s;
+        transition: all 0.2s;
+        font-size: 0.9rem;
     }
 
-    .icon-btn.edit {
-        background: #e0e7ff;
-        color: #4f46e5;
+    .icon-btn.edit { background: #eef2ff; color: #6366f1; }
+    .icon-btn.edit:hover { background: #6366f1; color: white; }
+
+    .icon-btn.delete { background: #fff1f2; color: #ef4444; }
+    .icon-btn.delete:hover { background: #ef4444; color: white; }
+
+    /* ===== 7. Utils ===== */
+    .pet-name { font-weight: 700; color: #4338ca; }
+
+    .muted {
+        color: #94a3b8;
+        font-size: 0.85rem;
+        max-width: 350px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Evita que el texto largo estire la fila */
     }
 
-    .icon-btn.edit:hover {
-        background: #6366f1;
-        color: white;
-        transform: scale(1.08);
-    }
-
-    .icon-btn.delete {
-        background: #fee2e2;
-        color: #ef4444;
-    }
-
-    .icon-btn.delete:hover {
-        background: #ef4444;
-        color: white;
-        transform: scale(1.08);
-    }
-
-    /* ===== Empty state ===== */
+    /* ===== 8. Empty State & Animations ===== */
     .empty {
         text-align: center;
-        padding: 40px;
-        color: #94a3b8;
+        padding: 50px;
+        background: white;
+        border-radius: 20px;
     }
 
-    /* ===== Animation ===== */
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(15px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
     }
-</style>
 
+    /* ===== 9. Responsive ===== */
+    @media (max-width: 1024px) {
+        aside.sidebar { width: 80px; padding: 20px 10px; }
+        aside.sidebar header h1, aside.sidebar nav a span, .logo { display: none; }
+        main.main { margin-left: 80px; width: calc(100% - 80px); }
+        aside.sidebar nav a { justify-content: center; }
+    }
+    </style>
 </head>
 
 <body>
 
 <div class="layout">
 
-    <!-- ===== Sidebar ===== -->
-    <div class="sidebar">
-        <h1>| VidaPET</h1>
+    <aside class="sidebar">
+        <header>
+            <h1>| VidaPET</h1>
+        </header>
 
-        <a href="/"><i class="fas fa-home"></i> Home</a>
-        <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
-        <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
-        <a href="/veterinarios"><i class="fas fa-user-md"></i> Veterinarios</a>
-        <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
-        <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
-        <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
+        <nav aria-label="Menú principal">
+            <a th:href="@{/}"><i class="fas fa-home"></i> <span>Home</span></a>
+            <a th:href="@{/propietarios}"><i class="fas fa-user"></i> <span>Propietarios</span></a>
+            <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> <span>Mascotas</span></a>
+            <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> <span>Veterinarios</span></a>
+            <a th:href="@{/especies}"><i class="fas fa-paw"></i> <span>Especies</span></a>
+            <a th:href="@{/citas}"><i class="fas fa-calendar"></i> <span>Citas</span></a>
+            <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> <span>Consultas</span></a>
+        </nav>
 
-        <img src="/images/www.png" class="logo" alt="VidaPet">
-    </div>
+        <img th:src="@{/images/www.png}" class="logo" alt="Logotipo VidaPet">
+    </aside>
 
-    <!-- ===== Main ===== -->
-    <div class="main">
+    <main class="main">
 
-        <h1>
-            <i class="fas fa-file-medical-alt"></i> Consultas
-        </h1>
+        <header>
+            <h1><i class="fas fa-file-medical-alt" aria-hidden="true"></i> Consultas</h1>
+        </header>
 
-        <!-- top bar -->
-        <div class="top-bar">
-
-            <form th:action="@{/consultas/buscar}" method="get" class="search-container">
-                <input type="text" name="nombre" th:value="${nombre}" placeholder="🐶 Nombre mascota...">
-                <button type="submit">
+        <section class="top-bar" aria-label="Búsqueda de consultas">
+            <form th:action="@{/consultas/buscar}" method="get" class="search-container" role="search">
+                <input type="text" name="nombre" th:value="${nombre}" placeholder="🐶 Nombre mascota..." aria-label="Buscar por nombre de mascota">
+                <button type="submit" aria-label="Ejecutar búsqueda">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
+        </section>
 
-        </div>
+        <section class="table-container">
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Mascota</th>
+                    <th scope="col">Diagnóstico</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
 
-        <!-- table -->
-        <table>
-            <thead>
-            <tr>
-                <th>Mascota</th>
-                <th>Diagnóstico</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
+                <tbody>
+                <tr th:each="c : ${consultas}">
+                    <td class="pet-name" th:text="${c.mascota_nombre}"></td>
 
-            <tbody>
+                    <td class="muted"
+                        th:text="${#strings.abbreviate(c.diagnostico, 60)}"></td>
 
-            <tr th:each="c : ${consultas}">
+                    <td class="date">
+                        <time th:datetime="${c.fecha}" th:text="${c.fecha != null ? c.fecha : 'Sin fecha'}"></time>
+                    </td>
 
-                <td class="pet-name" th:text="${c.mascota_nombre}"></td>
+                    <td class="actions">
+                        <nav aria-label="Acciones de consulta">
+                            <a th:href="@{'/consultas/' + ${c.id}}"
+                               class="icon-btn edit"
+                               title="Ver detalle completo">
+                                <i class="fas fa-eye" aria-hidden="true"></i>
+                            </a>
 
-                <td class="muted"
-                    th:text="${#strings.abbreviate(c.diagnostico, 60)}"></td>
+                            <a th:href="@{'/consultas/eliminar/' + ${c.id}}"
+                               class="icon-btn delete"
+                               onclick="return confirm('¿Está seguro de borrar esta consulta permanentemente?')"
+                               title="Eliminar registro">
+                                <i class="fas fa-trash" aria-hidden="true"></i>
+                            </a>
+                        </nav>
+                    </td>
+                </tr>
 
-                <td class="date"
-                    th:text="${c.fecha != null ? c.fecha : 'Sin fecha'}"></td>
+                <tr th:if="${#lists.isEmpty(consultas)}">
+                    <td colspan="4">
+                        <div class="empty">
+                            <i class="fas fa-search fa-3x mb-3" style="color: #cbd5e1" aria-hidden="true"></i>
+                            <p class="h5">No se encontraron consultas registradas</p>
+                            <a th:href="@{/consultas}" class="btn">
+                                <i class="fas fa-sync-alt me-2"></i> Ver todas las consultas
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
 
-                <td class="actions">
-
-                    <a th:href="@{'/consultas/' + ${c.id}}"
-                       class="icon-btn edit"
-                       title="Ver">
-                        <i class="fas fa-eye"></i>
-                    </a>
-
-                    <a th:href="@{'/consultas/eliminar/' + ${c.id}}"
-                       class="icon-btn delete"
-                       onclick="return confirm('¿Borrar consulta?')"
-                       title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                    </a>
-
-                </td>
-            </tr>
-
-            <tr th:if="${#lists.isEmpty(consultas)}">
-                <td colspan="4" class="empty">
-                    <i class="fas fa-search"></i>
-                    <p>No se encontraron consultas</p>
-                    <a href="/consultas" class="btn">Ver todas</a>
-                </td>
-            </tr>
-
-            </tbody>
-        </table>
-
-    </div>
+    </main>
 </div>
 
 </body>

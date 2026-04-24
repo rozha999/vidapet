@@ -1,5 +1,5 @@
 /* =========================
-   VIDA PET - CONSULTA CSS
+   VIDA PET - CONSULTA CSS (SEMÁNTICO)
    ========================= */
 
 body {
@@ -10,9 +10,8 @@ body {
 }
 
 /* =========================
-   SIDEBAR
+   SIDEBAR (Actualizado para <aside>)
    ========================= */
-/* ===== SIDEBAR ===== */
 .sidebar {
     position: fixed;
     top: 0;
@@ -22,40 +21,46 @@ body {
     background: #dfe7ff;
     padding: 20px;
     border-right: 1px solid #e6e9f2;
+    z-index: 1000;
 }
 
-.sidebar h2 {
+.sidebar header h2 {
     color: #5a6ac4;
     margin-bottom: 25px;
+    font-size: 1.5rem;
 }
 
-.sidebar a {
+.sidebar nav a {
     display: block;
     padding: 10px;
     margin: 6px 0;
     text-decoration: none;
     color: #4a5568;
     border-radius: 8px;
+    transition: background 0.2s;
 }
 
-.sidebar a:hover {
+.sidebar nav a:hover {
     background: #eef2ff;
+    color: #5a6ac4;
 }
 
 /* =========================
-   MAIN CONTAINER
+   MAIN CONTAINER (Actualizado para <main>)
    ========================= */
-.container {
-    margin-left: 250px;
-    max-width: calc(100% - 250px);
+main.container {
+    margin-left: 240px; /* Ajustado para dar aire al sidebar */
+    max-width: calc(100% - 260px);
+    padding-top: 2rem;
 }
 
 /* =========================
-   CARDS
+   CARDS & SECTIONS
    ========================= */
-.card {
+.card, section.card {
     border: none;
     border-radius: 12px;
+    background-color: #fff;
 }
 
 .shadow-sm {
@@ -65,15 +70,27 @@ body {
 /* =========================
    HEADERS
    ========================= */
-h2, h3, h4, h5 {
+h1, h2, h3, h4, h5 {
     color: #0f172a;
 }
 
+/* Títulos de sección dentro de cards */
+.section-title, legend {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
 /* =========================
-   PET IMAGE
+   PET IMAGE (Actualizado para <figure>)
    ========================= */
-img {
-    border-radius: 12px;
+figure.card img {
+    border-radius: 50%; /* Para el círculo de la mascota */
+    border: 5px solid #f8f9fa;
+    transition: transform 0.3s ease;
+}
+
+figure.card img:hover {
+    transform: scale(1.02);
 }
 
 /* =========================
@@ -82,25 +99,35 @@ img {
 .badge {
     font-size: 12px;
     padding: 6px 10px;
+    font-weight: 600;
 }
 
 /* =========================
-   FORM
+   FORM & FIELDSETS
    ========================= */
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 form label {
-    font-weight: 500;
+    font-weight: 600;
     color: #334155;
+    margin-bottom: 0.5rem;
 }
 
 textarea, input {
     border-radius: 8px !important;
     border: 1px solid #cbd5e1 !important;
+    padding: 10px 12px;
 }
 
 textarea:focus,
 input:focus {
     border-color: #3b82f6 !important;
     box-shadow: 0 0 0 0.15rem rgba(59, 130, 246, 0.2) !important;
+    outline: none;
 }
 
 /* =========================
@@ -108,45 +135,99 @@ input:focus {
    ========================= */
 .btn {
     border-radius: 8px;
+    font-weight: 600;
+    padding: 8px 16px;
+    transition: all 0.2s;
+}
+
+.btn-success {
+    background-color: #10b981;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+    transform: translateY(-1px);
 }
 
 /* =========================
-   TRATAMIENTOS
+   TRATAMIENTOS (Actualizado para <article>)
    ========================= */
-#tratamientos-container .border {
+#tratamientos-container article.card {
     border: 1px solid #e2e8f0 !important;
     border-radius: 10px;
-}
-
-#tratamientos-container .bg-light {
     background-color: #f8fafc !important;
+    margin-bottom: 1rem;
 }
 
-/* close button */
+/* Estilo para el botón de cerrar en tratamientos */
 .btn-close {
     filter: invert(0.4);
+    opacity: 0.8;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* =========================
+   VISUALLY HIDDEN (Para legends de accesibilidad)
+   ========================= */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
 }
 
 /* =========================
    RESPONSIVE
    ========================= */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        padding: 15px 5px;
+    }
+    .sidebar header h2,
+    .sidebar nav a span,
+    .sidebar nav a i + span {
+        display: none;
+    }
+
+    .sidebar nav a {
+        text-align: center;
+    }
+
+    main.container {
+        margin-left: 80px;
+        max-width: calc(100% - 100px);
+    }
+}
+
 @media (max-width: 768px) {
     .sidebar {
-        position: relative;
+        position: static;
         width: 100%;
         height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e6e9f2;
+    }
+
+    .sidebar nav {
+        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+        gap: 5px;
     }
 
-    .container {
+    main.container {
         margin-left: 0;
         max-width: 100%;
-    }
-
-    .sidebar a {
-        flex: 1 1 auto;
-        justify-content: center;
+        padding: 15px;
     }
 }

@@ -1,35 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota - VidaPet' : 'Editar Mascota - VidaPet'}">VidaPET</title>
 
     <link rel="stylesheet" th:href="@{/css/fmascota.css}">
-    <link rel="stylesheet" href="/css/mascota.css">
-    <title th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}">VidaPET</title>
-
+    <link rel="stylesheet" th:href="@{/css/mascota.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="layout">
 
-    <div class="sidebar">
-        <h1>| VidaPET</h1>
-        <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
-        <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
-        <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
-        <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
-        <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
-        <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
-        <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
-        <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
-    </div>
+    <aside class="sidebar">
+        <header>
+            <h1>| VidaPET</h1>
+        </header>
+        <nav aria-label="Menú principal">
+            <a th:href="@{/}"><i class="fas fa-home" aria-hidden="true"></i> <span>Home</span></a>
+            <a th:href="@{/propietarios}"><i class="fas fa-user" aria-hidden="true"></i> <span>Propietarios</span></a>
+            <a th:href="@{/mascotas}" class="active"><i class="fas fa-dog" aria-hidden="true"></i> <span>Mascotas</span></a>
+            <a th:href="@{/veterinarios}"><i class="fas fa-user-md" aria-hidden="true"></i> <span>Veterinarios</span></a>
+            <a th:href="@{/especies}"><i class="fas fa-paw" aria-hidden="true"></i> <span>Especies</span></a>
+            <a th:href="@{/citas}"><i class="fas fa-calendar" aria-hidden="true"></i> <span>Citas</span></a>
+            <a th:href="@{/consultas}"><i class="fas fa-stethoscope" aria-hidden="true"></i> <span>Consultas</span></a>
+        </nav>
+        <figure class="logo-container">
+            <img th:src="@{/images/www.png}" class="logo" alt="Logotipo oficial VidaPet">
+        </figure>
+    </aside>
 
-    <div class="main">
+    <main class="main">
 
-        <h1 th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}">Formulario Mascota</h1>
+        <header>
+            <h1 th:text="${#strings.isEmpty(mascota['id']) ? 'Nueva Mascota' : 'Editar Mascota'}">Formulario Mascota</h1>
+        </header>
 
-        <div class="card-form">
+        <section class="card-form" aria-labelledby="form-title">
             <form th:action="${#strings.isEmpty(mascota['id']) ? '/mascotas/guardar' : '/mascotas/actualizar'}"
                   method="post"
                   enctype="multipart/form-data">
@@ -37,12 +45,12 @@
                 <input type="hidden" name="id" th:value="${mascota['id']}">
 
                 <div class="form-group">
-                    <label><i class="fas fa-signature"></i> Nombre:</label>
-                    <input type="text" name="nombre" th:value="${mascota['nombre']}" required placeholder="Nombre de la mascota">
+                    <label for="nombre"><i class="fas fa-signature" aria-hidden="true"></i> Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" th:value="${mascota['nombre']}" required placeholder="Nombre de la mascota">
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-paw"></i> Especie:</label>
+                    <label for="especieInput"><i class="fas fa-paw" aria-hidden="true"></i> Especie:</label>
                     <input type="text"
                            id="especieInput"
                            list="especiesList"
@@ -58,17 +66,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-dna"></i> Raza:</label>
-                    <input type="text" name="raza" th:value="${mascota['raza']}" required placeholder="Ej: Labrador, Siamés...">
+                    <label for="raza"><i class="fas fa-dna" aria-hidden="true"></i> Raza:</label>
+                    <input type="text" id="raza" name="raza" th:value="${mascota['raza']}" required placeholder="Ej: Labrador, Siamés...">
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-calendar-alt"></i> Fecha de Nacimiento:</label>
-                    <input type="date" name="fecha_nacimiento" th:value="${mascota['fecha_nacimiento']}" required>
+                    <label for="fecha_nacimiento"><i class="fas fa-calendar-alt" aria-hidden="true"></i> Fecha de Nacimiento:</label>
+                    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" th:value="${mascota['fecha_nacimiento']}" required>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-user"></i> Propietario:</label>
+                    <label for="propietarioInput"><i class="fas fa-user" aria-hidden="true"></i> Propietario:</label>
                     <input type="text"
                            id="propietarioInput"
                            list="propietariosList"
@@ -84,25 +92,28 @@
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-camera"></i> Foto:</label>
-                    <input type="file" name="foto" accept="image/*" class="file-input">
+                    <label for="foto"><i class="fas fa-camera" aria-hidden="true"></i> Foto de Mascota:</label>
+                    <input type="file" id="foto" name="foto" accept="image/*" class="file-input">
                 </div>
 
-                <div class="form-actions">
+                <footer class="form-actions">
                     <button type="submit" class="btn">
-                        <i class="fas fa-save"></i>
+                        <i class="fas fa-save" aria-hidden="true"></i>
                         <span th:text="${#strings.isEmpty(mascota['id']) ? ' Guardar' : ' Actualizar'}"></span>
                     </button>
                     <a th:href="@{/mascotas}" class="btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Volver
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver
                     </a>
-                </div>
+                </footer>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
 </div>
 
 <script>
+    /**
+     * Sincroniza el valor de un datalist con un input oculto (hidden)
+     */
     function setupSearchableList(inputId, hiddenId, listId) {
         const input = document.getElementById(inputId);
         const hidden = document.getElementById(hiddenId);
@@ -110,7 +121,8 @@
         input.addEventListener("input", function () {
             const list = document.getElementById(listId);
             const options = list.querySelectorAll("option");
-            hidden.value = ""; // Reset por defecto
+            hidden.value = "";
+
             options.forEach(opt => {
                 if (opt.value === input.value) {
                     hidden.value = opt.getAttribute("data-id");

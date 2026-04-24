@@ -1,116 +1,289 @@
-/* ===== Base ===== */
+/* ==========================================================================
+   1. BASE & RESET
+   ========================================================================== */
 body {
+    background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-
-    /* 🌊 آبی روشن‌تر و تمیز */
-    background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 100%);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    color: #334155;
     min-height: 100vh;
+}
 
+.layout {
+    display: flex;
+}
+
+/* ==========================================================================
+   2. SIDEBAR (aside.sidebar)
+   ========================================================================== */
+aside.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    background: white;
+    padding: 25px 15px;
+    box-shadow: 4px 0 20px rgba(186, 230, 253, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+aside.sidebar header h1 {
+    color: #0ea5e9;
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+aside.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+aside.sidebar nav a {
+    text-decoration: none;
+    color: #64748b;
+    padding: 12px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+aside.sidebar nav a:hover {
+    background-color: #f0f9ff;
+    color: #0284c7;
+    transform: translateX(5px);
+}
+
+/* Estado Activo */
+aside.sidebar nav a.active,
+aside.sidebar nav a[href*="propietarios"] {
+    background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+aside.sidebar nav a i {
+    font-size: 1.2rem;
+}
+
+/* LOGO */
+.logo-container {
+    margin-top: auto;
+    text-align: center;
+}
+
+.logo {
+    width: 80%;
+    opacity: 0.2;
+    transition: 0.3s;
+    filter: grayscale(1);
+}
+
+aside.sidebar:hover .logo {
+    opacity: 0.7;
+    filter: grayscale(0);
+}
+
+/* ==========================================================================
+   3. MAIN CONTENT (main.main)
+   ========================================================================== */
+main.main {
+    margin-left: 260px;
+    padding: 40px;
+    width: calc(100% - 260px);
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+main.main header h1 {
+    color: #0369a1;
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 2.2rem;
+}
+
+/* ==========================================================================
+   4. FORM CARD (section.card-form)
+   ========================================================================== */
+section.card-form {
+    background: white;
+    padding: 30px;
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(14, 165, 233, 0.1);
+    max-width: 600px;
+    animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group label i {
+    color: #0ea5e9;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    outline: none;
+    transition: 0.3s;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+}
+
+/* ==========================================================================
+   5. BUTTONS & ACTIONS (footer.form-actions)
+   ========================================================================== */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn {
+    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(14, 165, 233, 0.3);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #64748b;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
     color: #334155;
 }
 
-/* ===== Card ===== */
-.card-form {
-    background: white;
-    width: 420px;
-    padding: 30px;
-    border-radius: 18px;
-
-    box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15);
-    animation: fadeIn 0.5s ease;
-}
-
-/* Title */
-.card-form h1 {
-    text-align: center;
-    color: #0284c7; /* آبی اصلی */
-    margin-bottom: 25px;
-    font-size: 1.6rem;
-    font-weight: 800;
-}
-
-/* ===== Labels ===== */
-.card-form label {
-    display: block;
-    margin-top: 12px;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-    color: #475569;
-    font-weight: 500;
-}
-
-/* ===== Inputs ===== */
-.card-form input {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid #bae6fd;
-    outline: none;
-    font-size: 0.95rem;
-    background: #f8fafc;
-    transition: 0.3s;
-}
-
-.card-form input:focus {
-    border-color: #0ea5e9;
-    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
-    background: white;
-}
-
-/* ===== Button ===== */
-.card-form button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px;
-
-    border: none;
-    border-radius: 12px;
-
-    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
-    color: white;
-
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-
-    transition: 0.3s;
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.25);
-}
-
-.card-form button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(14, 165, 233, 0.35);
-}
-
-/* ===== Back link ===== */
-.card-form a {
-    display: block;
-    text-align: center;
-    margin-top: 18px;
-    color: #0ea5e9;
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.card-form a:hover {
-    color: #0284c7;
-    text-decoration: underline;
-}
-
-/* ===== Animation ===== */
+/* ==========================================================================
+   6. ANIMATIONS & RESPONSIVE
+   ========================================================================== */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* TABLET (Pequeño ajuste de sidebar) */
+@media (max-width: 1024px) {
+    aside.sidebar { width: 220px; }
+    main.main {
+        margin-left: 220px;
+        width: calc(100% - 220px);
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+}
+
+/* MOBILE (Transformación de Sidebar a Barra Superior) */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    aside.sidebar {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+        padding: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    aside.sidebar header h1 {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    aside.sidebar nav {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    aside.sidebar nav a {
+        padding: 10px 14px;
+        background: #f8fafc;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        flex: 0 1 auto;
+    }
+
+    .logo-container {
+        display: none !important;
+    }
+
+    main.main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 20px;
+    }
+
+    section.card-form {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn, .btn-secondary {
+        width: 100%;
     }
 }

@@ -1,0 +1,28 @@
+# ==============================
+# VidaPet - robots.txt
+# ==============================
+
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /uploads/private/
+Disallow: /login/
+Disallow: /error/
+
+
+Allow: /
+Allow: /propietarios
+Allow: /mascotas
+Allow: /veterinarios
+Allow: /especies
+Allow: /citas
+Allow: /consultas
+
+
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /uploads/
+
+
+Sitemap: http://localhost:8080/sitemap.xml

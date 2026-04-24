@@ -14,9 +14,9 @@ body {
 }
 
 /* =========================================
-   ۲. سایدبار (Sidebar)
+   ۲. سایدبار (Sidebar - Ahora con <aside>)
    ========================================= */
-.sidebar {
+.sidebar { /* Mantiene la clase, pero ahora es un <aside> */
     position: fixed;
     top: 0;
     left: 0;
@@ -32,7 +32,8 @@ body {
     box-sizing: border-box;
 }
 
-.sidebar h1 {
+/* Selector para el header dentro del aside */
+.sidebar header h1 {
     color: #6366f1;
     font-size: 1.8rem;
     font-weight: 800;
@@ -40,7 +41,14 @@ body {
     margin-bottom: 30px;
 }
 
-.sidebar a {
+/* Selector para la navegación semántica */
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav a {
     text-decoration: none;
     color: #64748b;
     padding: 12px 20px;
@@ -51,14 +59,14 @@ body {
     transition: 0.3s;
 }
 
-.sidebar a:hover {
+.sidebar nav a:hover {
     background-color: #eef2ff;
     color: #6366f1;
     transform: translateX(5px);
 }
 
 /* هایلایت صفحه فعال */
-.sidebar a[href="/citas"] {
+.sidebar nav a[href*="/citas"] {
     background: linear-gradient(90deg, #a5b4fc, #818cf8);
     color: white;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
@@ -81,10 +89,10 @@ body {
 }
 
 /* =========================================
-   ۳. محتوای اصلی (Main Content)
+   ۳. محتوای اصلی (Main Content - Ahora con <main>)
    ========================================= */
-.main {
-    margin-left: 260px; /* ایجاد فضا برای سایدبار ثابت */
+.main-content { /* Selector actualizado a la nueva clase del <main> */
+    margin-left: 260px;
     padding: 40px;
     width: calc(100% - 260px);
     display: flex;
@@ -94,7 +102,7 @@ body {
     box-sizing: border-box;
 }
 
-.main h1 {
+.main-content header h1 {
     color: #4f46e5;
     font-size: 2.2rem;
     margin-bottom: 25px;
@@ -102,7 +110,7 @@ body {
 }
 
 /* =========================================
-   ۴. کارت فرم (Form Card)
+   ۴. کارت فرم (Form Card - Ahora con <section>)
    ========================================= */
 .card-form {
     background: white;
@@ -113,11 +121,34 @@ body {
     box-shadow: 0 10px 30px rgba(99, 102, 241, 0.08);
 }
 
+/* Estilo para el fieldset semántico */
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.visually-hidden { /* Para el <legend> que no queremos ver pero ayuda a la accesibilidad */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin-bottom: 20px;
+}
+
+/* Adaptación para <figure> de la foto */
+.pet-preview {
+    margin: 0 0 20px 0;
 }
 
 .form-group label {
@@ -157,7 +188,6 @@ body {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-/* فیلدهای فقط خواندنی */
 .readonly-input {
     background-color: #f1f5f9 !important;
     color: #64748b;
@@ -166,7 +196,7 @@ body {
 }
 
 /* =========================================
-   ۵. دکمه‌های عملیاتی (Guardar & Cancelar)
+   ۵. دکمه‌های عملیاتی (Ahora en un <footer>)
    ========================================= */
 .form-actions {
     display: flex;
@@ -175,7 +205,6 @@ body {
     margin-top: 25px;
 }
 
-/* دکمه ذخیره (Guardar) */
 .btn-save {
     background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
     color: white;
@@ -199,11 +228,6 @@ body {
     filter: brightness(1.1);
 }
 
-.btn-save:active {
-    transform: translateY(0);
-}
-
-/* دکمه انصراف (Cancelar) */
 .btn-cancel {
     background-color: transparent;
     color: #94a3b8;
@@ -229,7 +253,7 @@ body {
 }
 
 /* =========================================
-   ۶. انیمیشن و واکنش‌گرایی (Animation & Responsive)
+   ۶. انیمیشن و واکنش‌گرایی
    ========================================= */
 @keyframes fadeIn {
     from {
@@ -244,6 +268,6 @@ body {
 
 @media (max-width: 768px) {
     .sidebar { width: 70px; padding: 15px 5px; }
-    .sidebar h1, .sidebar a span, .logo { display: none; }
-    .main { margin-left: 70px; width: calc(100% - 70px); }
+    .sidebar header h1, .sidebar nav a span, .logo { display: none; }
+    .main-content { margin-left: 70px; width: calc(100% - 70px); }
 }

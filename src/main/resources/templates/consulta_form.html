@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Nueva Consulta - VidaPet</title>
@@ -9,123 +9,140 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <h2>🐾 VidaPet</h2>
-    <a href="/"><i class="fas fa-home"></i> Home</a>
-    <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
-    <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
-    <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
-    <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
-    <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
-</div>
+<aside class="sidebar">
+    <header>
+        <h2>🐾 VidaPet</h2>
+    </header>
+    <nav aria-label="Menú principal">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
+        <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
+        <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
+        <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
+        <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
+    </nav>
+</aside>
 
-<div class="container py-4">
-    <div class="mb-4">
-        <h2 class="fw-bold">🩺 Registro de Consulta</h2>
+<main class="container py-4">
+    <header class="mb-4">
+        <h1 class="fw-bold h2">🩺 Registro de Consulta</h1>
         <p class="text-muted mb-0">Completa el diagnóstico y tratamiento para la mascota</p>
-    </div>
+    </header>
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3 text-center h-100 d-flex align-items-center justify-content-center border-0">
+    <div class="row g-4 align-items-stretch">
+        <section class="col-md-4">
+            <figure class="card shadow-sm p-3 text-center h-100 d-flex align-items-center justify-content-center border-0">
                 <img th:if="${data['foto'] != null and data['foto'] != ''}"
                      th:src="${data['foto'].startsWith('http') ? data['foto'] : '/' + data['foto']}"
                      class="img-fluid rounded-circle shadow-sm"
-                     style="width:200px; height:200px; object-fit:cover; border: 5px solid #f8f9fa;">
+                     style="width:200px; height:200px; object-fit:cover; border: 5px solid #f8f9fa;"
+                     alt="Foto de la mascota">
 
                 <img th:if="${data['foto'] == null or data['foto'] == ''}"
                      src="https://via.placeholder.com/200?text=No+Photo"
                      class="img-fluid rounded-circle shadow-sm"
-                     style="width:200px; height:200px; object-fit:cover;">
-            </div>
-        </div>
+                     style="width:200px; height:200px; object-fit:cover;"
+                     alt="Sin foto disponible">
+            </figure>
+        </section>
 
-        <div class="col-md-8">
-            <div class="row g-3">
-                <div class="col-12">
-                    <div class="card shadow-sm p-4 border-0 border-start border-primary border-5">
-                        <h3 class="text-primary fw-bold mb-3" th:text="${data['mascota_nombre']}">Nombre Mascota</h3>
+        <section class="col-md-8">
+            <div class="row g-3 h-100">
+                <article class="col-12">
+                    <div class="card shadow-sm p-4 border-0 border-start border-primary border-5 h-100">
+                        <h2 class="text-primary fw-bold mb-3 h3" th:text="${data['mascota_nombre']}">Nombre Mascota</h2>
                         <div class="row">
                             <div class="col-sm-6">
-                                <p class="mb-1"><b>Especie:</b> <span th:text="${data['especie']}">-</span></p>
-                                <p class="mb-1"><b>Raza:</b> <span th:text="${data['raza']}">-</span></p>
+                                <p class="mb-1"><strong>Especie:</strong> <span th:text="${data['especie']}">-</span></p>
+                                <p class="mb-1"><strong>Raza:</strong> <span th:text="${data['raza']}">-</span></p>
                             </div>
                             <div class="col-sm-6">
                                 <p class="mb-0">
-                                    <b>Nacimiento:</b>
+                                    <strong>Nacimiento:</strong>
                                     <span th:text="${data['fecha_nacimiento'] != null ? #temporals.format(data['fecha_nacimiento'], 'dd/MM/yyyy') : 'N/A'}"></span>
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
 
-                <div class="col-md-6">
+                <aside class="col-md-6">
                     <div class="card shadow-sm p-3 border-0 h-100">
-                        <h6 class="text-secondary fw-bold mb-2"><i class="fas fa-user-tie me-2"></i>Propietario</h6>
-                        <p class="small mb-1"><b th:text="${data['propietario_nombre'] + ' ' + data['propietario_apellido']}"></b></p>
+                        <h3 class="text-secondary fw-bold mb-2 h6"><i class="fas fa-user-tie me-2"></i>Propietario</h3>
+                        <p class="small mb-1"><strong th:text="${data['propietario_nombre'] + ' ' + data['propietario_apellido']}"></strong></p>
                         <p class="small mb-1 text-muted" th:text="${data['propietario_telefono']}"></p>
                         <p class="small mb-0 text-muted" th:text="${data['propietario_email']}"></p>
                     </div>
-                </div>
+                </aside>
 
-                <div class="col-md-6">
+                <aside class="col-md-6">
                     <div class="card shadow-sm p-3 border-0 h-100 bg-light">
-                        <h6 class="text-success fw-bold mb-2"><i class="fas fa-user-md me-2"></i>Veterinario</h6>
+                        <h3 class="text-success fw-bold mb-2 h6"><i class="fas fa-user-md me-2"></i>Veterinario</h3>
                         <p class="small mb-0 fw-bold" th:text="${data['nombre'] + ' ' + data['apellido']}">Nombre Vet</p>
                         <span class="badge bg-success mt-2" style="width: fit-content;">En Turno</span>
                     </div>
-                </div>
+                </aside>
             </div>
-        </div>
+        </section>
     </div>
 
-    <div class="card shadow-sm p-4 mt-4 border-0">
-        <h4 class="mb-4 fw-bold text-dark border-bottom pb-2">🩺 Detalle de la Consulta</h4>
+    <section class="card shadow-sm p-4 mt-4 border-0">
+        <header class="border-bottom pb-2 mb-4">
+            <h2 class="h4 fw-bold text-dark mb-0">🩺 Detalle de la Consulta</h2>
+        </header>
 
         <form th:action="@{/consultas/guardar-desde-cita}" method="post">
             <input type="hidden" name="cita_id" th:value="${consulta['cita_id']}">
 
-            <div class="mb-4">
-                <label class="form-label fw-bold">Diagnóstico Clínico</label>
-                <textarea name="diagnostico" class="form-control" rows="4"
-                          placeholder="Describe los síntomas y el estado general..." required></textarea>
-            </div>
+            <fieldset class="mb-4">
+                <legend class="visually-hidden">Datos Clínicos</legend>
+                <div class="mb-4">
+                    <label for="diagnostico" class="form-label fw-bold">Diagnóstico Clínico</label>
+                    <textarea id="diagnostico" name="diagnostico" class="form-control" rows="4"
+                              placeholder="Describe los síntomas y el estado general..." required></textarea>
+                </div>
+            </fieldset>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-pills me-2"></i>Tratamientos</h5>
-                <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="agregarTratamiento()">
-                    <i class="fas fa-plus me-1"></i> Añadir Tratamiento
-                </button>
-            </div>
+            <fieldset class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <legend class="h5 mb-0 fw-bold text-primary w-auto" style="float: none;">
+                        <i class="fas fa-pills me-2"></i>Tratamientos
+                    </legend>
+                    <button type="button" class="btn btn-primary btn-sm rounded-pill px-3" onclick="agregarTratamiento()">
+                        <i class="fas fa-plus me-1"></i> Añadir Tratamiento
+                    </button>
+                </div>
 
-            <div id="tratamientos-container" class="mb-4">
-            </div>
+                <div id="tratamientos-container" class="mb-4">
+                </div>
+            </fieldset>
 
-            <div class="mt-5 pt-3 border-top d-flex gap-3">
+            <footer class="mt-5 pt-3 border-top d-flex gap-3">
                 <button type="submit" class="btn btn-success px-5 py-2 shadow-sm fw-bold">
                     <i class="fas fa-save me-2"></i> Finalizar y Guardar
                 </button>
                 <a href="/citas" class="btn btn-outline-secondary px-4 py-2">
                     Descartar
                 </a>
-            </div>
+            </footer>
         </form>
-    </div>
+    </section>
 
-    <div class="text-center text-muted mt-5 mb-4 small">
-        VidaPet Management System &copy; 2026
-    </div>
-</div>
+    <footer class="text-center text-muted mt-5 mb-4 small">
+        <p>VidaPet Management System &copy; 2026</p>
+    </footer>
+</main>
 
 <script>
     function agregarTratamiento() {
         const container = document.getElementById('tratamientos-container');
+        // Usamos etiquetas semánticas dentro del JS también para mantener la estructura
         const html = `
-        <div class="card mb-3 border-0 bg-light shadow-sm">
+        <article class="card mb-3 border-0 bg-light shadow-sm">
             <div class="card-body position-relative pt-4">
                 <button type="button" class="btn-close position-absolute top-0 end-0 m-2"
-                        onclick="this.closest('.card').remove()"></button>
+                        aria-label="Eliminar tratamiento"
+                        onclick="this.closest('article').remove()"></button>
                 <div class="row g-3">
                     <div class="col-md-12">
                         <label class="form-label small fw-bold">Medicamento / Procedimiento</label>
@@ -145,7 +162,7 @@
                     </div>
                 </div>
             </div>
-        </div>`;
+        </article>`;
         container.insertAdjacentHTML('beforeend', html);
     }
 </script>

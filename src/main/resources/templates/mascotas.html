@@ -74,25 +74,34 @@
                 </thead>
                 <tbody>
                 <tr th:each="m : ${mascotas}">
-                    <td class="td-photo">
+
+                    <td class="td-photo" data-label="Foto">
                         <figure th:if="${m['foto'] != null and m['foto'] != ''}">
                             <img th:src="@{'/' + ${m['foto']}}"
-                                 alt="Foto de mascota"
-                                 width="80" height="80"
-                                 style="border-radius: 12px; object-fit: cover; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                 alt="Foto de mascota">
                         </figure>
-                        <span th:unless="${m['foto'] != null and m['foto'] != ''}" class="no-photo">Sin foto</span>
+                        <span th:unless="${m['foto'] != null and m['foto'] != ''}" class="no-photo">
+            Sin foto
+        </span>
                     </td>
-                    <td th:text="${m['nombre']}" style="font-weight: 600;"></td>
-                    <td th:text="${m['especie_nombre']}"></td>
-                    <td th:text="${m['raza']}"></td>
-                    <td th:text="${m['fecha_nacimiento']}"></td>
-                    <td th:text="${m['propietario_nombre']} + ' ' + ${m['propietario_apellido']}"></td>
-                    <td class="actions">
+
+                    <td data-label="Nombre" th:text="${m['nombre']}" style="font-weight: 600;"></td>
+
+                    <td data-label="Especie" th:text="${m['especie_nombre']}"></td>
+
+                    <td data-label="Raza" th:text="${m['raza']}"></td>
+
+                    <td data-label="Fecha Nacimiento" th:text="${m['fecha_nacimiento']}"></td>
+
+                    <td data-label="Propietario"
+                        th:text="${m['propietario_nombre']} + ' ' + ${m['propietario_apellido']}"></td>
+
+                    <td class="actions" data-label="Acciones">
                         <a th:href="@{'/mascotas/editar/' + ${m['id']}}"
                            class="icon-btn edit" title="Editar">
                             <i class="fas fa-pen"></i>
                         </a>
+
                         <a th:href="@{'/mascotas/eliminar/' + ${m['id']}}"
                            class="icon-btn delete"
                            onclick="return confirm('¿Eliminar mascota?');"
@@ -100,6 +109,7 @@
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
+
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(mascotas)}">

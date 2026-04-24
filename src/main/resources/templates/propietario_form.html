@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/propietario.css}">
   <link rel="stylesheet" th:href="@{/css/fpropietario.css}">
-  <title th:text="${propietario['id'] != ''} ? 'Editar Propietario' : 'Nuevo Propietario'">VidaPET</title>
+  <title th:text="${propietario['id'] != ''} ? 'Editar Propietario - VidaPET' : 'Nuevo Propietario - VidaPET'">VidaPET</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -12,60 +13,70 @@
 
 <div class="layout">
 
-  <div class="sidebar">
-    <h1>| VidaPET</h1>
-    <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
-    <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
-    <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
-    <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
-    <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
-    <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
-    <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
-    <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
-  </div>
+  <aside class="sidebar">
+    <header>
+      <h1>| VidaPET</h1>
+    </header>
 
-  <div class="main">
+    <nav aria-label="Navegación principal">
+      <a th:href="@{/}"><i class="fas fa-home" aria-hidden="true"></i> <span>Home</span></a>
+      <a th:href="@{/propietarios}" class="active"><i class="fas fa-user" aria-hidden="true"></i> <span>Propietarios</span></a>
+      <a th:href="@{/mascotas}"><i class="fas fa-dog" aria-hidden="true"></i> <span>Mascotas</span></a>
+      <a th:href="@{/veterinarios}"><i class="fas fa-user-md" aria-hidden="true"></i> <span>Veterinarios</span></a>
+      <a th:href="@{/especies}"><i class="fas fa-paw" aria-hidden="true"></i> <span>Especies</span></a>
+      <a th:href="@{/citas}"><i class="fas fa-calendar" aria-hidden="true"></i> <span>Citas</span></a>
+      <a th:href="@{/consultas}"><i class="fas fa-stethoscope" aria-hidden="true"></i> <span>Consultas</span></a>
+    </nav>
 
-    <h1 th:text="${propietario['id'] != ''} ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
+    <figure class="logo-container">
+      <img th:src="@{/images/www.png}" class="logo" alt="VidaPet Logo">
+    </figure>
+  </aside>
 
-    <div class="card-form">
+  <main class="main">
+
+    <header>
+      <h1 th:text="${propietario['id'] != ''} ? 'Editar Propietario' : 'Nuevo Propietario'">Formulario</h1>
+    </header>
+
+    <section class="card-form" aria-labelledby="form-title">
       <form th:action="${propietario['id'] != ''} ? @{/propietarios/actualizar} : @{/propietarios/guardar}"
             method="post">
 
         <input type="hidden" name="id" th:value="${propietario['id']}" />
 
         <div class="form-group">
-          <label><i class="fas fa-id-card"></i> Nombre:</label>
-          <input type="text" name="nombre" th:value="${propietario['nombre']}" required placeholder="Ej: Juan"/>
+          <label for="nombre"><i class="fas fa-id-card" aria-hidden="true"></i> Nombre:</label>
+          <input type="text" id="nombre" name="nombre" th:value="${propietario['nombre']}" required placeholder="Ej: Juan"/>
         </div>
 
         <div class="form-group">
-          <label><i class="fas fa-user-tag"></i> Apellido:</label>
-          <input type="text" name="apellido" th:value="${propietario['apellido']}" required placeholder="Ej: Pérez"/>
+          <label for="apellido"><i class="fas fa-user-tag" aria-hidden="true"></i> Apellido:</label>
+          <input type="text" id="apellido" name="apellido" th:value="${propietario['apellido']}" required placeholder="Ej: Pérez"/>
         </div>
 
         <div class="form-group">
-          <label><i class="fas fa-phone"></i> Teléfono:</label>
-          <input type="text" name="telefono" th:value="${propietario['telefono']}" required placeholder="Ej: 0987654321"/>
+          <label for="telefono"><i class="fas fa-phone" aria-hidden="true"></i> Teléfono:</label>
+          <input type="tel" id="telefono" name="telefono" th:value="${propietario['telefono']}" required placeholder="Ej: 0987654321"/>
         </div>
 
         <div class="form-group">
-          <label><i class="fas fa-envelope"></i> Email:</label>
-          <input type="email" name="email" th:value="${propietario['email']}" required placeholder="correo@ejemplo.com"/>
+          <label for="email"><i class="fas fa-envelope" aria-hidden="true"></i> Email:</label>
+          <input type="email" id="email" name="email" th:value="${propietario['email']}" required placeholder="correo@ejemplo.com"/>
         </div>
 
-        <div class="form-actions">
+        <footer class="form-actions">
           <button type="submit" class="btn">
-            <i class="fas fa-save"></i>
+            <i class="fas fa-save" aria-hidden="true"></i>
             <span th:text="${propietario['id'] != ''} ? ' Actualizar' : ' Guardar'"></span>
           </button>
           <a th:href="@{/propietarios}" class="btn-secondary">
-            <i class="fas fa-arrow-left"></i> Volver a la lista
+            <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver a la lista
           </a>
-        </div>
+        </footer>
       </form>
-    </div>
-  </div>
+    </section>
+  </main>
 </div>
 
 </body>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
     <title th:text="${cita != null and cita.id != null} ? 'Editar Cita' : 'Nueva Cita'">VidaPet</title>
@@ -8,10 +8,11 @@
 </head>
 <body>
 
-<div class="layout">
-
-    <div class="sidebar">
+<div class="layout"> <aside class="sidebar">
+    <header>
         <h1>| VidaPET</h1>
+    </header>
+    <nav>
         <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
         <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
         <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
@@ -19,121 +20,121 @@
         <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
         <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
         <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+    </nav>
+    <img th:src="@{/images/www.png}" class="logo" alt="Logotipo de VidaPet">
+</aside>
 
-        <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
-    </div>
+    <main class="main-content">
 
-    <div class="main">
+        <header>
+            <h1 th:text="${cita != null and cita.id != null} ? '✏️ Editar Cita' : '➕ Nueva Cita'"></h1>
+        </header>
 
-        <h1 th:text="${cita != null and cita.id != null} ? '✏️ Editar Cita' : '➕ Nueva Cita'"></h1>
-
-        <div class="card-form">
+        <section class="card-form">
             <form th:action="@{${cita != null and cita.id != null} ? '/citas/actualizar' : '/citas/guardar'}" method="post">
 
                 <input type="hidden" name="id" th:value="${cita?.id}">
 
-                <div class="form-group">
-                    <label><i class="fas fa-paw"></i> Mascota</label>
-                    <select id="mascotaSelect" name="mascota_id" required>
-                        <option value="">Selecciona mascota</option>
-                        <option th:each="m : ${mascotas}"
-                                th:value="${m.id}"
-                                th:selected="${cita != null and cita.mascota_id == m.id}"
-                                th:text="${m.nombre}">
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-image"></i> Foto Mascota</label>
-                    <img id="mascota_foto"
-                         src=""
-                         alt="foto mascota"
-                         style="width:120px;height:120px;object-fit:cover;border-radius:10px;display:none;">
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-user-shield"></i> Propietario</label>
-                    <input type="hidden" id="propietario_id" name="propietario_id" th:value="${cita?.propietario_id}">
-                    <input type="text" id="propietario_nombre" readonly
-                           placeholder="Se cargará automáticamente"
-                           class="readonly-input">
-                </div>
+                <fieldset>
+                    <legend class="visually-hidden">Información de la Cita</legend>
 
-                <div class="form-group">
-                    <label><i class="fas fa-user-md"></i> Veterinario</label>
-                    <select name="veterinario_id" required>
-                        <option value="">Selecciona veterinario</option>
-                        <option th:each="v : ${veterinarios}"
-                                th:value="${v.id}"
-                                th:selected="${cita != null and cita.veterinario_id == v.id}"
-                                th:text="${v.nombre + ' ' + v.apellido}">
-                        </option>
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="mascotaSelect"><i class="fas fa-paw"></i> Mascota</label>
+                        <select id="mascotaSelect" name="mascota_id" required>
+                            <option value="">Selecciona mascota</option>
+                            <option th:each="m : ${mascotas}"
+                                    th:value="${m.id}"
+                                    th:selected="${cita != null and cita.mascota_id == m.id}"
+                                    th:text="${m.nombre}">
+                            </option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label><i class="fas fa-clock"></i> Fecha y Hora</label>
-                    <input type="datetime-local" name="fecha" th:value="${cita?.fecha}" required>
-                </div>
+                    <figure class="form-group pet-preview">
+                        <label><i class="fas fa-image"></i> Foto Mascota</label>
+                        <img id="mascota_foto"
+                             src=""
+                             alt="Vista previa de la mascota"
+                             style="width:120px;height:120px;object-fit:cover;border-radius:10px;display:none;">
+                    </figure>
 
-                <div class="form-group">
-                    <label><i class="fas fa-sticky-note"></i> Nota o Motivo</label>
-                    <textarea name="nota" rows="3" th:text="${cita?.nota}" placeholder="Describe el motivo de la cita..."></textarea>
-                </div>
+                    <div class="form-group">
+                        <label for="propietario_nombre"><i class="fas fa-user-shield"></i> Propietario</label>
+                        <input type="hidden" id="propietario_id" name="propietario_id" th:value="${cita?.propietario_id}">
+                        <input type="text" id="propietario_nombre" readonly
+                               placeholder="Se cargará automáticamente"
+                               class="readonly-input">
+                    </div>
 
-                <div class="form-actions">
+                    <div class="form-group">
+                        <label for="veterinarioSelect"><i class="fas fa-user-md"></i> Veterinario</label>
+                        <select id="veterinarioSelect" name="veterinario_id" required>
+                            <option value="">Selecciona veterinario</option>
+                            <option th:each="v : ${veterinarios}"
+                                    th:value="${v.id}"
+                                    th:selected="${cita != null and cita.veterinario_id == v.id}"
+                                    th:text="${v.nombre + ' ' + v.apellido}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaCita"><i class="fas fa-clock"></i> Fecha y Hora</label>
+                        <input type="datetime-local" id="fechaCita" name="fecha" th:value="${cita?.fecha}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notaCita"><i class="fas fa-sticky-note"></i> Nota o Motivo</label>
+                        <textarea id="notaCita" name="nota" rows="3" th:text="${cita?.nota}" placeholder="Describe el motivo de la cita..."></textarea>
+                    </div>
+                </fieldset>
+
+                <footer class="form-actions">
                     <button type="submit" class="btn-save">
                         <i class="fas fa-save"></i> Guardar Cita
                     </button>
 
-                    <a href="/citas" class="btn-cancel">
+                    <a th:href="@{/citas}" class="btn-cancel">
                         <i class="fas fa-times"></i> Cancelar
                     </a>
-                </div>
+                </footer>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
 </div>
 
 <script>
+    // Tu script se mantiene igual, es funcionalmente correcto.
     document.getElementById("mascotaSelect").addEventListener("change", function () {
+        const mascotaId = this.value;
+        const idInput = document.getElementById("propietario_id");
+        const nameInput = document.getElementById("propietario_nombre");
+        const img = document.getElementById("mascota_foto");
 
-     const mascotaId = this.value;
+        if (!mascotaId) {
+            idInput.value = "";
+            nameInput.value = "";
+            img.style.display = "none";
+            img.src = "";
+            return;
+        }
 
-     const idInput = document.getElementById("propietario_id");
-     const nameInput = document.getElementById("propietario_nombre");
-     const img = document.getElementById("mascota_foto");
-
-     if (!mascotaId) {
-         idInput.value = "";
-         nameInput.value = "";
-         img.style.display = "none";
-         img.src = "";
-         return;
-     }
-
-     fetch("/api/mascotas/" + mascotaId + "/info")
-         .then(res => res.json())
-         .then(data => {
-
-             // 👤 propietario
-             if (data.propietario) {
-                 idInput.value = data.propietario.id;
-                 nameInput.value =
-                     data.propietario.nombre + " " + data.propietario.apellido;
-             }
-
-             // 🐶 foto mascota
-             if (data.mascota && data.mascota.foto) {
-                 img.src = "/" + data.mascota.foto;
-                 img.style.display = "block";
-             } else {
-                 img.style.display = "none";
-             }
-         })
-         .catch(err => {
-             console.error(err);
-         });
- });
+        fetch("/api/mascotas/" + mascotaId + "/info")
+            .then(res => res.json())
+            .then(data => {
+                if (data.propietario) {
+                    idInput.value = data.propietario.id;
+                    nameInput.value = data.propietario.nombre + " " + data.propietario.apellido;
+                }
+                if (data.mascota && data.mascota.foto) {
+                    img.src = "/" + data.mascota.foto;
+                    img.style.display = "block";
+                } else {
+                    img.style.display = "none";
+                }
+            })
+            .catch(err => console.error(err));
+    });
 </script>
 
 </body>

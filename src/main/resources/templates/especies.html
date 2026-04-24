@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/especie.css">
-  <title>Lista de Especies</title>
-
-  <!-- Font Awesome -->
+  <title>Lista de Especies - VidaPet</title>
+  <link rel="stylesheet" th:href="@{/css/especie.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
@@ -13,86 +11,93 @@
 
 <div class="layout">
 
-  <!-- ===== Sidebar ===== -->
-  <div class="sidebar">
-    <h1>| VidaPET</h1>
+  <aside class="sidebar">
+    <header>
+      <h1>| VidaPET</h1>
+    </header>
 
-    <a href="/"><i class="fas fa-home"></i> Home</a>
-    <a href="/propietarios"><i class="fas fa-user"></i> Propietarios</a>
-    <a href="/mascotas"><i class="fas fa-dog"></i> Mascotas</a>
-    <a href="/veterinarios"><i class="fas fa-user-md"></i> Veterinarios</a>
+    <nav aria-label="Menú principal">
+      <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
+      <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
+      <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
+      <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
+      <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
+      <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
+      <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+    </nav>
 
-    <a href="/especies"><i class="fas fa-paw"></i> Especies</a>
+    <img th:src="@{/images/www.png}" class="logo" alt="Logotipo de VidaPet">
+  </aside>
 
-    <a href="/citas"><i class="fas fa-calendar"></i> Citas</a>
-    <a href="/consultas"><i class="fas fa-stethoscope"></i> Consultas</a>
+  <main class="main">
 
-    <img src="/images/www.png" class="logo" alt="VidaPet">
-  </div>
+    <header class="content-header">
+      <h1>Lista de Especies</h1>
 
-  <!-- ===== Main ===== -->
-  <div class="main">
+      <div class="top-bar">
+        <a th:href="@{/especies/nuevo}" class="btn">
+          <i class="fas fa-plus"></i> Agregar Nueva Especie
+        </a>
+      </div>
+    </header>
 
-    <h1>Lista de Especies</h1>
+    <section class="table-container">
+      <table>
+        <thead>
+        <tr>
+          <th scope="col">Imagen</th>
+          <th scope="col">Nombre de la Especie</th>
+          <th scope="col">Acciones</th>
+        </tr>
+        </thead>
 
-    <div class="top-bar">
-      <a th:href="@{/especies/nuevo}" class="btn">
-        <i class="fas fa-plus"></i> Agregar
-      </a>
-    </div>
+        <tbody>
+        <tr th:each="especie : ${especies}">
 
-    <!-- ===== Table ===== -->
-    <table>
-      <thead>
-      <tr>
-        <th>Imagen</th>
-        <th>Nombre</th>
-        <th>Acciones</th>
-      </tr>
-      </thead>
+          <td class="img-cell">
+            <figure class="m-0">
+              <img th:if="${especie['foto'] != null and especie['foto'] != ''}"
+                   th:src="@{'/' + ${especie['foto']}}"
+                   class="avatar"
+                   th:alt="'Foto de ' + ${especie['nombre']}">
 
-      <tbody>
-      <tr th:each="especie : ${especies}">
+              <i th:unless="${especie['foto'] != null and especie['foto'] != ''}"
+                 class="fas fa-paw default-icon"
+                 aria-hidden="true"></i>
+            </figure>
+          </td>
 
-        <!-- تصویر -->
-        <td class="img-cell">
-          <img th:if="${especie['foto'] != null and especie['foto'] != ''}"
-               th:src="@{'/' + ${especie['foto']}}"
-               class="avatar">
+          <td class="fw-bold" th:text="${especie['nombre']}"></td>
 
-          <i th:unless="${especie['foto'] != null and especie['foto'] != ''}"
-             class="fas fa-paw default-icon"></i>
-        </td>
+          <td class="actions">
+            <nav aria-label="Acciones de fila">
+              <a th:href="@{'/especies/editar/' + ${especie['id']}}"
+                 class="icon-btn edit"
+                 title="Editar especie">
+                <i class="fas fa-pen"></i>
+              </a>
 
-        <td th:text="${especie['nombre']}"></td>
+              <a th:href="@{'/especies/eliminar/' + ${especie['id']}}"
+                 onclick="return confirm('¿Está seguro de eliminar esta especie?');"
+                 class="icon-btn delete"
+                 title="Eliminar especie">
+                <i class="fas fa-trash"></i>
+              </a>
+            </nav>
+          </td>
+        </tr>
 
-        <!-- دکمه‌ها مثل بقیه -->
-        <td class="actions">
-          <a th:href="@{'/especies/editar/' + ${especie['id']}}"
-             class="icon-btn edit">
-            <i class="fas fa-pen"></i>
-          </a>
+        <tr th:if="${#lists.isEmpty(especies)}">
+          <td colspan="3" class="empty-state">
+            <i class="fas fa-info-circle"></i>
+            <p>No hay especies registradas actualmente</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
 
-          <a th:href="@{'/especies/eliminar/' + ${especie['id']}}"
-             onclick="return confirm('¿Eliminar especie?');"
-             class="icon-btn delete">
-            <i class="fas fa-trash"></i>
-          </a>
-        </td>
-
-      </tr>
-
-      <!-- حالت خالی -->
-      <tr th:if="${#lists.isEmpty(especies)}">
-        <td colspan="3" style="text-align:center; padding:20px; color:#94a3b8;">
-          No hay especies registradas
-        </td>
-      </tr>
-
-      </tbody>
-    </table>
-
-  </div>
+  </main>
 </div>
 
 </body>

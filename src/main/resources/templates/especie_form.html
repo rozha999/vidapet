@@ -1,64 +1,84 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" th:href="@{/css/fespecie.css}"> <title th:text="${especie['id'] == '' ? 'Nueva Especie' : 'Editar Especie'}">VidaPET</title>
+  <title th:text="${especie['id'] == '' ? 'Nueva Especie' : 'Editar Especie'}">VidaPET</title>
+  <link rel="stylesheet" th:href="@{/css/fespecie.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="layout">
 
-  <div class="sidebar">
-    <h1>| VidaPET</h1>
-    <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
-    <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
-    <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
-    <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
-    <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
-    <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
-    <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+  <aside class="sidebar">
+    <header>
+      <h1>| VidaPET</h1>
+    </header>
+    <nav aria-label="Menú principal">
+      <a th:href="@{/}"><i class="fas fa-home"></i> Home</a>
+      <a th:href="@{/propietarios}"><i class="fas fa-user"></i> Propietarios</a>
+      <a th:href="@{/mascotas}"><i class="fas fa-dog"></i> Mascotas</a>
+      <a th:href="@{/veterinarios}"><i class="fas fa-user-md"></i> Veterinarios</a>
+      <a th:href="@{/especies}"><i class="fas fa-paw"></i> Especies</a>
+      <a th:href="@{/citas}"><i class="fas fa-calendar"></i> Citas</a>
+      <a th:href="@{/consultas}"><i class="fas fa-stethoscope"></i> Consultas</a>
+    </nav>
+    <img th:src="@{/images/www.png}" class="logo" alt="Logotipo VidaPet">
+  </aside>
 
-    <img th:src="@{/images/www.png}" class="logo" alt="VidaPet">
-  </div>
+  <main class="main">
+    <header>
+      <h1 th:text="${especie['id'] == '' ? '➕ Nueva Especie' : '✏️ Editar Especie'}"></h1>
+    </header>
 
-  <div class="main">
-
-    <h1 th:text="${especie['id'] == '' ? 'Nueva Especie' : 'Editar Especie'}"></h1>
-
-    <div class="card-form">
+    <section class="card-form">
       <form th:action="${especie['id'] == '' ? '/especies/guardar' : '/especies/actualizar'}"
             method="post"
             enctype="multipart/form-data">
 
         <input type="hidden" name="id" th:value="${especie['id']}" />
 
-        <div class="form-group">
-          <label><i class="fas fa-tag"></i> Nombre de la Especie:</label>
-          <input type="text" name="nombre" th:value="${especie['nombre']}" required placeholder="Ej: Canino, Felino, Ave...">
-        </div>
+        <fieldset>
+          <legend class="visually-hidden">Información de la Especie</legend>
 
-        <div class="form-group">
-          <label><i class="fas fa-image"></i> Seleccionar Foto:</label>
-          <input type="file" name="archivoFoto" accept="image/*" class="file-input">
-
-          <div th:if="${especie['foto'] != null and especie['foto'] != ''}" style="margin-top: 15px; text-align: center;">
-            <p style="font-size: 0.8em; color: #64748b; margin-bottom: 5px;">Foto actual:</p>
-            <img th:src="@{'/' + ${especie['foto']}}" width="150" style="border-radius: 12px; border: 2px solid #e0f2fe;">
+          <div class="form-group">
+            <label for="nombreEspecie"><i class="fas fa-tag"></i> Nombre de la Especie:</label>
+            <input type="text" id="nombreEspecie" name="nombre"
+                   th:value="${especie['nombre']}"
+                   required
+                   placeholder="Ej: Canino, Felino, Ave...">
           </div>
-        </div>
 
-        <div class="form-actions">
+          <div class="form-group">
+            <label for="archivoFoto"><i class="fas fa-image"></i> Seleccionar Foto:</label>
+            <input type="file" id="archivoFoto" name="archivoFoto"
+                   accept="image/*"
+                   class="file-input">
+
+            <figure th:if="${especie['foto'] != null and especie['foto'] != ''}"
+                    style="margin-top: 15px; text-align: center;">
+              <figcaption style="font-size: 0.8em; color: #64748b; margin-bottom: 5px;">
+                Foto actual registrada:
+              </figcaption>
+              <img th:src="@{'/' + ${especie['foto']}}"
+                   alt="Miniatura de la especie"
+                   width="150"
+                   style="border-radius: 12px; border: 2px solid #e0f2fe;">
+            </figure>
+          </div>
+        </fieldset>
+
+        <footer class="form-actions">
           <button type="submit" class="btn">
             <i class="fas fa-save"></i> Guardar Especie
           </button>
-          <a href="/especies" class="btn-secondary">
+          <a th:href="@{/especies}" class="btn-secondary">
             <i class="fas fa-times"></i> Cancelar
           </a>
-        </div>
+        </footer>
       </form>
-    </div>
-  </div>
+    </section>
+  </main>
 </div>
 
 </body>

@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Detalle de Consulta - VidaPet</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Mismos estilos, solo actualizamos los selectores semánticos */
         body { background-color: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .pet-photo { width: 140px; height: 140px; object-fit: cover; border-radius: 20px; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .card { border: none; border-radius: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .card-custom {
+    background: white;
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    padding: 1.5rem;
+    /* height: 100%;  <-- ELIMINA O COMENTA ESTA LÍNEA */
+}
         .header-section { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 40px; border-radius: 20px; margin-bottom: 25px; }
         .info-label { color: #64748b; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
         .info-value { font-weight: 600; color: #1e293b; margin-bottom: 15px; }
@@ -18,7 +26,7 @@
         @media print {
             .no-print { display: none !important; }
             body { padding: 0; background: white; }
-            .card { box-shadow: none; border: 1px solid #eee; }
+            .card-custom { box-shadow: none; border: 1px solid #eee; }
             .header-section { background: #4f46e5 !important; -webkit-print-color-adjust: exact; padding: 20px; }
             .container { max-width: 100%; width: 100%; }
         }
@@ -26,120 +34,126 @@
 </head>
 <body class="container py-5">
 
-<div class="d-flex justify-content-between align-items-center mb-4 no-print">
-    <a href="/citas" class="btn btn-outline-primary rounded-pill px-4">
-        <i class="fas fa-arrow-left me-2"></i> Volver a Citas
-    </a>
+<header class="d-flex justify-content-between align-items-center mb-4 no-print">
+    <nav aria-label="Navegación de retorno">
+        <a href="/citas" class="btn btn-outline-primary rounded-pill px-4">
+            <i class="fas fa-arrow-left me-2"></i> Volver a Citas
+        </a>
+    </nav>
     <button onclick="window.print()" class="btn btn-dark rounded-pill px-4">
         <i class="fas fa-print me-2"></i> Imprimir Ficha Médica
     </button>
-</div>
+</header>
 
-<div class="header-section shadow-lg d-flex align-items-center">
-    <img th:src="${(data.foto != null and data.foto != '') ? '/' + data.foto : '/img/default-pet.png'}"
-         class="pet-photo me-4" alt="Mascota">
-    <div>
+<main>
+    <header class="header-section shadow-lg d-flex align-items-center">
+        <figure class="mb-0 me-4">
+            <img th:src="${(data.foto != null and data.foto != '') ? '/' + data.foto : '/img/default-pet.png'}"
+                 class="pet-photo" alt="Foto de la mascota">
+        </figure>
+        <div>
             <span class="badge bg-white text-primary mb-2 px-3 py-2 rounded-pill text-uppercase">
                 <i class="fas fa-paw me-1"></i>
                 <th:block th:text="${data.especie_nombre != null ? data.especie_nombre : 'Sin Especie'}"></th:block>
             </span>
-        <h1 class="display-5 fw-bold mb-0" th:text="${data.mascota_nombre}">Nombre</h1>
-        <p class="lead opacity-75 mb-0">
-            <i class="fas fa-dna me-2"></i>Raza:
-            <span th:text="${data.raza != null and data.raza != '' ? data.raza : 'No especificada'}"></span>
-        </p>
-    </div>
-</div>
-
-<div class="row g-4">
-    <div class="col-lg-4">
-        <div class="card p-4 mb-4">
-            <h5 class="section-title text-indigo-600"><i class="fas fa-user-circle"></i> Propietario</h5>
-
-            <div class="info-label">Nombre Completo</div>
-            <div class="info-value" th:text="${data.propietario_nombre + ' ' + data.propietario_apellido}"></div>
-
-            <div class="info-label">Teléfono</div>
-            <div class="info-value text-primary font-monospace"><i class="fas fa-phone-alt me-2"></i>[[${data.propietario_telefono}]]</div>
-
-            <div class="info-label">Email</div>
-            <div class="info-value small"><i class="fas fa-envelope me-2 text-muted"></i>[[${data.propietario_email}]]</div>
+            <h1 class="display-5 fw-bold mb-0" th:text="${data.mascota_nombre}">Nombre</h1>
+            <p class="lead opacity-75 mb-0">
+                <i class="fas fa-dna me-2"></i>Raza:
+                <span th:text="${data.raza != null and data.raza != '' ? data.raza : 'No especificada'}"></span>
+            </p>
         </div>
+    </header>
 
-        <div class="card p-4">
-            <h5 class="section-title text-info"><i class="fas fa-info-circle"></i> Datos Técnicos</h5>
+    <div class="row g-4">
+        <aside class="col-lg-4">
+            <section class="card-custom mb-4" aria-labelledby="owner-title">
+                <h2 id="owner-title" class="section-title text-indigo-600"><i class="fas fa-user-circle"></i> Propietario</h2>
 
-            <div class="info-label">Fecha de Nacimiento</div>
-            <div class="info-value">[[${data.fecha_nacimiento}]]</div>
+                <div class="info-label">Nombre Completo</div>
+                <div class="info-value" th:text="${data.propietario_nombre + ' ' + data.propietario_apellido}"></div>
 
-            <div class="info-label">Especie</div>
-            <div class="info-value text-capitalize" th:text="${data.especie_nombre != null ? data.especie_nombre : '---'}"></div>
+                <div class="info-label">Teléfono</div>
+                <div class="info-value text-primary font-monospace"><i class="fas fa-phone-alt me-2"></i>[[${data.propietario_telefono}]]</div>
 
-            <div class="info-label">Raza</div>
-            <div class="info-value text-capitalize" th:text="${data.raza != null ? data.raza : '---'}"></div>
-        </div>
-    </div>
+                <div class="info-label">Email</div>
+                <div class="info-value small"><i class="fas fa-envelope me-2 text-muted"></i>[[${data.propietario_email}]]</div>
+            </section>
 
-    <div class="col-lg-8">
-        <div class="card p-4 mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-3 text-nowrap">
-                <h5 class="section-title text-primary mb-0"><i class="fas fa-stethoscope"></i> Resumen Clínico</h5>
-                <span class="badge bg-light text-dark fw-normal border px-3">
+            <section class="card-custom" aria-labelledby="tech-data-title">
+                <h2 id="tech-data-title" class="section-title text-info"><i class="fas fa-info-circle"></i> Datos Técnicos</h2>
+
+                <div class="info-label">Fecha de Nacimiento</div>
+                <div class="info-value">[[${data.fecha_nacimiento}]]</div>
+
+                <div class="info-label">Especie</div>
+                <div class="info-value text-capitalize" th:text="${data.especie_nombre != null ? data.especie_nombre : '---'}"></div>
+
+                <div class="info-label">Raza</div>
+                <div class="info-value text-capitalize" th:text="${data.raza != null ? data.raza : '---'}"></div>
+            </section>
+        </aside>
+
+        <article class="col-lg-8">
+            <section class="card-custom mb-4" aria-labelledby="clinical-summary-title">
+                <div class="d-flex justify-content-between align-items-center mb-3 text-nowrap">
+                    <h2 id="clinical-summary-title" class="section-title text-primary mb-0"><i class="fas fa-stethoscope"></i> Resumen Clínico</h2>
+                    <time class="badge bg-light text-dark fw-normal border px-3" th:datetime="${data.fecha_consulta}">
                         <i class="far fa-calendar-alt me-1 text-primary"></i>
                         [[${#temporals.format(data.fecha_consulta, 'dd/MM/yyyy HH:mm')}]]
-                    </span>
-            </div>
-
-            <div class="diagnosis-box mb-4">
-                <h6 class="fw-bold mb-2"><i class="fas fa-comment-medical me-2"></i>Diagnóstico:</h6>
-                <p class="mb-0" th:text="${data.diagnostico != null ? data.diagnostico : 'Sin diagnóstico registrado.'}">---</p>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="info-label">Veterinario Responsable</div>
-                    <div class="info-value text-success">
-                        <i class="fas fa-user-md me-2"></i>Dr. [[${data.veterinario_nombre}]] [[${data.veterinario_apellido}]]
-                    </div>
+                    </time>
                 </div>
-            </div>
-        </div>
 
-        <div class="card p-4">
-            <h5 class="section-title text-success"><i class="fas fa-clipboard-list"></i> Plan de Tratamiento</h5>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mt-2">
-                    <thead class="table-light">
-                    <tr class="text-secondary small">
-                        <th class="py-3">TRATAMIENTO</th>
-                        <th class="py-3 text-center">PERIODO</th>
-                        <th class="py-3">OBSERVACIONES</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="t : ${data.tratamientos}" class="border-bottom-0">
-                        <td class="py-3 fw-bold" th:text="${t.tratamiento}"></td>
-                        <td class="py-3 small text-center">
-                            <span class="badge bg-outline-primary border text-primary fw-normal">[[${t.fecha_inicio}]]</span>
-                            <i class="fas fa-long-arrow-alt-right mx-1 text-muted"></i>
-                            <span class="badge bg-outline-danger border text-danger fw-normal">[[${t.fecha_fin}]]</span>
-                        </td>
-                        <td class="py-3">
-                            <small class="text-muted italic" th:text="${t.observaciones}"></small>
-                        </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(data.tratamientos)}">
-                        <td colspan="3" class="text-center py-5 text-muted">
-                            <i class="fas fa-info-circle d-block mb-2 fa-2x"></i>
-                            No se han prescrito tratamientos en esta visita.
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                <div class="diagnosis-box mb-4">
+                    <h3 class="h6 fw-bold mb-2"><i class="fas fa-comment-medical me-2"></i>Diagnóstico:</h3>
+                    <p class="mb-0" th:text="${data.diagnostico != null ? data.diagnostico : 'Sin diagnóstico registrado.'}">---</p>
+                </div>
+
+                <footer class="row">
+                    <div class="col-sm-6">
+                        <div class="info-label">Veterinario Responsable</div>
+                        <div class="info-value text-success">
+                            <i class="fas fa-user-md me-2"></i>Dr. [[${data.veterinario_nombre}]] [[${data.veterinario_apellido}]]
+                        </div>
+                    </div>
+                </footer>
+            </section>
+
+            <section class="card-custom" aria-labelledby="treatment-title">
+                <h2 id="treatment-title" class="section-title text-success"><i class="fas fa-clipboard-list"></i> Plan de Tratamiento</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mt-2">
+                        <thead class="table-light">
+                        <tr class="text-secondary small">
+                            <th scope="col" class="py-3">TRATAMIENTO</th>
+                            <th scope="col" class="py-3 text-center">PERIODO</th>
+                            <th scope="col" class="py-3">OBSERVACIONES</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="t : ${data.tratamientos}" class="border-bottom-0">
+                            <td class="py-3 fw-bold" th:text="${t.tratamiento}"></td>
+                            <td class="py-3 small text-center">
+                                <time class="badge bg-outline-primary border text-primary fw-normal">[[${t.fecha_inicio}]]</time>
+                                <i class="fas fa-long-arrow-alt-right mx-1 text-muted"></i>
+                                <time class="badge bg-outline-danger border text-danger fw-normal">[[${t.fecha_fin}]]</time>
+                            </td>
+                            <td class="py-3">
+                                <small class="text-muted italic" th:text="${t.observaciones}"></small>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(data.tratamientos)}">
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <i class="fas fa-info-circle d-block mb-2 fa-2x"></i>
+                                No se han prescrito tratamientos en esta visita.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </article>
     </div>
-</div>
+</main>
 
 </body>
 </html>
