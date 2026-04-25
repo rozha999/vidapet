@@ -54,7 +54,7 @@
                 <th>Propietario</th>
                 <th>Veterinario</th>
                 <th>Fecha</th>
-                <th>Nota</th>   <!-- ⭐ NUEVO -->
+                <th>Nota</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -63,71 +63,52 @@
             <tbody>
             <tr th:each="c : ${citas}">
 
-                <td th:text="${c.mascota_nombre}" style="font-weight:600;"></td>
+                <td data-label="Mascota" th:text="${c.mascota_nombre}" style="font-weight:600;"></td>
 
-                <td th:text="${c.propietario_nombre + ' ' + c.propietario_apellido}"></td>
+                <td data-label="Propietario"
+                    th:text="${c.propietario_nombre + ' ' + c.propietario_apellido}"></td>
 
-                <td>
-                    <span th:if="${c.veterinario_nombre != null}">
-                        <i class="fas fa-user-md"></i>
-                        <span th:text="${c.veterinario_nombre + ' ' + c.veterinario_apellido}"></span>
-                    </span>
-
+                <td data-label="Veterinario">
+        <span th:if="${c.veterinario_nombre != null}">
+            <i class="fas fa-user-md"></i>
+            <span th:text="${c.veterinario_nombre + ' ' + c.veterinario_apellido}"></span>
+        </span>
                     <span th:unless="${c.veterinario_nombre != null}" class="muted">
-                        Sin asignar
-                    </span>
+            Sin asignar
+        </span>
                 </td>
 
-                <td th:text="${#temporals.format(c.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                <td data-label="Fecha"
+                    th:text="${#temporals.format(c.fecha, 'dd/MM/yyyy HH:mm')}"></td>
 
-                <!-- ⭐ NOTA -->
-                <td th:text="${c.nota}"></td>
+                <td data-label="Nota" th:text="${c.nota}"></td>
 
-                <!-- estado -->
-                <td>
-                    <span th:switch="${c.estado}">
-
-                        <span th:case="'ESPERANDO'" class="status waiting">🟡 Esperando</span>
-
-                        <span th:case="'ATENDIENDO'" class="status working">🔵 Atendiendo</span>
-
-                        <span th:case="'ATENDIDO'" class="status done">🟢 Atendido</span>
-
-                        <span th:case="*" class="status default">⚪ Sin estado</span>
-
-                    </span>
+                <td data-label="Estado">
+        <span th:switch="${c.estado}">
+            <span th:case="'ESPERANDO'" class="status waiting">🟡 Esperando</span>
+            <span th:case="'ATENDIENDO'" class="status working">🔵 Atendiendo</span>
+            <span th:case="'ATENDIDO'" class="status done">🟢 Atendido</span>
+            <span th:case="*" class="status default">⚪ Sin estado</span>
+        </span>
                 </td>
 
-                <!-- acciones -->
-                <td class="actions">
-
+                <td data-label="Acciones" class="actions">
                     <a th:if="${c.consulta_id == null}"
                        th:href="@{'/consultas/nueva-desde-cita/' + ${c.id}}"
-                       class="icon-btn edit"
-                       title="Iniciar consulta">
-                        <i class="fas fa-play"></i>
-                    </a>
+                       class="icon-btn edit"><i class="fas fa-play"></i></a>
 
                     <a th:if="${c.consulta_id != null}"
                        th:href="@{'/consultas/' + ${c.consulta_id}}"
-                       class="icon-btn edit"
-                       title="Ver consulta">
-                        <i class="fas fa-eye"></i>
-                    </a>
+                       class="icon-btn edit"><i class="fas fa-eye"></i></a>
 
                     <a th:href="@{'/citas/editar/' + ${c.id}}"
-                       class="icon-btn edit"
-                       title="Editar">
-                        <i class="fas fa-pen"></i>
-                    </a>
+                       class="icon-btn edit"><i class="fas fa-pen"></i></a>
 
                     <a th:href="@{'/citas/eliminar/' + ${c.id}}"
                        class="icon-btn delete"
-                       onclick="return confirm('¿Eliminar cita?');"
-                       title="Eliminar">
+                       onclick="return confirm('¿Eliminar cita?');">
                         <i class="fas fa-trash"></i>
                     </a>
-
                 </td>
 
             </tr>

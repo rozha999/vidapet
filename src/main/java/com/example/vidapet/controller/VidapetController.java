@@ -159,23 +159,28 @@ public class VidapetController {
     //  (CONSULTAS)
     // ======================================================
     @GetMapping("/consultas")
-    public String listarConsultas(@RequestParam(required = false) String search, Model model) {
-        List<Map<String, Object>> consultas = (search != null && !search.isBlank())
-                ? vidapetService.buscarConsultasSeguro(search)
-                : vidapetService.listarConsultas();
+    public String listarConsultas(@RequestParam(required = false) String nombre, Model model) {
+
+        List<Map<String, Object>> consultas;
+
+        if (nombre != null && !nombre.isBlank()) {
+            consultas = vidapetService.buscarConsultasPorMascota(nombre);
+        } else {
+            consultas = vidapetService.listarConsultas();
+        }
 
         model.addAttribute("consultas", consultas);
-        model.addAttribute("search", search);
+        model.addAttribute("nombre", nombre);
+
         return "consultas";
     }
-
     @GetMapping("/consultas/dashboard")
     public String dashboardConsultas(Model model) {
         model.addAttribute("consultas", vidapetService.listarConsultasConTratamientos());
         return "consultas";
     }
 
-    @GetMapping("/consultas/{id}")
+    @GetMapping("/consultas/{id:\\d+}")
     public String verDetalleConsulta(@PathVariable int id, Model model) {
         Map<String, Object> data = vidapetService.obtenerConsultaDetalleCompleto(id);
         if (data == null) return "redirect:/consultas";
@@ -227,6 +232,23 @@ public class VidapetController {
         vidapetService.eliminarConsulta(id);
         return "redirect:/consultas";
     }
+    @GetMapping("/consultas/buscar")
+    public String buscarConsultas(@RequestParam String nombre, Model model) {
+
+        List<Map<String, Object>> consultas;
+
+        if (nombre != null && !nombre.isBlank()) {
+            consultas = vidapetService.buscarConsultasPorMascota(nombre);
+        } else {
+            consultas = vidapetService.listarConsultas();
+        }
+
+        model.addAttribute("consultas", consultas);
+        model.addAttribute("nombre", nombre);
+
+        return "consultas";
+    }
+
     // ======================================================
     //  (CITAS)
     // ======================================================

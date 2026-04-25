@@ -1,4 +1,4 @@
-/* ===== ۱. پایه و ساختار اصلی (Base & Layout) ===== */
+
 body {
     background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -11,7 +11,6 @@ body {
     display: flex;
 }
 
-/* ===== ۲. سایدبار (Sidebar - با تگ <aside>) ===== */
 aside.sidebar {
     position: fixed;
     top: 0;
@@ -35,7 +34,7 @@ aside.sidebar header h1 {
     margin-bottom: 30px;
 }
 
-/* استایل ناوبری سمنیتک */
+
 aside.sidebar nav {
     display: flex;
     flex-direction: column;
@@ -59,14 +58,14 @@ aside.sidebar nav a:hover {
     transform: translateX(5px);
 }
 
-/* هایلایت صفحه فعلی */
+
 aside.sidebar nav a[href*="/especies"] {
     background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
     color: white;
     box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
 }
 
-/* لوگو */
+
 .logo {
     margin-top: auto;
     margin-bottom: 20px;
@@ -82,9 +81,9 @@ aside.sidebar nav a[href*="/especies"] {
     opacity: 0.8;
 }
 
-/* ===== ۳. بخش اصلی (Main Content - با تگ <main>) ===== */
+
 main.main {
-    margin-left: 260px; /* ایجاد فضا برای سایدبار ثابت */
+    margin-left: 260px;
     padding: 40px;
     width: calc(100% - 260px);
     animation: fadeIn 0.6s ease;
@@ -98,7 +97,7 @@ main.main header h1 {
     font-weight: 800;
 }
 
-/* ===== ۴. نوار ابزار بالا (Top Bar) ===== */
+
 .top-bar {
     display: flex;
     justify-content: flex-start;
@@ -124,9 +123,9 @@ main.main header h1 {
     box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3);
 }
 
-/* ===== ۵. جدول (Table) ===== */
+
 .table-container {
-    overflow-x: auto; /* برای ریسپانسیو بودن */
+    overflow-x: auto;
 }
 
 table {
@@ -162,11 +161,11 @@ td {
     border: none;
 }
 
-/* گردی گوشه‌های ردیف‌ها */
+
 td:first-child { border-radius: 15px 0 0 15px; }
 td:last-child { border-radius: 0 15px 15px 0; }
 
-/* استایل تصویر در جدول */
+
 .img-cell figure {
     margin: 0;
     display: flex;
@@ -192,7 +191,7 @@ td:last-child { border-radius: 0 15px 15px 0; }
     color: #cbd5e1;
 }
 
-/* ===== ۶. دکمه‌های اکشن (Actions) ===== */
+
 .actions nav {
     display: flex;
     gap: 8px;
@@ -222,16 +221,177 @@ td:last-child { border-radius: 0 15px 15px 0; }
     background: #f8fafc;
     border-radius: 15px;
 }
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
 
-/* ===== ۷. انیمیشن و ریسپانسیو ===== */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* ================= RESPONSIVE ================= */
 
+/* TABLET */
 @media (max-width: 1024px) {
-    aside.sidebar { width: 70px; padding: 15px 5px; }
-    aside.sidebar header h1, aside.sidebar nav a span, .logo { display: none; }
-    main.main { margin-left: 70px; width: calc(100% - 70px); }
-    aside.sidebar nav a { justify-content: center; padding: 12px; }
+
+    aside.sidebar {
+        width: 220px;
+    }
+
+    main.main {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+        padding: 25px;
+    }
+
+    search.search-container input {
+        width: 180px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    .layout {
+        flex-direction: column;
+    }
+
+    aside.sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    aside.sidebar h1 {
+        width: 100%;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+
+    aside.sidebar nav {
+        width: 100%;
+    }
+
+
+    aside.sidebar nav a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 10px 15px;
+        min-width: auto;
+        flex: 0 1 auto;
+        font-size: 0.85rem;
+        gap: 8px;
+        border-radius: 12px;
+        background: #f8fafc;
+    }
+
+    aside.sidebar nav a i {
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    aside.sidebar nav a:hover {
+        transform: scale(1.02);
+    }
+
+    .logo {
+        display: none !important;
+    }
+
+
+    aside.sidebar header h1 {
+        margin: 5px 0 10px 0;
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    aside.sidebar nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        overflow: visible;
+    }
+
+    aside.sidebar nav a {
+        flex: 0 1 auto;
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    aside.sidebar nav a i {
+        font-size: 1rem;
+    }
+
+
+    aside.sidebar nav a:hover {
+        transform: none;
+    }
+
+    /* MAIN */
+    main.main {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+
+
+    main.main {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+
+    /* AJUSTE DE TABLA PARA QUE NO SE DESBORDE */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        table-layout: fixed; /* Mantiene proporciones */
+    }
+
+    th, td {
+        padding: 8px 4px;
+        font-size: 0.7rem;
+        text-align: center;
+        word-break: break-word;
+        white-space: normal; /* Permite que el texto largo salte de línea */
+    }
+
+    .td-photo img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    search.search-container input {
+        width: 100%;
+    }
+
+    .icon-btn {
+        width: 30px;
+        height: 30px;
+    }
 }

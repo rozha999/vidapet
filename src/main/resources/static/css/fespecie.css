@@ -1,4 +1,4 @@
-/* ===== ۱. پایه و ساختار اصلی (Base & Layout) ===== */
+
 body {
     background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -11,7 +11,7 @@ body {
     display: flex;
 }
 
-/* ===== ۲. سایدبار (Sidebar - Actualizado para <aside>) ===== */
+
 .sidebar {
     position: fixed;
     top: 0;
@@ -58,14 +58,14 @@ body {
     transform: translateX(5px);
 }
 
-/* هایلایت صفحه فعلی (Active Page) */
+
 .sidebar nav a[href*="/especies"] {
     background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
     color: white;
     box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
 }
 
-/* لوگو انتهای سایدبار */
+
 .logo {
     margin-top: auto;
     margin-bottom: 20px;
@@ -81,7 +81,7 @@ body {
     opacity: 0.8;
 }
 
-/* ===== ۳. بخش اصلی محتوا (Main Content - Actualizado para <main>) ===== */
+
 .main {
     margin-left: 260px;
     padding: 40px;
@@ -100,7 +100,7 @@ body {
     font-weight: 800;
 }
 
-/* ===== ۴. کارت فرم (Card Form - Actualizado para <section>) ===== */
+
 .card-form {
     background: white;
     width: 100%;
@@ -166,7 +166,7 @@ fieldset {
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
 }
 
-/* تصویر پیش‌نمایش (Actualizado para <figure>) */
+
 figure {
     margin: 15px 0 0 0;
 }
@@ -183,7 +183,7 @@ figcaption {
     margin-bottom: 5px;
 }
 
-/* ===== ۵. دکمه‌ها (Buttons - Actualizado para <footer>) ===== */
+
 .form-actions {
     display: flex;
     flex-direction: column;
@@ -230,10 +230,10 @@ figcaption {
 }
 
 .btn-secondary:hover {
-    color: #ef4444; /* Rojo para indicar cancelación */
+    color: #ef4444;
 }
 
-/* ===== ۶. انیمیشن و ریسپانسیو ===== */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -243,20 +243,77 @@ figcaption {
         opacity: 1;
         transform: translateY(0);
     }
+}html, body {
+     overflow-x: hidden;
+     width: 100%;
+ }
+
+/* TABLET (Pequeño ajuste de sidebar) */
+@media (max-width: 1024px) {
+    aside.sidebar { width: 220px; }
+    main.main {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+    }
 }
 
+/* MOBILE (Transformación de Sidebar a Barra Superior) */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 70px;
-        padding: 15px 5px;
+    .layout {
+        flex-direction: column;
     }
-    .sidebar header h1,
-    .sidebar nav a span,
+
+    aside.sidebar {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+        padding: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
     .logo {
-        display: none;
+        display: none !important;
     }
-    .main {
-        margin-left: 70px;
-        width: calc(100% - 70px);
+    aside.sidebar header h1 {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    aside.sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    aside.sidebar nav a {
+        padding: 10px 14px;
+        background: #f8fafc;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        flex: 0 1 auto;
+    }
+
+
+    main.main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 20px;
+    }
+
+    section.card-form {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn, .btn-secondary {
+        width: 100%;
     }
 }

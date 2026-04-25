@@ -243,7 +243,10 @@ td {
     text-decoration: none;
     color: inherit;
 }
-
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
 /* ===== RESPONSIVE ===== */
 
 

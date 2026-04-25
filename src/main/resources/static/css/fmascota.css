@@ -57,7 +57,8 @@ aside.sidebar nav a.active {
 
 /* Estilo del Logo al final */
 .logo-container {
-    margin: auto 0 20px 0;
+
+    margin-top: 85px;
     text-align: center;
 }
 
@@ -229,32 +230,75 @@ section.card-form {
    4. RESPONSIVE
    ========================================================================== */
 
-@media (max-width: 850px) {
-    aside.sidebar {
-        width: 80px;
-    }
-    aside.sidebar header h1,
-    aside.sidebar nav a span,
-    .logo-container {
-        display: none;
-    }
-    aside.sidebar nav a {
-        justify-content: center;
-        padding: 20px 0;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* TABLET (Pequeño ajuste de sidebar) */
+@media (max-width: 1024px) {
+    aside.sidebar { width: 220px; }
     main.main {
-        margin-left: 0;
+        margin-left: 220px;
+        width: calc(100% - 220px);
     }
 }
 
-@media (max-width: 480px) {
+/* MOBILE (Transformación de Sidebar a Barra Superior) */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    aside.sidebar {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+        padding: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    aside.sidebar header h1 {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    aside.sidebar nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        overflow: hidden;
+    }
+    aside.sidebar nav a {
+        flex: 0 1 auto;
+        white-space: nowrap;
+    }
+    .logo-container {
+        display: none !important;
+    }
+
     main.main {
+        margin-left: 0 !important;
+        width: 100% !important;
         padding: 20px;
     }
+
     section.card-form {
+        max-width: 100%;
         padding: 20px;
     }
-    main.main header h1 {
-        font-size: 1.8rem;
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn, .btn-secondary {
+        width: 100%;
     }
 }

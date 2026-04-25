@@ -72,29 +72,40 @@
 
                 <tbody>
                 <tr th:each="veterinario : ${veterinarios}">
-                    <td><strong th:text="${veterinario['nombre']}"></strong></td>
-                    <td th:text="${veterinario['apellido']}"></td>
-                    <td th:text="${veterinario['telefono']}"></td>
-                    <td th:text="${veterinario['email']}"></td>
-                    <td>
+
+                    <td data-label="Nombre">
+                        <strong th:text="${veterinario['nombre']}"></strong>
+                    </td>
+
+                    <td data-label="Apellido" th:text="${veterinario['apellido']}"></td>
+
+                    <td data-label="Teléfono" th:text="${veterinario['telefono']}"></td>
+
+                    <td data-label="Email" th:text="${veterinario['email']}"></td>
+
+                    <td data-label="Especialidad">
                         <span class="badge-specialty" th:text="${veterinario['especialidad']}"></span>
                     </td>
-                    <td><code th:text="${veterinario['codigo_colegiado']}"></code></td>
 
-                    <td class="actions">
-                        <nav aria-label="Acciones de registro">
+                    <td data-label="Código">
+                        <code th:text="${veterinario['codigo_colegiado']}"></code>
+                    </td>
+
+                    <td data-label="Acciones">
+                        <div class="actions">
                             <a th:href="@{'/veterinarios/editar/' + ${veterinario['id']}}"
-                               class="icon-btn edit" title="Editar">
-                                <i class="fas fa-pen" aria-hidden="true"></i>
+                               class="icon-btn edit">
+                                <i class="fas fa-pen"></i>
                             </a>
 
                             <a th:href="@{'/veterinarios/eliminar/' + ${veterinario['id']}}"
-                               onclick="return confirm('¿Está seguro de eliminar este veterinario?');"
-                               class="icon-btn delete" title="Eliminar">
-                                <i class="fas fa-trash" aria-hidden="true"></i>
+                               onclick="return confirm('¿Eliminar?');"
+                               class="icon-btn delete">
+                                <i class="fas fa-trash"></i>
                             </a>
-                        </nav>
+                        </div>
                     </td>
+
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(veterinarios)}">

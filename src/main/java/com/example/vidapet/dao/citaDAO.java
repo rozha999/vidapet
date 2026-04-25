@@ -33,7 +33,6 @@ public class citaDAO {
         map.put("propietario_nombre", rs.getString("propietario_nombre"));
         map.put("propietario_apellido", rs.getString("propietario_apellido"));
 
-        // ✅ این دو تا حیاتی هستند
         map.put("veterinario_nombre", rs.getString("veterinario_nombre"));
         map.put("veterinario_apellido", rs.getString("veterinario_apellido"));
 
@@ -53,8 +52,7 @@ SELECT c.id,
        c.fecha,
        c.nota,
        c.estado,
-       con.id AS consulta_id, -- اینجا تغییر کرد: گرفتن ID از جدول مشاوره
-
+       con.id AS consulta_id, 
        m.nombre AS mascota_nombre,
        p.nombre AS propietario_nombre,
        p.apellido AS propietario_apellido,
@@ -65,7 +63,7 @@ FROM cita c
 JOIN mascota m ON c.mascota_id = m.id
 JOIN propietario p ON c.propietario_id = p.id
 LEFT JOIN veterinario v ON c.veterinario_id = v.id
-LEFT JOIN consulta con ON c.id = con.cita_id -- جوین با جدول مشاوره
+LEFT JOIN consulta con ON c.id = con.cita_id 
 WHERE 1=1
 """;
 

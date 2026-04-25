@@ -32,6 +32,7 @@ body {
     z-index: 100;
 }
 
+
 @media (min-width: 1024px) {
     .sidebar {
         position: fixed;
@@ -40,6 +41,12 @@ body {
         width: 260px;
         height: 100vh;
         box-shadow: 4px 0 20px rgba(99, 102, 241, 0.12);
+    }
+
+
+    .main {
+        margin-left: 260px;
+        width: calc(100% - 260px) !important;
     }
 }
 
@@ -75,7 +82,7 @@ body {
 }
 
 .logo {
-    display: none; /* مخفی در موبایل */
+    display: none;
 }
 
 @media (min-width: 1024px) {
@@ -101,13 +108,7 @@ body {
     animation: fadeIn 0.6s ease;
 }
 
-@media (min-width: 1024px) {
-    .main {
-        margin-left: 260px;
-        padding: 40px;
-        width: calc(100% - 260px);
-    }
-}
+
 
 .main h1 {
     color: #4f46e5;
@@ -116,9 +117,6 @@ body {
     font-weight: 800;
 }
 
-@media (min-width: 768px) {
-    .main h1 { font-size: 2.2rem; }
-}
 
 /* ===== Top bar ===== */
 .top-bar {
@@ -128,13 +126,7 @@ body {
     margin-bottom: 20px;
 }
 
-@media (min-width: 640px) {
-    .top-bar {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-}
+
 
 /* ===== Button & Search ===== */
 .btn {
@@ -169,7 +161,7 @@ body {
 /* ===== Table Responsive Wrapper ===== */
 .table-container {
     width: 100%;
-    overflow-x: auto; /* اسکرول افقی در موبایل برای جدول */
+    overflow-x: auto;
     border-radius: 15px;
 }
 
@@ -177,7 +169,7 @@ table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
-    min-width: 700px; /* جلوگیری از بهم ریختگی ستون‌ها */
+    min-width: 700px;
 }
 
 th {
@@ -215,11 +207,11 @@ tbody tr:hover td {
 /* ===== Actions ===== */
 .actions {
     display: flex;
-    gap: 12px; /* فاصله دکمه‌های اکشن بیشتر شد */
+    gap: 12px;
 }
 
 .icon-btn {
-    width: 38px; /* کمی بزرگتر برای لمس بهتر در موبایل */
+    width: 38px;
     height: 38px;
     border-radius: 10px;
     display: flex;
@@ -240,80 +232,178 @@ tbody tr:hover td {
     from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
 }
+.search-container button {
+    background: linear-gradient(90deg, #a5b4fc, #818cf8);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+    transition: 0.25s ease;
+}
+
+/* hover */
+.search-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
+    background: linear-gradient(90deg, #818cf8, #6366f1);
+}
+
+/* click */
+.search-container button:active {
+    transform: scale(0.97);
+}
 
 
+.search-container button i {
+    font-size: 1rem;
+}
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+/* ===== RESPONSIVE ===== */
+
+/* TABLET */
+
+@media (max-width: 1023px) {
+
+    .sidebar {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        padding: 15px !important;
+        gap: 10px !important;
+        top: 0;
+        left: 0;
+    }
+
+    .sidebar h1 {
+        width: 100%;
+        margin-bottom: 10px !important;
+        text-align: center;
+    }
+
+    .sidebar a {
+        flex: 0 1 auto !important;
+        padding: 8px 15px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .logo {
+        display: none !important;
+    }
+}
 @media (max-width: 768px) {
+
+    /* ===== MAIN ===== */
     .main {
         padding: 15px;
     }
 
-    /* تبدیل جدول به حالت کارتی برای خوانایی بهتر */
-    table, thead, tbody, th, td, tr {
-        display: block;
-        width: 100%;
-    }
-
-    thead {
-        display: none; /* حذف سرتیتر جدول در حالت موبایل */
+    /* ===== TABLE ===== */
+    .table-container {
+        overflow-x: hidden;
     }
 
     table {
-        min-width: unset; /* حذف محدودیت عرض */
+        width: 100%;
+        border-spacing: 0;
+        min-width: unset;
+    }
+
+    table, thead, tbody, th, td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
     tbody tr {
         background: white;
-        margin-bottom: 15px;
-        border-radius: 15px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border-radius: 16px;
         padding: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     }
 
     td {
-        background: transparent !important;
-        padding: 5px 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #f1f5f9;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
     }
 
     td:last-child {
         border-bottom: none;
-        padding-top: 15px;
         justify-content: center;
+        padding-top: 15px;
     }
 
-    /* اضافه کردن لیبل برای مشخص شدن فیلدها */
     td::before {
         content: attr(data-label);
-        font-weight: 700;
+        font-weight: bold;
         color: #6366f1;
         font-size: 0.8rem;
-        text-transform: uppercase;
     }
 
+    /* ===== PHOTO ===== */
+    td.td-photo img {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    /* ===== ACTIONS ===== */
     .actions {
-        width: 100%;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 12px;
         justify-content: center;
     }
-}
 
-/* ===== مخصوص موبایل‌های کوچک (477px و کمتر) ===== */
-@media (max-width: 477px) {
-    .sidebar h1 {
-        font-size: 1.3rem;
+    .icon-btn {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
     }
 
-    .sidebar a {
-        min-width: calc(50% - 10px); /* قرارگیری دو به دو منوها */
-        font-size: 0.75rem;
-        padding: 8px;
+    td:last-child::before {
+        display: none !important;
     }
 
+    /* ===== TOP BAR ===== */
     .top-bar {
         flex-direction: column;
         align-items: stretch;
@@ -321,26 +411,161 @@ tbody tr:hover td {
 
     .search-container {
         flex-direction: column;
+        width: 100%;
+        gap: 10px;
     }
 
-    .search-container input {
+    .search-container input,
+    .search-container button {
         width: 100%;
     }
 
-    .btn {
+    /* ===== SIDEBAR (HORIZONTAL FIX) ===== */
+    .sidebar {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 10px;
+    }
+
+
+    aside.sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    aside.sidebar h1 {
+        width: 100%;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+
+    aside.sidebar nav {
         width: 100%;
     }
 
-    tbody tr {
-        padding: 12px;
-    }
 
-    td {
+    aside.sidebar nav a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 10px 15px;
+        min-width: auto;
+        flex: 0 1 auto;
         font-size: 0.85rem;
+        gap: 8px;
+        border-radius: 12px;
+        background: #f8fafc;
     }
 
-    .icon-btn {
-        width: 45px; /* بزرگتر برای لمس راحت‌تر در موبایل */
-        height: 45px;
+    aside.sidebar nav a i {
+        font-size: 1.1rem;
+        margin: 0;
     }
+
+
+    aside.sidebar nav a:hover {
+        transform: scale(1.02);
+    }
+
+    .logo {
+        display: none !important;
+    }
+
+
+    aside.sidebar header h1 {
+        margin: 5px 0 10px 0;
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    aside.sidebar nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        overflow: visible;
+    }
+
+    aside.sidebar nav a {
+        flex: 0 1 auto;
+        white-space: nowrap;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    aside.sidebar nav a i {
+        font-size: 1rem;
+    }
+
+
+    aside.sidebar nav a:hover {
+        transform: none;
+    }
+    aside.sidebar, .sidebar {
+        position: relative;
+        width: 100% !important;
+        height: auto !important;
+        padding: 15px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        left: 0 !important;
+    }
+
+    /* تنظیمات عنوان VidaPET */
+    .sidebar h1 {
+        margin-bottom: 15px !important;
+        font-size: 1.5rem !important;
+        width: 100%;
+        text-align: center;
+    }
+
+
+    .sidebar nav, .sidebar {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    .sidebar a {
+        flex: 0 1 auto !important;
+        white-space: nowrap !important;
+        padding: 8px 12px !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+        background: #f8fafc !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin: 0 !important;
+    }
+
+
+    .logo {
+        display: none !important;
+    }
+
 }

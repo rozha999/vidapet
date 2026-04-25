@@ -29,7 +29,6 @@ public class MascotaDAO {
         map.put("especie_id", rs.getLong("especie_id"));
         map.put("foto", rs.getString("foto"));
 
-        // اطلاعات استخراج شده از JOIN (نام صاحب و نام گونه)
         map.put("propietario_nombre", rs.getString("propietario_nombre"));
         map.put("propietario_apellido", rs.getString("propietario_apellido"));
         map.put("especie_nombre", rs.getString("especie_nombre"));

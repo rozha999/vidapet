@@ -240,7 +240,10 @@ td:last-child { border-radius: 0 15px 15px 0; }
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
 /* ================= RESPONSIVE ================= */
 
 /* TABLET */
@@ -274,29 +277,29 @@ td:last-child { border-radius: 0 15px 15px 0; }
             height: auto;
             padding: 20px 15px;
             display: flex;
-            flex-direction: row; /* چیدمان افقی برای کل سایدبار */
-            flex-wrap: wrap;     /* اجازه شکستن خط به ردیف بعد */
+            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
         aside.sidebar h1 {
-            width: 100%; /* عنوان تمام عرض را می‌گیرد تا منوها به ردیف بعد بروند */
+            width: 100%;
             margin-bottom: 15px;
             font-size: 1.5rem;
             text-align: center;
         }
 
-        /* کانتینر اصلی لیست منوها */
+
         aside.sidebar nav {
             width: 100%;
         }
 
         aside.sidebar nav ul {
             display: flex;
-            flex-direction: row; /* منوها کنار هم */
-            flex-wrap: wrap;     /* اگر جا نشدند بروند ردیف بعد */
+            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 10px;
             list-style: none;
@@ -305,32 +308,32 @@ td:last-child { border-radius: 0 15px 15px 0; }
 
         aside.sidebar nav a {
             display: flex;
-            flex-direction: row; /* آیکون و متن در یک خط کنار هم */
+            flex-direction: row;
             align-items: center;
             padding: 10px 15px;
-            min-width: auto;     /* عرض بر اساس محتوا */
-            flex: 0 1 auto;      /* انعطاف‌پذیر بر اساس متن */
+            min-width: auto;
+            flex: 0 1 auto;
             font-size: 0.85rem;
-            gap: 8px;            /* فاصله بین آیکون و متن */
+            gap: 8px;
             border-radius: 12px;
-            background: #f8fafc; /* پس‌زمینه ملایم برای موبایل */
+            background: #f8fafc;
         }
 
         aside.sidebar nav a i {
             font-size: 1.1rem;
-            margin: 0;           /* حذف مارجین‌های اضافی */
+            margin: 0;
         }
 
-        /* حذف افکت جابجایی دسکتاپ برای جلوگیری از لرزش چیدمان در موبایل */
+
         aside.sidebar nav a:hover {
             transform: scale(1.02);
         }
 
         .logo-container {
-            display: none; /* حذف لوگو در موبایل برای خلوت شدن صفحه */
+            display: none;
         }
 
-        /* تنظیم بخش محتوای اصلی */
+
         main.main {
             margin-left: 0;
             width: 100%;

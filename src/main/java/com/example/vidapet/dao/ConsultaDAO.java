@@ -34,7 +34,7 @@ public class ConsultaDAO {
             map.put("fecha", rs.getObject("fecha"));
             map.put("mascota_nombre", rs.getString("mascota_nombre"));
         } catch (Exception e) {
-            // اگر ستون‌ها در کوئری نبودند، مقدار پیش‌فرض
+
         }
         return map;
     };
@@ -54,8 +54,19 @@ public class ConsultaDAO {
         """;
         return jdbcTemplate.queryForList(sql);
     }
+    public List<Map<String, Object>> buscarPorNombreMascota(String nombre) {
 
-    /* ---------------- FIND BY ID (اصلاح شده) ---------------- */
+        String sql = """
+        SELECT c.id, c.diagnostico, c.cita_id, ci.fecha, m.nombre AS mascota_nombre
+        FROM consulta c
+        JOIN cita ci ON c.cita_id = ci.id
+        JOIN mascota m ON ci.mascota_id = m.id
+        WHERE LOWER(m.nombre) LIKE LOWER(?)
+    """;
+
+        return jdbcTemplate.queryForList(sql, "%" + nombre + "%");
+    }
+    /* ---------------- FIND BY ID  ---------------- */
     public Map<String, Object> findById(int id) {
         String sql = """
             SELECT 

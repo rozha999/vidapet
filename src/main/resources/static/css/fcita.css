@@ -1,6 +1,4 @@
-/* =========================================
-   ۱. پایه و تنظیمات اصلی (Base & Layout)
-   ========================================= */
+
 body {
     background: linear-gradient(135deg, #eef2ff 0%, #f5f7ff 100%);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -11,12 +9,11 @@ body {
 
 .layout {
     display: flex;
+    flex-direction: row; /* پیش‌فرض دسکتاپ */
 }
 
-/* =========================================
-   ۲. سایدبار (Sidebar - Ahora con <aside>)
-   ========================================= */
-.sidebar { /* Mantiene la clase, pero ahora es un <aside> */
+
+.sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -32,7 +29,6 @@ body {
     box-sizing: border-box;
 }
 
-/* Selector para el header dentro del aside */
 .sidebar header h1 {
     color: #6366f1;
     font-size: 1.8rem;
@@ -41,7 +37,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* Selector para la navegación semántica */
 .sidebar nav {
     display: flex;
     flex-direction: column;
@@ -65,33 +60,24 @@ body {
     transform: translateX(5px);
 }
 
-/* هایلایت صفحه فعال */
 .sidebar nav a[href*="/citas"] {
     background: linear-gradient(90deg, #a5b4fc, #818cf8);
     color: white;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
-/* لوگو انتهای سایدبار */
 .logo {
     margin-top: auto;
     margin-bottom: 20px;
-    height: 210px;
+    height: 180px;
     width: auto;
     align-self: center;
     opacity: 0.2;
-    filter: brightness(1.1) blur(0.5px);
     transition: opacity 0.3s;
 }
 
-.logo:hover {
-    opacity: 0.8;
-}
 
-/* =========================================
-   ۳. محتوای اصلی (Main Content - Ahora con <main>)
-   ========================================= */
-.main-content { /* Selector actualizado a la nueva clase del <main> */
+.main-content {
     margin-left: 260px;
     padding: 40px;
     width: calc(100% - 260px);
@@ -104,14 +90,11 @@ body {
 
 .main-content header h1 {
     color: #4f46e5;
-    font-size: 2.2rem;
+    font-size: 2rem;
     margin-bottom: 25px;
     font-weight: 800;
 }
 
-/* =========================================
-   ۴. کارت فرم (Form Card - Ahora con <section>)
-   ========================================= */
 .card-form {
     background: white;
     width: 100%;
@@ -121,24 +104,6 @@ body {
     box-shadow: 0 10px 30px rgba(99, 102, 241, 0.08);
 }
 
-/* Estilo para el fieldset semántico */
-fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-.visually-hidden { /* Para el <legend> que no queremos ver pero ayuda a la accesibilidad */
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-}
-
 .form-group {
     display: flex;
     flex-direction: column;
@@ -146,58 +111,25 @@ fieldset {
     margin-bottom: 20px;
 }
 
-/* Adaptación para <figure> de la foto */
-.pet-preview {
-    margin: 0 0 20px 0;
-}
-
 .form-group label {
     font-size: 0.95rem;
     color: #4f46e5;
     font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
-.form-group label i {
-    color: #818cf8;
-}
-
-/* استایل ورودی‌ها (Inputs) */
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group input, .form-group select, .form-group textarea {
     padding: 13px 15px;
     border-radius: 12px;
     border: 1px solid #e0e7ff;
-    outline: none;
-    transition: 0.3s;
     background: #f8fafc;
-    width: 100%;
-    box-sizing: border-box;
     font-size: 1rem;
-    color: #334155;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: #818cf8;
-    background: white;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
 .readonly-input {
     background-color: #f1f5f9 !important;
-    color: #64748b;
     cursor: not-allowed;
-    border-style: dashed;
 }
 
-/* =========================================
-   ۵. دکمه‌های عملیاتی (Ahora en un <footer>)
-   ========================================= */
 .form-actions {
     display: flex;
     flex-direction: column;
@@ -206,68 +138,68 @@ fieldset {
 }
 
 .btn-save {
-    background: linear-gradient(90deg, #818cf8 0%, #6366f1 100%);
+    background: linear-gradient(90deg, #818cf8, #6366f1);
     color: white;
-    padding: 14px 20px;
+    padding: 14px;
     border: none;
     border-radius: 14px;
     font-weight: 700;
-    font-size: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-}
-
-.btn-save:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
-    filter: brightness(1.1);
 }
 
 .btn-cancel {
-    background-color: transparent;
+    text-align: center;
+    text-decoration: none;
     color: #94a3b8;
-    padding: 12px 20px;
+    padding: 12px;
     border: 2px solid #e2e8f0;
     border-radius: 14px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-decoration: none;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s ease;
 }
-
-.btn-cancel:hover {
-    background-color: #fff1f2;
-    color: #ef4444;
-    border-color: #fecaca;
-    transform: scale(0.98);
+html, body {
+    overflow-x: hidden;
+    width: 100%;
 }
-
 /* =========================================
-   ۶. انیمیشن و واکنش‌گرایی
+   Mobile & Table
    ========================================= */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
+@media (max-width: 1023px) {
+    .layout {
+        flex-direction: column;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    .sidebar {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+        padding: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sidebar nav a {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 20px;
+    }
+
+    .logo {
+        display: none !important;
     }
 }
 
-@media (max-width: 768px) {
-    .sidebar { width: 70px; padding: 15px 5px; }
-    .sidebar header h1, .sidebar nav a span, .logo { display: none; }
-    .main-content { margin-left: 70px; width: calc(100% - 70px); }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
 }

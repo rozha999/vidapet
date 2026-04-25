@@ -73,7 +73,7 @@ aside.sidebar a[href*="veterinarios"] {
 
 /* LOGO INTEGRADO */
 .logo {
-    margin-top: auto;
+    margin-top: 55px;
     margin-bottom: 20px;
     height: 180px; /* Ajustado para que no sature */
     width: auto;
@@ -209,7 +209,21 @@ section.card-form {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive para Móvil */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* TABLET (Pequeño ajuste de sidebar) */
+@media (max-width: 1024px) {
+    aside.sidebar { width: 220px; }
+    main.main {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+    }
+}
+
+/* MOBILE (Transformación de Sidebar a Barra Superior) */
 @media (max-width: 768px) {
     .layout {
         flex-direction: column;
@@ -217,22 +231,57 @@ section.card-form {
 
     aside.sidebar {
         position: relative;
-        width: 100%;
+        width: 100% !important;
         height: auto;
         padding: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
 
-    aside.sidebar .logo {
-        display: none;
+    aside.sidebar header h1 {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    aside.sidebar nav {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    aside.sidebar nav a {
+        padding: 10px 14px;
+        background: #f8fafc;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        flex: 0 1 auto;
+    }
+
+    .logo-container {
+        display: none !important;
     }
 
     main.main {
-        margin-left: 0;
-        width: 100%;
+        margin-left: 0 !important;
+        width: 100% !important;
         padding: 20px;
     }
 
     section.card-form {
-        padding: 25px;
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn, .btn-secondary {
+        width: 100%;
     }
 }

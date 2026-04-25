@@ -136,8 +136,8 @@ public class VidapetService {
                 details.put("nombre", vet.get("nombre"));
                 details.put("apellido", vet.get("apellido"));
             } else {
-                details.put("nombre", "تعیین");
-                details.put("apellido", "نشده");
+                details.put("nombre", "");
+                details.put("apellido", "");
             }
         }
 
@@ -265,5 +265,7 @@ public class VidapetService {
     public void eliminarEspecie(Long id) {
         especieDAO.delete(id);
     }
-
+    public List<Map<String, Object>> buscarConsultasPorMascota(String nombreMascota) {
+        return consultaDAO.buscarPorNombreMascota(nombreMascota);
+    }
 }

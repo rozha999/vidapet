@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        /* =========================================
-       VIDA PET - CONSULTAS (FULL OPTIMIZED)
-       ========================================= */
-
-    /* ===== 1. Base & Reset ===== */
     body {
         background: linear-gradient(135deg, #eef2ff 0%, #f5f7ff 100%);
         font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -228,13 +223,161 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== 9. Responsive ===== */
-    @media (max-width: 1024px) {
-        aside.sidebar { width: 80px; padding: 20px 10px; }
-        aside.sidebar header h1, aside.sidebar nav a span, .logo { display: none; }
-        main.main { margin-left: 80px; width: calc(100% - 80px); }
-        aside.sidebar nav a { justify-content: center; }
-    }
+        /* ================= RESPONSIVE ================= */
+
+        /* TABLET */
+        @media (max-width: 1024px) {
+
+            aside.sidebar {
+                width: 220px;
+            }
+
+            main.main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 25px;
+            }
+
+            search.search-container input {
+                width: 180px;
+            }
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+
+            .layout {
+                flex-direction: column;
+            }
+
+            aside.sidebar {
+                position: relative;
+                width: 100% !important;
+                height: auto !important;
+                padding: 15px 10px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+                left: 0 !important;
+            }
+
+
+            .logo, .logo-container {
+                display: none !important;
+            }
+
+            aside.sidebar header h1 {
+                width: 100%;
+                margin-bottom: 15px !important;
+                font-size: 1.4rem !important;
+                text-align: center;
+            }
+
+            aside.sidebar nav {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+                gap: 8px !important;
+                width: 100% !important;
+            }
+            aside.sidebar nav ul {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                list-style: none;
+                padding: 0;
+            }
+
+            aside.sidebar nav a {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center;
+                padding: 8px 12px !important;
+                min-width: auto !important;
+                flex: 0 1 auto !important;
+                font-size: 0.8rem !important;
+                gap: 6px !important;
+                border-radius: 10px !important;
+                background: #f8fafc !important;
+                white-space: nowrap !important;
+            }
+            aside.sidebar nav a i {
+                font-size: 1rem !important;
+                margin: 0 !important;
+            }
+
+
+            aside.sidebar nav a:hover {
+                transform: scale(1.02);
+            }
+
+            .logo-container {
+                display: none;
+            }
+
+
+            main.main {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            /* AJUSTE DE TABLA PARA QUE NO SE DESBORDE */
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+                table-layout: fixed; /* Mantiene proporciones */
+            }
+
+            th, td {
+                padding: 8px 4px;
+                font-size: 0.7rem;
+                text-align: center;
+                word-break: break-word;
+                white-space: normal; /* Permite que el texto largo salte de línea */
+            }
+
+            .td-photo img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            search.search-container input {
+                width: 100%;
+            }
+
+            .icon-btn {
+                width: 30px;
+                height: 30px;
+            }
+
+            aside.sidebar nav a[href*="/consultas"]{
+                background: linear-gradient(90deg, #818cf8, #6366f1) !important;
+                color: white !important;
+                box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+            }
+
+
+            aside.sidebar nav a {
+                color: #64748b !important;
+            }
+
+            aside.sidebar nav a i {
+                color: #6366f1 !important;
+            }
+        }
     </style>
 </head>
 
